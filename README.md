@@ -65,38 +65,38 @@ A comprehensive, accessible, and performant job application tracking system buil
 
 ```bash
 # Install dependencies
-bun install
+pnpm install
 
 # Start development server
-bun dev
+pnpm dev
 
 # Build for production
-bun run build
+pnpm run build
 
 # Preview production build
-bun run preview
+pnpm run preview
 
 # Run linting
-bun run lint
+pnpm run lint
 
 # Type checking
-bun run type-check
+pnpm run type-check
 ```
 
 ### Testing
 
 ```bash
 # Run all tests
-npm test
+pnpm test
 
 # Run tests with UI
-npm run test:ui
+pnpm run test:ui
 
 # Run tests with coverage
-npm run test:coverage
+pnpm run test:coverage
 
 # Run integration tests only
-npm run test:integration
+pnpm run test:integration
 ```
 
 See [TESTING.md](./TESTING.md) for detailed testing documentation.
@@ -105,7 +105,7 @@ See [TESTING.md](./TESTING.md) for detailed testing documentation.
 
 ```bash
 # Deploy to GitHub Pages
-bun run deploy
+pnpm run deploy
 
 # Or push to main branch for automatic deployment via GitHub Actions
 git push origin main
@@ -179,7 +179,7 @@ Track your applications through these statuses:
 
 ### Core
 - **React 19** with **TypeScript**
-- **Bun** - Runtime and package manager
+- **pnpm** - Package manager
 - **Vite** - Build tool
 
 ### UI & Styling

@@ -187,12 +187,6 @@ export const CREDITS = [
         licenseUrl: 'https://github.com/pmndrs/zustand/blob/main/LICENSE',
       },
       {
-        name: 'Dexie.js',
-        description: 'IndexedDB wrapper',
-        url: 'https://github.com/dexie/Dexie.js',
-        licenseUrl: 'https://github.com/dexie/Dexie.js/blob/master/LICENSE',
-      },
-      {
         name: 'Framer Motion',
         description: 'Animation library',
         url: 'https://github.com/framer/motion',
@@ -257,10 +251,10 @@ export const CREDITS = [
     category: 'Development Tools',
     items: [
       {
-        name: 'Bun',
-        description: 'JavaScript runtime',
-        url: 'https://github.com/oven-sh/bun',
-        licenseUrl: 'https://github.com/oven-sh/bun/blob/main/LICENSE.md',
+        name: 'Pnpm',
+        description: 'JavaScript package manager',
+        url: 'https://github.com/pnpm/pnpm',
+        licenseUrl: 'https://github.com/pnpm/pnpm/blob/main/LICENSE',
       },
       {
         name: 'Biome',

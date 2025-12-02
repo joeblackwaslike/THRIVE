@@ -4,6 +4,7 @@ import path from "path";
 import type { Server } from 'node:http';
 import { ApolloServer } from '@apollo/server';
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
+import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
 import { makeExecutableSchema } from '@graphql-tools/schema';
 import { GraphQLScalarType, Kind } from 'graphql';
 import { gql } from "graphql-tag";
@@ -93,14 +94,15 @@ const schema = makeExecutableSchema({
 export async function createApolloServer(expressApp: Express, httpServer: Server) {
   const server = new ApolloServer({
     schema,
-    plugins: [ApolloServerPluginDrainHttpServer({ httpServer })],
+    plugins: [
+      ApolloServerPluginDrainHttpServer({ httpServer }),
+      ApolloServerPluginLandingPageLocalDefault({ embed: true }),
+    ],
   });
 
   await server.start();
 
-  // Use the Apollo Server middleware directly
   expressApp.use('/graphql', optionalAuth, async (req, res, next) => {
-    // Simple middleware to handle GraphQL requests
     if (req.method === 'POST') {
       logger.debug('GraphQL server debug - Headers received:', {
         authorization: req.headers.authorization ? 'Bearer [TOKEN]' : 'missing',
@@ -150,27 +152,13 @@ export async function createApolloServer(expressApp: Express, httpServer: Server
         const single = (result as any)?.body?.singleResult ?? result;
         res.status(200).json(single);
       } catch (error) {
-        logger.error('GraphQL execution error:', error);
         res.status(500).json({ error: 'Internal server error' });
       }
     } else if (req.method === 'GET') {
-      // Handle GET requests (for GraphQL Playground)
-      res.setHeader('Content-Type', 'text/html');
-      res.send(`
-        <!DOCTYPE html>
-        <html>
-          <head>
-            <title>Apollo Server GraphQL Playground</title>
-          </head>
-          <body>
-            <h1>Apollo Server GraphQL Playground</h1>
-            <p>GraphQL endpoint is available at POST /graphql</p>
-            <p>Authentication: Include JWT token in Authorization header:</p>
-            <pre>Authorization: Bearer &lt;your-jwt-token&gt;</pre>
-            <p>Get a token by calling POST /api/auth/login with email and password</p>
-          </body>
-        </html>
-      `);
+      const host = req.get('host');
+      const endpoint = `http://${host}/graphql`;
+      const sandboxUrl = `https://studio.apollographql.com/sandbox?endpoint=${encodeURIComponent(endpoint)}`;
+      res.redirect(302, sandboxUrl);
     } else {
       next();
     }
