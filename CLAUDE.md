@@ -4,60 +4,99 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-THRIVE is a comprehensive job application tracking system (Target, Hunt, Reach, Interview, Validate, Employ) built as a client-side single-page application. It manages the entire job search journey from application to offer with features including application tracking, interview preparation, company research, document management, and analytics.
+THRIVE is a comprehensive job application tracking system (Target, Hunt, Reach, Interview, Validate, Employ) built as a full-stack application with a React client and GraphQL backend. It manages the entire job search journey from application to offer with features including application tracking, interview preparation, company research, document management, analytics, and backend API with Supabase integration.
 
 **Live Demo**: https://adriandarian.github.io/thrive/
+
+## Essential Documentation
+
+- **[README.md](./README.md)** - Project overview, features, quick start guide
+- **[TESTING.md](./TESTING.md)** - Comprehensive testing documentation (56 tests, integration, unit, GraphQL)
+- **[CHANGELOG.md](./CHANGELOG.md)** - Version history and release notes
+- **[Pull Request Template](./.github/pull_request_template.md)** - PR checklist and guidelines
 
 ## Development Commands
 
 ### Essential Commands
 ```bash
 # Install dependencies
-bun install
+pnpm install
 
-# Start development server (http://localhost:5173)
-bun dev
+# Start development (runs both client and server)
+pnpm dev
+
+# Start client only
+pnpm run client:dev
+
+# Start server only (GraphQL API)
+pnpm run server:dev
 
 # Build for production
-bun run build
+pnpm run build
 
 # Preview production build
-bun run preview
+pnpm run preview
 
 # Type checking
-bun run type-check
+pnpm run type-check
 
-# Linting
-bun run lint
-
-# Format code
-bun run format
+# Linting and formatting
+pnpm run lint
+pnpm run format
 
 # Fix linting + formatting issues
-bun run check
+pnpm run check
+
+# Run Biome migration from ESLint/Prettier
+pnpm run biome:migrate
+```
+
+### Testing Commands
+```bash
+# Run all tests
+pnpm test
+
+# Run tests with UI
+pnpm run test:ui
+
+# Run tests with coverage report
+pnpm run test:coverage
+
+# Run integration tests only
+pnpm run test:integration
 ```
 
 ### Deployment
 ```bash
 # Deploy to GitHub Pages
-bun run deploy
+pnpm run deploy
 
-# Automatic deployment happens via GitHub Actions on push to main
+# Deployment happens automatically via GitHub Actions on push to main branch
 ```
 
 ## Architecture
 
 ### Tech Stack Core
-- **Runtime**: Bun (package manager and runtime)
-- **Framework**: React 19 with TypeScript 5.6
+
+**Frontend:**
+- **Package Manager**: pnpm
+- **Framework**: React 19 with TypeScript 5.9
 - **Build Tool**: Vite 7
-- **Database**: Dexie (IndexedDB wrapper) for client-side storage
+- **GraphQL Client**: Apollo Client (all data fetching via GraphQL)
 - **Routing**: TanStack Router (type-safe, file-based routing)
-- **State Management**: Zustand (global state) + TanStack Query (server/async state)
+- **State Management**: Zustand (21 stores) + TanStack Query (server/async state)
 - **Styling**: Tailwind CSS 4 with shadcn/ui components
 - **Linting/Formatting**: Biome (replaces ESLint + Prettier)
 
+**Backend:**
+- **API**: GraphQL with Apollo Server + Express
+- **Database**: Supabase (PostgreSQL)
+- **Authentication**: Supabase Auth with JWT tokens
+- **Testing**: Vitest + Supertest (56 passing tests)
+
 ### Key Libraries
+
+**UI & Interaction:**
 - **UI Components**: Radix UI primitives + shadcn/ui
 - **Tables**: TanStack Table with virtual scrolling (TanStack Virtual)
 - **Forms**: TanStack Form + Zod validation
@@ -66,40 +105,103 @@ bun run deploy
 - **PDF Generation**: jsPDF
 - **Drag & Drop**: dnd-kit
 
+**Data & State:**
+- **GraphQL Client**: Apollo Client
+- **State**: Zustand (21 stores), TanStack Query
+- **Validation**: Zod 4.1
+- **Date Handling**: date-fns 4.1
+
 ### Directory Structure
 ```
-src/
-├── components/       # Reusable UI components
-│   ├── ui/          # shadcn/ui components (auto-generated, be careful editing)
-│   └── layout/      # Layout components (header, nav, etc.)
-├── routes/          # TanStack Router route files
-│   ├── __root.tsx   # Root layout
-│   ├── index.tsx    # Landing/dashboard
-│   ├── applications.tsx
-│   ├── interviews.tsx
-│   ├── documents.tsx
-│   ├── analytics.tsx
-│   └── settings.tsx
-├── stores/          # Zustand state stores (one per feature)
-│   ├── applicationsStore.ts
-│   ├── interviewsStore.ts
-│   ├── documentsStore.ts
-│   ├── uiStore.ts
-│   └── settingsStore.ts
-├── lib/             # Core utilities and database
-│   ├── db.ts        # Dexie database schema and instance
-│   └── utils.ts     # Helper functions
-├── hooks/           # Custom React hooks
-├── types/           # TypeScript type definitions
-└── assets/          # Static assets
+thrive/
+├── src/
+│   ├── components/       # Reusable UI components
+│   │   ├── ui/          # shadcn/ui components (auto-generated, be careful editing)
+│   │   └── layout/      # Layout components (header, nav, etc.)
+│   ├── routes/          # TanStack Router route files
+│   │   ├── __root.tsx   # Root layout
+│   │   ├── index.tsx    # Landing/dashboard
+│   │   ├── applications.tsx
+│   │   ├── companies.tsx
+│   │   ├── interviews.tsx
+│   │   ├── interviewprep.tsx
+│   │   ├── documents.tsx
+│   │   ├── analytics.tsx
+│   │   ├── dashboard.tsx
+│   │   ├── export.tsx
+│   │   └── settings.tsx
+│   ├── stores/          # Zustand state stores (21 stores)
+│   │   ├── applicationsStore.ts
+│   │   ├── companiesStore.ts
+│   │   ├── contactsStore.ts
+│   │   ├── documentsStore.ts
+│   │   ├── interviewsStore.ts
+│   │   ├── interviewPrepStore.ts
+│   │   ├── dashboardStore.ts
+│   │   ├── dashboardLayoutStore.ts
+│   │   ├── activityStore.ts
+│   │   ├── annotationsStore.ts
+│   │   ├── backupStore.ts
+│   │   ├── customWidgetsStore.ts
+│   │   ├── goalsStore.ts
+│   │   ├── noteStore.ts
+│   │   ├── notificationsStore.ts
+│   │   ├── searchStore.ts
+│   │   ├── settingsStore.ts
+│   │   ├── tagStore.ts
+│   │   ├── templateStore.ts
+│   │   ├── uiStore.ts
+│   │   └── index.ts
+│   ├── lib/             # Core utilities and GraphQL client
+│   │   ├── graphql.ts   # Apollo Client configuration
+│   │   └── utils.ts     # Helper functions
+│   ├── hooks/           # Custom React hooks
+│   ├── types/           # TypeScript type definitions
+│   │   └── index.ts     # Main type exports
+│   └── assets/          # Static assets
+├── api/                 # Backend GraphQL API (if present)
+│   ├── tests/          # API test suites
+│   │   ├── integration/
+│   │   ├── unit/
+│   │    setup.ts
+|   |   └──
+│   ├── graphql/        # GraphQL schema and resolvers
+|   |   ├── resolvers/
+|   |   |   ├── analytics.ts
+|   |   |   ├── applications.ys
+|   |   |   ├── companies.ys
+|   |   |   ├── contacts.ts
+|   |   |   ├── documents.ts
+|   |   |   └── interviews.ts 
+|   |   ├── server.ts
+|   |   ├── types.ts
+|   ├── lib/
+|   |   ├── auth.ts
+|   |   ├── db.ts
+|   |   └── supabase.ts
+|   ├── types/
+|   |   └── database.ts
+|   ├── routes/
+|   |    └── auth.ts
+|   ├── app.ts
+|   ├── index.ts
+|   ├── server.ts
+├── public/              # Public assets
+├── supabase/
+|   └── migrations/
+|       └── 2023115_initial_schemas.sql
+└── scripts/
 ```
 
 ### Data Flow Architecture
 
-**Client-Side Database (Dexie/IndexedDB)**:
-- All data stored locally in the browser
-- No backend server - fully offline-capable
-- Schema defined in `src/lib/db.ts` with 5 tables:
+**Backend Database (Supabase/PostgreSQL)**:
+- PostgreSQL database hosted on Supabase
+- GraphQL API with Apollo Server providing all CRUD operations
+- JWT-based authentication via Supabase Auth
+- User-scoped data access with row-level security
+- Document storage via Supabase Storage
+- Database schema includes:
   - `applications`: Job applications with status tracking
   - `interviews`: Interview schedules linked to applications
   - `documents`: Resumes, cover letters, portfolios
@@ -108,19 +210,21 @@ src/
 
 **State Management Pattern**:
 1. **Zustand stores** (`src/stores/*`) manage app state and business logic
-2. Each store typically handles:
-   - CRUD operations for a domain (applications, interviews, etc.)
-   - Optimistic updates to Dexie database
+2. Each store handles:
+   - CRUD operations via GraphQL mutations/queries through Apollo Client
+   - Optimistic UI updates for better user experience
+   - Client-side state synchronization with backend
    - Derived state and computed values
-3. **TanStack Query** is NOT heavily used since there's no backend
-4. Components read from stores via hooks like `useApplicationsStore()`
+3. **Apollo Client** manages all GraphQL communication and caching
+4. **TanStack Query** provides additional async state management capabilities
+5. Components read from stores via hooks like `useApplicationsStore()`
 
 ### Routing Pattern
 
 Uses TanStack Router file-based routing:
 - Route files in `src/routes/` define both route and component
 - Type-safe routing with generated route tree (`routeTree.gen.ts` - auto-generated, don't edit)
-- Base path set to `/THRIVE/` for GitHub Pages deployment (see `vite.config.ts`)
+- Supports catch-all route (`$.tsx`) for 404 handling
 
 ### Styling Patterns
 
@@ -128,41 +232,66 @@ Uses TanStack Router file-based routing:
 - **shadcn/ui components** in `src/components/ui/` (installed via CLI, treat as generated code)
 - Dark mode support via `dark:` Tailwind variant
 - Responsive design using Tailwind breakpoints (`sm:`, `md:`, `lg:`, etc.)
-- Custom theme colors defined in `tailwind.config.js` (if exists) or `src/index.css`
+- Custom theme colors defined in `tailwind.config.js` or `src/index.css`
 
 ## Important Patterns & Conventions
 
-### Database Operations
-Always use Dexie through the centralized `db` instance from `src/lib/db.ts`:
+### GraphQL Operations (Apollo Client)
+All data operations use GraphQL through Apollo Client:
 ```typescript
-import { db } from '@/lib/db';
+import { gql } from '@apollo/client';
+import { apolloClient } from '@/lib/graphql';
 
-// Add
-await db.applications.add(newApplication);
+// Query
+const GET_APPLICATIONS = gql`
+  query GetApplications {
+    applications {
+      id
+      companyName
+      position
+      status
+    }
+  }
+`;
 
-// Update
-await db.applications.update(id, updates);
+const { data } = await apolloClient.query({ query: GET_APPLICATIONS });
 
-// Query with indexes
-await db.applications.where('status').equals('Applied').toArray();
+// Mutation
+const CREATE_APPLICATION = gql`
+  mutation CreateApplication($input: ApplicationInput!) {
+    createApplication(input: $input) {
+      id
+      companyName
+      position
+    }
+  }
+`;
+
+const { data } = await apolloClient.mutate({
+  mutation: CREATE_APPLICATION,
+  variables: { input: newApplication }
+});
 ```
 
-### Store Pattern
-Zustand stores follow a consistent pattern:
+### Store Pattern (Zustand + GraphQL)
+Zustand stores follow a consistent pattern with GraphQL:
 ```typescript
 export const useExampleStore = create<ExampleStore>((set, get) => ({
   items: [],
 
-  // Actions that mutate state AND sync to Dexie
+  // Actions that mutate state AND sync to backend via GraphQL
   addItem: async (item) => {
-    await db.items.add(item);
-    set({ items: [...get().items, item] });
+    const { data } = await apolloClient.mutate({
+      mutation: CREATE_ITEM,
+      variables: { input: item }
+    });
+    set({ items: [...get().items, data.createItem] });
   },
 
-  // Initialize from database
+  // Initialize from backend
   initialize: async () => {
-    const items = await db.items.toArray();
-    set({ items });
+    const { data } = await apolloClient.query({ query: GET_ITEMS });
+    set({ items: data.items });
   },
 }));
 ```
@@ -179,22 +308,50 @@ export const useExampleStore = create<ExampleStore>((set, get) => ({
 Use path aliases defined in `vite.config.ts`:
 ```typescript
 import { Button } from '@/components/ui/button';
-import { db } from '@/lib/db';
+import { apolloClient } from '@/lib/graphql';
 import { useApplicationsStore } from '@/stores';
 ```
 
-## GitHub Pages Deployment
+## Testing Strategy
 
-- Base path is `/THRIVE/` (uppercase, see `vite.config.ts`)
-- Deployed via GitHub Actions on push to `main` (see `.github/workflows/deploy.yml`)
-- Manual deployment: `bun run deploy`
-- Build output goes to `dist/`
+**Test Suite Overview** (56 passing tests):
+- **Integration Tests**: GraphQL API with authentication
+- **Unit Tests**: Authentication middleware, routes, and resolvers
+- **Test Coverage**: ~85% for backend, frontend tests in progress
 
-## Testing Approach
+See [TESTING.md](./TESTING.md) for comprehensive testing documentation including:
+- Running tests with Vitest
+- Writing integration tests
+- Authentication testing patterns
+- GraphQL testing examples
+- Debugging tests
 
-- No test files are currently configured
-- When adding tests, use Vitest (referenced in docs but not set up)
-- Playwright for E2E tests (also referenced but not implemented)
+## Development Workflow
+
+### Setting Up Development Environment
+
+1. Clone the repository
+2. Install dependencies: `pnpm install`
+3. Start development server: `pnpm dev` (starts both client and API)
+4. Visit http://localhost:5173
+
+### API Development
+
+The backend runs concurrently with the frontend:
+- **Client Dev Server**: http://localhost:5173 (Vite)
+- **API Server**: http://localhost:3001 (Express + GraphQL)
+- API proxy configured in `vite.config.ts` for seamless `/api` requests
+
+### Making Changes
+
+1. **Before coding**: Read relevant files first
+2. **Frontend changes**: Work in `src/` directory
+3. **Backend changes**: Work in `api/` directory (if present)
+4. **State changes**: Update Zustand stores in `src/stores/`
+5. **Type changes**: Update types in `src/types/`
+6. **Run tests**: `pnpm test` before committing
+7. **Type check**: `pnpm run type-check`
+8. **Lint/format**: `pnpm run check`
 
 ## Common Gotchas
 
@@ -202,37 +359,144 @@ import { useApplicationsStore } from '@/stores';
    - `src/routeTree.gen.ts` (TanStack Router)
    - `src/components/ui/*` components (shadcn - regenerate via CLI instead)
 
-2. **Base path**: All routing must account for `/THRIVE/` base path when deployed to GitHub Pages
+2. **GraphQL Schema Changes**: When modifying the GraphQL schema:
+   - Update schema definitions in `api/graphql/schema.graphql` (if using schema-first)
+   - Update resolvers in `api/graphql/resolvers/`
+   - Run tests to ensure no breaking changes
 
-3. **Dexie schema**: Changing the schema requires incrementing version and writing migration:
-   ```typescript
-   db.version(2).stores({
-     applications: '++id, companyId, ..., newField'
-   });
-   ```
+3. **Import from index**: Many stores export from `src/stores/index.ts`, use that barrel export
 
-4. **Import from index**: Many stores export from `src/stores/index.ts`, use that barrel export
+4. **Biome vs ESLint**: This project uses Biome, not ESLint. Don't add ESLint config.
 
-5. **Biome vs ESLint**: This project uses Biome, not ESLint. Don't add ESLint config.
+5. **Concurrent Development**: When running `pnpm dev`, both frontend and backend start. Ensure no port conflicts.
+
+6. **Vite Proxy**: API requests to `/api/*` are proxied to `localhost:3001`. Check `vite.config.ts` for configuration.
+
+7. **Apollo Client Cache**: Be mindful of Apollo Client's cache when making mutations - use proper cache update strategies or refetch queries as needed.
 
 ## Key Files to Understand
 
-- **`src/lib/db.ts`**: Database schema - understand the data model here first
-- **`vite.config.ts`**: Build config, base path, aliases, chunk optimization
+- **`api/lib/db.ts`**: Supabase client configuration - backend database connection
+- **`src/lib/graphql.ts`**: Apollo Client configuration - frontend GraphQL client
+- **`vite.config.ts`**: Build config, aliases, chunk optimization, API proxy
 - **`src/routes/__root.tsx`**: Root layout, global providers, theme setup
 - **`biome.json`**: Linting and formatting rules
-- **`src/stores/applicationsStore.ts`**: Example of the store pattern (most complex feature)
+- **`src/stores/applicationsStore.ts`**: Example of the store pattern with GraphQL (most complex feature)
+- **`src/types/index.ts`**: TypeScript type definitions for the application
+- **`package.json`**: Scripts, dependencies, and project metadata
+- **`api/graphql/resolvers/`**: GraphQL resolvers - backend data operations
 
 ## Adding New Features
 
 1. **New route**: Create file in `src/routes/` (e.g., `newfeature.tsx`), router auto-detects
-2. **New data entity**: Add table to `src/lib/db.ts` and create corresponding store in `src/stores/`
-3. **New UI component**: Use shadcn CLI (`bunx shadcn-ui@latest add <component>`) for base components
+2. **New data entity**:
+   - Add PostgreSQL table via Supabase migration
+   - Create GraphQL schema types and resolvers in `api/graphql/`
+   - Create corresponding Zustand store in `src/stores/`
+3. **New UI component**: Use shadcn CLI (`pnpm dlx shadcn-ui@latest add <component>`) for base components
 4. **New type**: Add to `src/types/` or colocate with feature
+5. **New backend endpoint**: Add GraphQL schema and resolvers in `api/graphql/` directory
+6. **New tests**: Add to `api/tests/` for backend, follow patterns in [TESTING.md](./TESTING.md)
 
 ## Performance Considerations
 
 - Virtual scrolling is used for large tables (TanStack Virtual)
 - Manual chunk splitting in `vite.config.ts` separates React, TanStack, and UI vendors
-- IndexedDB queries should use indexes defined in schema
+- PostgreSQL queries are optimized with proper indexes and query planning
 - Lazy load heavy components with `React.lazy()` if needed
+- API requests are optimized with Apollo Client caching and batching
+- GraphQL queries should request only needed fields to minimize payload size
+- Use Apollo Client's `fetchPolicy` options appropriately (cache-first, network-only, etc.)
+
+## Deployment
+
+### Production Build
+```bash
+pnpm run build
+```
+
+Builds the optimized production bundle to `dist/` directory.
+
+### Automated Deployment
+- Automatic deployment to GitHub Pages via GitHub Actions on push to `main`
+- See `.github/workflows/deploy.yml` for CI/CD configuration (if present)
+
+### Manual Deployment
+```bash
+pnpm run deploy
+```
+
+## Project Status
+
+**Current Version**: 0.1.0
+
+**Status**: ✅ Deployed to Production
+
+**Features**:
+- ✅ Full-stack application (React + GraphQL API)
+- ✅ Authentication with Supabase
+- ✅ Comprehensive test suite (56 tests)
+- ✅ Job application tracking
+- ✅ Interview preparation tools
+- ✅ Document management
+- ✅ Analytics and reporting
+- ✅ Dark mode support
+- ✅ Responsive design
+- ✅ Accessibility (WCAG 2.1 AA)
+
+See [CHANGELOG.md](./CHANGELOG.md) for detailed release history.
+
+## Troubleshooting
+
+### Common Issues
+
+1. **Port conflicts**: Ensure ports 5173 (client) and 3001 (API) are available
+2. **Database errors**: Check Supabase connection and PostgreSQL schema
+3. **Type errors**: Run `pnpm run type-check` to identify issues
+4. **Lint errors**: Run `pnpm run check` to auto-fix
+5. **API connection**: Verify Supabase credentials in `.env` file
+6. **GraphQL errors**: Check resolver implementation and schema types
+7. **Authentication issues**: Verify JWT token handling and Supabase Auth configuration
+8. **Test failures**: See [TESTING.md](./TESTING.md) for debugging guidance
+
+### Getting Help
+
+- Check existing documentation in this repository
+- Review [README.md](./README.md) for quick start guide
+- Check [TESTING.md](./TESTING.md) for testing issues
+- Review [CHANGELOG.md](./CHANGELOG.md) for recent changes
+- Check pull request template ([.github/pull_request_template.md](./.github/pull_request_template.md))
+
+## Best Practices
+
+### Code Quality
+- Always run `pnpm run check` before committing
+- Write tests for new features (see [TESTING.md](./TESTING.md))
+- Use TypeScript strict mode
+- Follow existing patterns in the codebase
+
+### Git Workflow
+- Create feature branches from `main`
+- Use descriptive commit messages
+- Reference issues in commits
+- Use PR template ([.github/pull_request_template.md](./.github/pull_request_template.md))
+
+### Security
+- Never commit `.env` files
+- Use environment variables for sensitive data
+- Follow OWASP security guidelines
+- Test authentication thoroughly
+
+## Additional Resources
+
+- **Live Demo**: https://adriandarian.github.io/thrive/
+- **GitHub Repository**: Check for wiki and issues
+- **pnpm Documentation**: https://pnpm.io/
+- **React 19 Docs**: https://react.dev
+- **Vite Docs**: https://vitejs.dev
+- **TanStack Router**: https://tanstack.com/router
+- **Zustand**: https://zustand-demo.pmnd.rs
+- **Biome**: https://biomejs.dev
+- **Supabase**: https://supabase.com/docs
+- **GraphQL**: https://graphql.org/learn
+- **Apollo**: https://www.apollographql.com/docs

@@ -76,27 +76,27 @@ api/tests/
 
 #### Run All Tests
 ```bash
-npm test
+pnpm test
 ```
 
 #### Run Integration Tests Only
 ```bash
-npm run test:integration
+pnpm run test:integration
 ```
 
 #### Run Tests with Interactive UI
 ```bash
-npm run test:ui
+pnpm run test:ui
 ```
 
 #### Run Tests with Coverage Report
 ```bash
-npm run test:coverage
+pnpm run test:coverage
 ```
 
 #### Run Specific Test File
 ```bash
-npx vitest run api/tests/unit/auth.test.ts
+pnpm exec vitest run api/tests/unit/auth.test.ts
 ```
 
 ### 📊 Test Features
@@ -239,7 +239,7 @@ The test suite provides comprehensive coverage for both the authentication syste
 
 Run tests with debug output:
 ```bash
-DEBUG=* npm test
+DEBUG=* pnpm test
 ```
 
 ### Test Database
