@@ -1,6 +1,7 @@
 import { GraphQLError } from 'graphql';
-import { contacts as contactsDb } from '../../lib/db';
-import { supabase } from '../../lib/supabase';
+import { contacts as contactsDb } from '../../lib/db.ts';
+import { supabase } from '../../lib/supabase.ts';
+import logger from '../../logger.ts';
 import type {
   ContactQueryArgs,
   ContactRecord,
@@ -8,7 +9,7 @@ import type {
   CreateContactArgs,
   DeleteContactArgs,
   UpdateContactArgs,
-} from '../types';
+} from '../types.ts';
 
 export const contactsResolver = {
   Query: {
@@ -16,6 +17,7 @@ export const contactsResolver = {
       try {
         return await contactsDb.getAll(userId);
       } catch (error) {
+        logger.error('Error fetching contacts:', error);
         throw new GraphQLError(`Failed to fetch contacts: ${error}`);
       }
     },
@@ -32,6 +34,7 @@ export const contactsResolver = {
         if (error) throw error;
         return data;
       } catch (error) {
+        logger.error('Error fetching contact:', error);
         throw new GraphQLError(`Failed to fetch contact: ${error}`);
       }
     },
@@ -44,6 +47,7 @@ export const contactsResolver = {
       try {
         return await contactsDb.getByCompanyId(companyId, userId);
       } catch (error) {
+        logger.error('Error fetching contacts by company:', error);
         throw new GraphQLError(`Failed to fetch contacts by company: ${error}`);
       }
     },
@@ -62,6 +66,7 @@ export const contactsResolver = {
 
         return await contactsDb.create(contactData);
       } catch (error) {
+        logger.error('Error creating contact:', error);
         throw new GraphQLError(`Failed to create contact: ${error}`);
       }
     },
@@ -77,6 +82,7 @@ export const contactsResolver = {
 
         return await contactsDb.update(id, updateData, userId);
       } catch (error) {
+        logger.error('Error updating contact:', error);
         throw new GraphQLError(`Failed to update contact: ${error}`);
       }
     },
@@ -85,6 +91,7 @@ export const contactsResolver = {
       try {
         return await contactsDb.delete(id, userId);
       } catch (error) {
+        logger.error('Error deleting contact:', error);
         throw new GraphQLError(`Failed to delete contact: ${error}`);
       }
     },

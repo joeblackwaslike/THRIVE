@@ -2,6 +2,7 @@ import { Link } from '@tanstack/react-router';
 import { Menu } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import ThemeToggle from './ThemeToggle';
+import UserMenu from './UserMenu';
 
 export default function Header() {
   return (
@@ -113,6 +114,7 @@ export default function Header() {
         </div>
         <div className="flex flex-1 items-center justify-end space-x-2">
           <ThemeToggle />
+          <UserMenu />
         </div>
       </div>
     </header>

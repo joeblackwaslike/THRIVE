@@ -84,16 +84,16 @@ export function ExportPage() {
     applications,
     addApplication,
     fetchApplications,
-    isLoading: applicationsLoading,
+    loading: applicationsLoading,
   } = useApplicationsStore();
   const {
     interviews,
     addInterview,
     fetchInterviews,
-    isLoading: interviewsLoading,
+    loading: interviewsLoading,
   } = useInterviewsStore();
-  const { documents, fetchDocuments, isLoading: documentsLoading } = useDocumentsStore();
-  const { companies, fetchCompanies, isLoading: companiesLoading } = useCompaniesStore();
+  const { documents, fetchDocuments, loading: documentsLoading } = useDocumentsStore();
+  const { companies, fetchCompanies, loading: companiesLoading } = useCompaniesStore();
   const { confirm, alert } = useConfirm();
 
   // Fetch data on mount

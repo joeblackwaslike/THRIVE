@@ -1,0 +1,4 @@
+[[servers]]
+  name = "time"
+  package = "uvx::mcp-server-time@latest"
+  tools = ["convert_time", "get_current_time"]

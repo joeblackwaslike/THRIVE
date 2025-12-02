@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Document Upload</title>
+</head>
+<body>
+    <h1>Test Document Upload</h1>
+    <input type="file" id="fileInput" accept=".pdf,.md,.txt" />
+    <button onclick="uploadFile()">Upload</button>
+    <div id="result"></div>
+
+    <script>
+        // Check if there's already a token in localStorage
+        const token = localStorage.getItem('supabase-auth-token');
+        const userId = localStorage.getItem('user-id');
+        console.log('Token from localStorage:', token);
+        console.log('User ID from localStorage:', userId);
+
+        async function uploadFile() {
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+            if (!file) {
+                alert('Please select a file');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = async (e) => {
+                const base64Content = e.target.result;
+                
+                // Extract base64 data from data URL
+                const base64Data = base64Content.split(',')[1];
+                const mimeType = base64Content.split(',')[0].split(':')[1].split(';')[0];
+
+                const mutation = `
+                    mutation CreateDocument($input: DocumentInput!) {
+                        createDocument(input: $input) {
+                            id
+                            name
+                            url
+                            fileSize
+                        }
+                    }
+                `;
+
+                const variables = {
+                    input: {
+                        name: file.name.replace(/\.[^/.]+$/, ''),
+                        type: 'resume',
+                        fileUrl: base64Content,
+                        fileName: file.name,
+                        fileSize: file.size,
+                        mimeType: mimeType
+                    }
+                };
+
+                try {
+                    const response = await fetch('http://localhost:3001/graphql', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': token ? `Bearer ${token}` : ''
+                        },
+                        body: JSON.stringify({
+                            query: mutation,
+                            variables: variables
+                        })
+                    });
+
+                    const result = await response.json();
+                    console.log('Upload result:', result);
+                    document.getElementById('result').innerHTML = `
+                        <h3>Upload Result:</h3>
+                        <pre>${JSON.stringify(result, null, 2)}</pre>
+                    `;
+                } catch (error) {
+                    console.error('Upload error:', error);
+                    document.getElementById('result').innerHTML = `
+                        <h3>Error:</h3>
+                        <pre>${error.message}</pre>
+                    `;
+                }
+            };
+            reader.readAsDataURL(file);
+        }
+    </script>
+</body>
+</html>

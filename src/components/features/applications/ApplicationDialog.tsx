@@ -28,7 +28,7 @@ export function ApplicationDialog({
   const [internalOpen, setInternalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const { addApplication, updateApplication } = useApplicationsStore();
+  const { createApplication, updateApplication } = useApplicationsStore();
   const { linkDocumentToApplications, unlinkDocumentFromApplication, documents } =
     useDocumentsStore();
 
@@ -53,9 +53,12 @@ export function ApplicationDialog({
         applicationId = application.id;
       } else {
         // Create new application
-        const newApp = await addApplication(
+        const newApp = await createApplication(
           applicationData as Omit<Application, 'id' | 'createdAt' | 'updatedAt'>
         );
+        if (!newApp) {
+          throw new Error('Failed to create application');
+        }
         applicationId = newApp.id;
       }
 

@@ -14,6 +14,10 @@ interface DocumentsState {
   getDocumentById: (id: string) => Document | undefined;
   getDocumentsByApplication: (applicationId: string) => Document[];
   getDocumentsByType: (type: string) => Document[];
+  updateVersionName: (id: string, versionName: string) => Promise<Document>;
+  linkDocumentToApplications: (documentId: string, applicationIds: string[]) => Promise<Document>;
+  unlinkDocumentFromApplication: (documentId: string, applicationId: string) => Promise<Document>;
+  clearDocuments: () => void;
 }
 
 const GET_DOCUMENTS = gql`
@@ -23,7 +27,7 @@ const GET_DOCUMENTS = gql`
       name
       type
       url
-      size
+      fileSize
       mimeType
       applicationId
       notes
@@ -40,7 +44,7 @@ const CREATE_DOCUMENT = gql`
       name
       type
       url
-      size
+      fileSize
       mimeType
       applicationId
       notes
@@ -57,7 +61,7 @@ const UPDATE_DOCUMENT = gql`
       name
       type
       url
-      size
+      fileSize
       mimeType
       applicationId
       notes
@@ -88,17 +92,27 @@ export const useDocumentsStore = create<DocumentsState>((set, get) => ({
 
       set({ documents: (data as any).documents, loading: false });
     } catch (error) {
+      const status = (error as any)?.networkError?.statusCode;
+      const isUnauthorized = status === 401 || (error as any)?.name === 'ServerError';
       console.error('Error fetching documents:', error);
-      set({ error: 'Failed to fetch documents', loading: false });
+      set({
+        error: isUnauthorized ? 'Unauthorized: please login' : 'Failed to fetch documents',
+        loading: false,
+        documents: [],
+      });
     }
   },
 
   addDocument: async (document) => {
     set({ loading: true, error: null });
     try {
+      const input = {
+        ...document,
+        type: document.type ? (document.type as any).toString().replace(/-/g, '_') : document.type,
+      } as any;
       const { data } = await graphqlClient.mutate({
         mutation: CREATE_DOCUMENT,
-        variables: { input: document },
+        variables: { input },
       });
 
       const newDocument = (data as any).createDocument;
@@ -118,9 +132,13 @@ export const useDocumentsStore = create<DocumentsState>((set, get) => ({
   updateDocument: async (id, updates) => {
     set({ loading: true, error: null });
     try {
+      const input = {
+        ...updates,
+        type: updates.type ? (updates.type as any).toString().replace(/-/g, '_') : updates.type,
+      } as any;
       const { data } = await graphqlClient.mutate({
         mutation: UPDATE_DOCUMENT,
-        variables: { id, input: updates },
+        variables: { id, input },
       });
 
       const updatedDocument = (data as any).updateDocument;
@@ -171,15 +189,36 @@ export const useDocumentsStore = create<DocumentsState>((set, get) => ({
   },
 
   updateVersionName: async (id: string, versionName: string) => {
-    return updateDocument(id, { versionName });
+    const { data } = await graphqlClient.mutate({
+      mutation: UPDATE_DOCUMENT,
+      variables: { id, input: { versionName } },
+    });
+    const updatedDocument = (data as any).updateDocument;
+    set((state) => ({
+      documents: state.documents.map((document) =>
+        document.id === id ? updatedDocument : document
+      ),
+    }));
+    return updatedDocument;
   },
 
   linkDocumentToApplications: async (documentId: string, applicationIds: string[]) => {
     // This would need to be implemented in the GraphQL schema
     // For now, we'll just update the document with the first application ID
     if (applicationIds.length > 0) {
-      return updateDocument(documentId, { applicationId: applicationIds[0] });
+      const { data } = await graphqlClient.mutate({
+        mutation: UPDATE_DOCUMENT,
+        variables: { id: documentId, input: { applicationId: applicationIds[0] } },
+      });
+      const updatedDocument = (data as any).updateDocument;
+      set((state) => ({
+        documents: state.documents.map((document) =>
+          document.id === documentId ? updatedDocument : document
+        ),
+      }));
+      return updatedDocument;
     }
+    return get().documents.find((d) => d.id === documentId)!;
   },
 
   unlinkDocumentFromApplication: async (documentId: string, applicationId: string) => {
@@ -187,7 +226,20 @@ export const useDocumentsStore = create<DocumentsState>((set, get) => ({
     // For now, we'll just clear the application ID if it matches
     const document = get().documents.find((d) => d.id === documentId);
     if (document && document.applicationId === applicationId) {
-      return updateDocument(documentId, { applicationId: undefined });
+      const { data } = await graphqlClient.mutate({
+        mutation: UPDATE_DOCUMENT,
+        variables: { id: documentId, input: { applicationId: undefined } },
+      });
+      const updatedDocument = (data as any).updateDocument;
+      set((state) => ({
+        documents: state.documents.map((doc) => (doc.id === documentId ? updatedDocument : doc)),
+      }));
+      return updatedDocument;
     }
+    return document!;
+  },
+
+  clearDocuments: () => {
+    set({ documents: [] });
   },
 }));

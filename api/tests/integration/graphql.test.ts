@@ -1,12 +1,12 @@
-import { describe, it, expect, beforeAll, afterAll, beforeEach, vi } from 'vitest';
-import request from 'supertest';
-import type { Express } from 'express';
 import { createServer } from 'node:http';
-import express from 'express';
 import cors from 'cors';
-import { createApolloServer } from '../../graphql/server';
-import authRoutes from '../../routes/auth';
-import { supabase } from '../../lib/supabase';
+import type { Express } from 'express';
+import express from 'express';
+import request from 'supertest';
+import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
+import { createApolloServer } from '../../graphql/server.ts';
+import { supabase } from '../../lib/supabase.ts';
+import authRoutes from '../../routes/auth.ts';
 
 // Test utilities
 let app: Express;
@@ -15,7 +15,7 @@ let authToken: string;
 let testUser: { email: string; password: string; id: string };
 
 // GraphQL test queries
-const REGISTER_MUTATION = `
+const _REGISTER_MUTATION = `
   mutation RegisterUser($email: String!, $password: String!) {
     register(email: $email, password: $password) {
       user {
@@ -27,7 +27,7 @@ const REGISTER_MUTATION = `
   }
 `;
 
-const LOGIN_MUTATION = `
+const _LOGIN_MUTATION = `
   mutation LoginUser($email: String!, $password: String!) {
     login(email: $email, password: $password) {
       user {
@@ -93,49 +93,46 @@ describe('GraphQL API Integration Tests', () => {
     app = express();
     app.use(cors());
     app.use(express.json());
-    
+
     // Add auth routes
     app.use('/api/auth', authRoutes);
-    
+
     // Create HTTP server and setup Apollo Server
     server = createServer(app);
     await createApolloServer(app, server);
-    
+
     // Start server
     await new Promise<void>((resolve) => {
       server.listen(0, () => {
         resolve();
       });
     });
-    
+
     // Create test user
     testUser = {
       email: `test-${Date.now()}@example.com`,
       password: 'testPassword123!',
-      id: ''
+      id: '',
     };
-    
+
     // Register and login test user
-    const registerResponse = await request(app)
-      .post('/api/auth/register')
-      .send({
-        email: testUser.email,
-        password: testUser.password,
-        name: 'Test User'
-      });
-    
+    const registerResponse = await request(app).post('/api/auth/register').send({
+      email: testUser.email,
+      password: testUser.password,
+      name: 'Test User',
+    });
+
     if (registerResponse.body?.token || registerResponse.body?.data?.session?.access_token) {
-      authToken = registerResponse.body?.token || registerResponse.body?.data?.session?.access_token;
+      authToken =
+        registerResponse.body?.token || registerResponse.body?.data?.session?.access_token;
       testUser.id = registerResponse.body?.user?.id || registerResponse.body?.data?.user?.id || '';
     } else {
       // If registration failed, try login
-      const loginResponse = await request(app)
-        .post('/api/auth/login')
-        .send({
-          email: testUser.email,
-          password: testUser.password
-        });
-      
+      const loginResponse = await request(app).post('/api/auth/login').send({
+        email: testUser.email,
+        password: testUser.password,
+      });
+
       authToken = loginResponse.body?.token || loginResponse.body?.data?.session?.access_token;
       testUser.id = loginResponse.body?.user?.id || loginResponse.body?.data?.user?.id || '';
     }
@@ -145,17 +142,14 @@ describe('GraphQL API Integration Tests', () => {
     // Cleanup test data
     if (testUser.id) {
       try {
-        await supabase
-          .from('applications')
-          .delete()
-          .eq('user_id', testUser.id);
-        
+        await supabase.from('applications').delete().eq('user_id', testUser.id);
+
         await supabase.auth.admin.deleteUser(testUser.id);
       } catch (error) {
         console.error('Cleanup error:', error);
       }
     }
-    
+
     // Close server
     await new Promise<void>((resolve) => {
       server.close(() => {
@@ -167,13 +161,11 @@ describe('GraphQL API Integration Tests', () => {
   describe('Authentication Tests', () => {
     it('should register a new user', async () => {
       const newUserEmail = `newuser-${Date.now()}@example.com`;
-      const response = await request(app)
-        .post('/api/auth/register')
-        .send({
-          email: newUserEmail,
-          password: 'newPassword123!',
-          name: 'New User'
-        });
+      const response = await request(app).post('/api/auth/register').send({
+        email: newUserEmail,
+        password: 'newPassword123!',
+        name: 'New User',
+      });
 
       expect([200, 201]).toContain(response.status);
       const regUser = response.body?.user || response.body?.data?.user;
@@ -185,12 +177,10 @@ describe('GraphQL API Integration Tests', () => {
     });
 
     it('should login existing user', async () => {
-      const response = await request(app)
-        .post('/api/auth/login')
-        .send({
-          email: testUser.email,
-          password: testUser.password
-        });
+      const response = await request(app).post('/api/auth/login').send({
+        email: testUser.email,
+        password: testUser.password,
+      });
 
       expect(response.status).toBe(200);
       const loginUser = response.body?.user || response.body?.data?.user;
@@ -222,11 +212,9 @@ describe('GraphQL API Integration Tests', () => {
 
   describe('GraphQL Queries', () => {
     it('should access GraphQL endpoint without authentication (with test user fallback)', async () => {
-      const response = await request(app)
-        .post('/graphql')
-        .send({
-          query: GET_APPLICATIONS_QUERY
-        });
+      const response = await request(app).post('/graphql').send({
+        query: GET_APPLICATIONS_QUERY,
+      });
 
       expect(response.status).toBe(200);
     });
@@ -236,15 +224,14 @@ describe('GraphQL API Integration Tests', () => {
         .post('/graphql')
         .set('Authorization', `Bearer ${authToken}`)
         .send({
-          query: GET_APPLICATIONS_QUERY
+          query: GET_APPLICATIONS_QUERY,
         });
 
       expect(response.status).toBe(200);
     });
 
     it('should return GraphQL playground for GET requests', async () => {
-      const response = await request(app)
-        .get('/graphql');
+      const response = await request(app).get('/graphql');
 
       expect(response.status).toBe(200);
       expect(response.text).toContain('Apollo Server GraphQL Playground');
@@ -262,7 +249,7 @@ describe('GraphQL API Integration Tests', () => {
         status: 'applied',
         location: 'San Francisco, CA',
         workType: 'remote',
-        employmentType: 'full_time'
+        employmentType: 'full_time',
       };
 
       const response = await request(app)
@@ -270,11 +257,11 @@ describe('GraphQL API Integration Tests', () => {
         .set('Authorization', `Bearer ${authToken}`)
         .send({
           query: CREATE_APPLICATION_MUTATION,
-          variables: { input }
+          variables: { input },
         });
 
       expect(response.status).toBe(200);
-      
+
       createdApplicationId = response.body?.data?.createApplication?.id ?? 'test-app-id';
     });
 
@@ -283,7 +270,7 @@ describe('GraphQL API Integration Tests', () => {
         .post('/graphql')
         .set('Authorization', `Bearer ${authToken}`)
         .send({
-          query: GET_APPLICATIONS_QUERY
+          query: GET_APPLICATIONS_QUERY,
         });
 
       expect(response.status).toBe(200);
@@ -293,7 +280,7 @@ describe('GraphQL API Integration Tests', () => {
       const updateInput = {
         companyName: 'Updated Company',
         position: 'Senior Software Engineer',
-        status: 'interviewing'
+        status: 'interviewing',
       };
 
       const response = await request(app)
@@ -301,10 +288,10 @@ describe('GraphQL API Integration Tests', () => {
         .set('Authorization', `Bearer ${authToken}`)
         .send({
           query: UPDATE_APPLICATION_MUTATION,
-          variables: { 
+          variables: {
             id: createdApplicationId,
-            input: updateInput
-          }
+            input: updateInput,
+          },
         });
 
       expect(response.status).toBe(200);
@@ -316,7 +303,7 @@ describe('GraphQL API Integration Tests', () => {
         .set('Authorization', `Bearer ${authToken}`)
         .send({
           query: DELETE_APPLICATION_MUTATION,
-          variables: { id: createdApplicationId }
+          variables: { id: createdApplicationId },
         });
 
       expect(response.status).toBe(200);
@@ -327,7 +314,7 @@ describe('GraphQL API Integration Tests', () => {
         .post('/graphql')
         .set('Authorization', `Bearer ${authToken}`)
         .send({
-          query: GET_APPLICATIONS_QUERY
+          query: GET_APPLICATIONS_QUERY,
         });
 
       expect(response.status).toBe(200);
@@ -336,11 +323,9 @@ describe('GraphQL API Integration Tests', () => {
 
   describe('Error Handling', () => {
     it('should handle invalid GraphQL queries', async () => {
-      const response = await request(app)
-        .post('/graphql')
-        .send({
-          query: 'invalid query { }'
-        });
+      const response = await request(app).post('/graphql').send({
+        query: 'invalid query { }',
+      });
 
       expect(response.status).toBe(200);
       expect(response.body).toHaveProperty('errors');
@@ -352,12 +337,12 @@ describe('GraphQL API Integration Tests', () => {
         .set('Authorization', `Bearer ${authToken}`)
         .send({
           query: CREATE_APPLICATION_MUTATION,
-          variables: { 
+          variables: {
             input: {
               // Missing required fields: companyName and position
-              status: 'applied'
-            }
-          }
+              status: 'applied',
+            },
+          },
         });
 
       expect(response.status).toBe(200);
@@ -369,7 +354,7 @@ describe('GraphQL API Integration Tests', () => {
         .post('/graphql')
         .set('Authorization', 'Bearer invalid-token')
         .send({
-          query: GET_APPLICATIONS_QUERY
+          query: GET_APPLICATIONS_QUERY,
         });
 
       // Should still work with test user fallback
@@ -385,13 +370,13 @@ describe('GraphQL API Integration Tests', () => {
         .set('Authorization', `Bearer ${authToken}`)
         .send({
           query: CREATE_APPLICATION_MUTATION,
-          variables: { 
+          variables: {
             input: {
               companyName: 'Test Company',
               position: 'Developer',
-              status: 'invalid_status' // Invalid enum value
-            }
-          }
+              status: 'invalid_status', // Invalid enum value
+            },
+          },
         });
 
       expect(response.status).toBe(200);
@@ -404,11 +389,11 @@ describe('GraphQL API Integration Tests', () => {
         .set('Authorization', `Bearer ${authToken}`)
         .send({
           query: CREATE_APPLICATION_MUTATION,
-          variables: { 
+          variables: {
             input: {
               // Missing required companyName and position
-            }
-          }
+            },
+          },
         });
 
       expect(response.status).toBe(200);
@@ -420,11 +405,17 @@ vi.mock('../../lib/supabase', () => ({
   supabase: {
     auth: {
       signUp: vi.fn().mockResolvedValue({
-        data: { user: { id: 'int-test-user-id', email: 'test@example.com' }, session: { access_token: 'int-test-token' } },
+        data: {
+          user: { id: 'int-test-user-id', email: 'test@example.com' },
+          session: { access_token: 'int-test-token' },
+        },
         error: null,
       }),
       signInWithPassword: vi.fn().mockResolvedValue({
-        data: { user: { id: 'int-test-user-id', email: 'test@example.com' }, session: { access_token: 'int-test-token' } },
+        data: {
+          user: { id: 'int-test-user-id', email: 'test@example.com' },
+          session: { access_token: 'int-test-token' },
+        },
         error: null,
       }),
       getUser: vi.fn().mockResolvedValue({

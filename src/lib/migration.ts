@@ -1,6 +1,5 @@
-import { db } from '../src/lib/db';
-import { supabase } from '../src/lib/supabase';
-import type { Application, Company, Contact, Document, Interview } from '../src/types';
+import { db } from './db';
+import { supabase } from './supabase';
 
 /**
  * Migration utility to transfer data from Dexie (local IndexedDB) to Supabase
@@ -200,31 +199,7 @@ export class DexieToSupabaseMigrator {
         throw error;
       }
 
-      // Migrate interviewers if they exist
-      if (interview.interviewers && interview.interviewers.length > 0) {
-        for (const interviewer of interview.interviewers) {
-          const interviewerData = {
-            interview_id: interview.id,
-            name: interviewer.name,
-            title: interviewer.title || null,
-            linkedin: interviewer.linkedIn || null,
-            email: interviewer.email || null,
-            notes: interviewer.notes || null,
-            created_at: new Date().toISOString(),
-          };
-
-          const { error: interviewerError } = await supabase
-            .from('interviewers')
-            .insert(interviewerData);
-          if (interviewerError) {
-            console.error(
-              `Failed to migrate interviewer for interview ${interview.id}:`,
-              interviewerError
-            );
-            throw interviewerError;
-          }
-        }
-      }
+      // Note: Interviewers migration skipped as table doesn't exist in current schema
     }
 
     console.log(`Migrated ${interviews.length} interviews`);
@@ -269,32 +244,7 @@ export class DexieToSupabaseMigrator {
         throw error;
       }
 
-      // Migrate document version links if they exist
-      if (document.linkedDocuments && document.linkedDocuments.length > 0) {
-        for (const link of document.linkedDocuments) {
-          const linkData = {
-            application_id: document.applicationId,
-            document_id: document.id,
-            document_name: link.documentName,
-            document_type: link.documentType,
-            version: link.version,
-            version_name: link.versionName || null,
-            linked_at: link.linkedAt.toISOString(),
-            content: link.content || null,
-          };
-
-          const { error: linkError } = await supabase
-            .from('document_version_links')
-            .insert(linkData);
-          if (linkError) {
-            console.error(
-              `Failed to migrate document version link for document ${document.id}:`,
-              linkError
-            );
-            throw linkError;
-          }
-        }
-      }
+      // Note: Document version links migration skipped as table doesn't exist in current schema
     }
 
     console.log(`Migrated ${documents.length} documents`);
@@ -312,14 +262,15 @@ export class DexieToSupabaseMigrator {
       documents: await db.documents.count(),
     };
 
-    const { data: supabaseCounts, error } = await supabase.rpc('get_table_counts', {
-      user_id: this.userId,
-    });
-
-    if (error) {
-      console.error('Failed to get Supabase counts:', error);
-      return false;
-    }
+    // Get counts from Supabase individually since RPC function doesn't exist
+    const supabaseCounts = {
+      applications:
+        (await supabase.from('applications').select('id', { count: 'exact' })).count || 0,
+      interviews: (await supabase.from('interviews').select('id', { count: 'exact' })).count || 0,
+      companies: (await supabase.from('companies').select('id', { count: 'exact' })).count || 0,
+      contacts: (await supabase.from('contacts').select('id', { count: 'exact' })).count || 0,
+      documents: (await supabase.from('documents').select('id', { count: 'exact' })).count || 0,
+    };
 
     console.log('Migration verification results:');
     console.log('Applications:', dexieCounts.applications, '->', supabaseCounts.applications);

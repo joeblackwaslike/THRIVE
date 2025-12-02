@@ -1,5 +1,6 @@
 import { GraphQLError } from 'graphql';
-import { applications as applicationsDb } from '../../lib/db';
+import { applications as applicationsDb } from '../../lib/db.ts';
+import logger from '../../logger.ts';
 import type {
   ApplicationQueryArgs,
   ApplicationRecord,
@@ -7,7 +8,7 @@ import type {
   CreateApplicationArgs,
   DeleteApplicationArgs,
   UpdateApplicationArgs,
-} from '../types';
+} from '../types.ts';
 
 export const applicationsResolver = {
   Query: {
@@ -15,6 +16,7 @@ export const applicationsResolver = {
       try {
         return await applicationsDb.getAll(userId);
       } catch (error) {
+        logger.error('Error fetching applications:', error);
         throw new GraphQLError(`Failed to fetch applications: ${error}`);
       }
     },
@@ -23,6 +25,7 @@ export const applicationsResolver = {
       try {
         return await applicationsDb.getById(id, userId);
       } catch (error) {
+        logger.error('Error fetching application:', error);
         throw new GraphQLError(`Failed to fetch application: ${error}`);
       }
     },
@@ -35,6 +38,7 @@ export const applicationsResolver = {
       try {
         return await applicationsDb.getByStatus(userId, status);
       } catch (error) {
+        logger.error('Error fetching applications by status:', error);
         throw new GraphQLError(`Failed to fetch applications by status: ${error}`);
       }
     },
@@ -71,6 +75,7 @@ export const applicationsResolver = {
 
         return await applicationsDb.create(applicationData);
       } catch (error) {
+        logger.error('Error creating application:', error);
         throw new GraphQLError(`Failed to create application: ${error}`);
       }
     },
@@ -103,6 +108,7 @@ export const applicationsResolver = {
 
         return await applicationsDb.update(id, updateData, userId);
       } catch (error) {
+        logger.error('Error updating application:', error);
         throw new GraphQLError(`Failed to update application: ${error}`);
       }
     },
@@ -111,6 +117,7 @@ export const applicationsResolver = {
       try {
         return await applicationsDb.delete(id, userId);
       } catch (error) {
+        logger.error('Error deleting application:', error);
         throw new GraphQLError(`Failed to delete application: ${error}`);
       }
     },

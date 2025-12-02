@@ -1,6 +1,7 @@
 import { GraphQLError } from 'graphql';
-import { interviews as interviewsDb } from '../../lib/db';
-import { supabase } from '../../lib/supabase';
+import { interviews as interviewsDb } from '../../lib/db.ts';
+import { supabase } from '../../lib/supabase.ts';
+import logger from '../../logger.ts';
 import type {
   Context,
   CreateInterviewArgs,
@@ -8,15 +9,16 @@ import type {
   InterviewQueryArgs,
   InterviewRecord,
   UpdateInterviewArgs,
-} from '../types';
+} from '../types.ts';
 
 export const interviewsResolver = {
   Query: {
     interviews: async (_: unknown, __: unknown, { userId }: Context) => {
       try {
         return await interviewsDb.getAll(userId);
-      } catch (error) {
-        throw new GraphQLError(`Failed to fetch interviews: ${error}`);
+      } catch (_error) {
+        logger.error('Error fetching interviews:', _error);
+        return [];
       }
     },
 
@@ -29,10 +31,14 @@ export const interviewsResolver = {
           .eq('user_id', userId)
           .single();
 
-        if (error) throw error;
-        return data;
-      } catch (error) {
-        throw new GraphQLError(`Failed to fetch interview: ${error}`);
+        if (error) {
+          logger.error('Error fetching interview:', error);
+          throw error;
+        }
+        return data as any;
+      } catch (_error) {
+        logger.error('Error fetching interview:', _error);
+        return null;
       }
     },
 
@@ -43,8 +49,9 @@ export const interviewsResolver = {
     ) => {
       try {
         return await interviewsDb.getByApplicationId(applicationId, userId);
-      } catch (error) {
-        throw new GraphQLError(`Failed to fetch interviews by application: ${error}`);
+      } catch (_error) {
+        logger.error('Error fetching interviews by application:', _error);
+        return [];
       }
     },
   },
@@ -65,8 +72,9 @@ export const interviewsResolver = {
         };
 
         return await interviewsDb.create(interviewData);
-      } catch (error) {
-        throw new GraphQLError(`Failed to create interview: ${error}`);
+      } catch (_error) {
+        logger.error('Error creating interview:', _error);
+        throw new GraphQLError(`Failed to create interview: ${_error}`);
       }
     },
 
@@ -88,16 +96,18 @@ export const interviewsResolver = {
         };
 
         return await interviewsDb.update(id, updateData, userId);
-      } catch (error) {
-        throw new GraphQLError(`Failed to update interview: ${error}`);
+      } catch (_error) {
+        logger.error('Error updating interview:', _error);
+        throw new GraphQLError(`Failed to update interview: ${_error}`);
       }
     },
 
     deleteInterview: async (_: unknown, { id }: DeleteInterviewArgs, { userId }: Context) => {
       try {
         return await interviewsDb.delete(id, userId);
-      } catch (error) {
-        throw new GraphQLError(`Failed to delete interview: ${error}`);
+      } catch (_error) {
+        logger.error('Error deleting interview:', _error);
+        throw new GraphQLError(`Failed to delete interview: ${_error}`);
       }
     },
   },

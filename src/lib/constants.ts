@@ -140,11 +140,15 @@ export const DOCUMENT_TYPES = [
  * Interview types
  */
 export const INTERVIEW_TYPES = [
+  { value: 'recruiter-screen', label: 'Recruiter Screen' },
   { value: 'phone-screen', label: 'Phone Screen' },
+  { value: 'hiring-manager-chat', label: 'Hiring Manager Chat' },
   { value: 'video', label: 'Video Interview' },
+  { value: 'technical-assessment', label: 'Technical Assessment' },
   { value: 'on-site', label: 'On-site Interview' },
-  { value: 'technical', label: 'Technical Interview' },
-  { value: 'behavioral', label: 'Behavioral Interview' },
+  { value: 'technical-interview', label: 'Technical Interview' },
+  { value: 'behavioral-interview', label: 'Behavioral Interview' },
+  { value: 'leadership-interview', label: 'Leadership Interview' },
   { value: 'panel', label: 'Panel Interview' },
   { value: 'final', label: 'Final Interview' },
   { value: 'other', label: 'Other' },

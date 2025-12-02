@@ -1,25 +1,34 @@
 /**
  * This is a API server
  */
-
 import type { Server } from 'node:http';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
+import * as Sentry from '@sentry/node';
 import cors from 'cors';
 import dotenv from 'dotenv';
 import express, { type NextFunction, type Request, type Response } from 'express';
-import { createApolloServer } from './graphql/server.js';
-import authRoutes from './routes/auth.js';
+import pino from 'pino-http';
+import { createApolloServer } from './graphql/server.ts';
+import authRoutes from './routes/auth.ts';
 
 // for esm mode
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 // load env
-dotenv.config();
+dotenv.config({ quiet: true });
 
 const app: express.Application = express();
 
+app.get('/debug-sentry', function mainHandler(_req, _res) {
+  throw new Error('My first Sentry error!');
+});
+
+// The error handler must be registered before any other error middleware and after all controllers
+Sentry.setupExpressErrorHandler(app);
+
+app.use(pino);
 app.use(cors());
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true, limit: '10mb' }));
@@ -52,12 +61,7 @@ app.use((_error: Error, _req: Request, res: Response, _next: NextFunction) => {
 /**
  * 404 handler
  */
-app.use((_req: Request, res: Response) => {
-  res.status(404).json({
-    success: false,
-    error: 'API not found',
-  });
-});
+// 404 handler is registered after GraphQL in server.ts
 
 // Apollo Server setup function
 export async function setupApolloServer(expressApp: Express, httpServer: Server) {

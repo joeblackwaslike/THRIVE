@@ -794,7 +794,7 @@ Add your content here...`;
 
       await addDocument({
         name: newDocName,
-        type: newDocType,
+        type: (newDocType as any).replace(/-/g, '_'),
         version: 1,
         content: newDocContent || defaultContent,
       });

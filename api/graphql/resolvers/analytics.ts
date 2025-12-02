@@ -1,6 +1,7 @@
 import { GraphQLError } from 'graphql';
-import { supabase } from '../../lib/supabase';
-import type { ApplicationRecordForAnalytics, ApplicationsOverTimeArgs, Context } from '../types';
+import { supabase } from '../../lib/supabase.ts';
+import logger from '../../logger.ts';
+import type { ApplicationRecordForAnalytics, ApplicationsOverTimeArgs, Context } from '../types.ts';
 
 export const analyticsResolver = {
   Query: {
@@ -12,7 +13,10 @@ export const analyticsResolver = {
           .select('*', { count: 'exact', head: true })
           .eq('user_id', userId);
 
-        if (totalError) throw totalError;
+        if (totalError) {
+          logger.error('Error fetching total applications count:', totalError);
+          throw totalError;
+        }
 
         // Get applications by status
         const { data: statusData, error: statusError } = await supabase
@@ -20,7 +24,10 @@ export const analyticsResolver = {
           .select('status')
           .eq('user_id', userId);
 
-        if (statusError) throw statusError;
+        if (statusError) {
+          logger.error('Error fetching applications by status:', statusError);
+          throw statusError;
+        }
 
         // Get interviews count
         const { data: interviewsData, error: interviewsError } = await supabase
@@ -28,7 +35,10 @@ export const analyticsResolver = {
           .select('*', { count: 'exact', head: true })
           .eq('user_id', userId);
 
-        if (interviewsError) throw interviewsError;
+        if (interviewsError) {
+          logger.error('Error fetching interviews count:', interviewsError);
+          throw interviewsError;
+        }
 
         // Get offers count (applications with status 'offer' or 'accepted')
         const { data: offersData, error: offersError } = await supabase
@@ -37,7 +47,10 @@ export const analyticsResolver = {
           .eq('user_id', userId)
           .in('status', ['offer', 'accepted']);
 
-        if (offersError) throw offersError;
+        if (offersError) {
+          logger.error('Error fetching offers count:', offersError);
+          throw offersError;
+        }
 
         // Calculate by status
         const byStatus: Record<string, number> = {};
@@ -58,6 +71,7 @@ export const analyticsResolver = {
           offersReceived: offersData.length,
         };
       } catch (error) {
+        logger.error('Error fetching application stats:', error);
         throw new GraphQLError(`Failed to fetch application stats: ${error}`);
       }
     },
@@ -69,7 +83,10 @@ export const analyticsResolver = {
           .select('status')
           .eq('user_id', userId);
 
-        if (error) throw error;
+        if (error) {
+          logger.error('Error fetching applications by status count:', error);
+          throw error;
+        }
 
         const byStatus: Record<string, number> = {};
         data.forEach((app: ApplicationRecordForAnalytics) => {
@@ -78,6 +95,7 @@ export const analyticsResolver = {
 
         return byStatus;
       } catch (error) {
+        logger.error('Error fetching applications by status count:', error);
         throw new GraphQLError(`Failed to fetch applications by status count: ${error}`);
       }
     },
@@ -96,10 +114,14 @@ export const analyticsResolver = {
           .lte('created_at', endDate)
           .order('created_at', { ascending: true });
 
-        if (error) throw error;
+        if (error) {
+          logger.error('Error fetching applications over time:', error);
+          throw error;
+        }
 
         return data;
       } catch (error) {
+        logger.error('Error fetching applications over time:', error);
         throw new GraphQLError(`Failed to fetch applications over time: ${error}`);
       }
     },

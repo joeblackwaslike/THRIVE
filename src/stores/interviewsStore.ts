@@ -16,7 +16,13 @@ const GET_INTERVIEWS = gql`
       duration
       location
       meetingUrl
-      interviewers
+      interviewers {
+        name
+        title
+        linkedin
+        email
+        notes
+      }
       preparationNotes
       questionsAsked
       questionsToAsk
@@ -42,7 +48,13 @@ const GET_INTERVIEWS_BY_APPLICATION = gql`
       duration
       location
       meetingUrl
-      interviewers
+      interviewers {
+        name
+        title
+        linkedin
+        email
+        notes
+      }
       preparationNotes
       questionsAsked
       questionsToAsk
@@ -68,7 +80,13 @@ const GET_INTERVIEW = gql`
       duration
       location
       meetingUrl
-      interviewers
+      interviewers {
+        name
+        title
+        linkedin
+        email
+        notes
+      }
       preparationNotes
       questionsAsked
       questionsToAsk
@@ -94,7 +112,13 @@ const CREATE_INTERVIEW = gql`
       duration
       location
       meetingUrl
-      interviewers
+      interviewers {
+        name
+        title
+        linkedin
+        email
+        notes
+      }
       preparationNotes
       questionsAsked
       questionsToAsk
@@ -120,7 +144,13 @@ const UPDATE_INTERVIEW = gql`
       duration
       location
       meetingUrl
-      interviewers
+      interviewers {
+        name
+        title
+        linkedin
+        email
+        notes
+      }
       preparationNotes
       questionsAsked
       questionsToAsk
@@ -204,27 +234,19 @@ export const useInterviewsStore = create<InterviewsState>((set, get) => ({
   },
 
   fetchInterviewsByApplication: async (applicationId: string) => {
-    try {
-      const { data } = await graphqlClient.query({
-        query: GET_INTERVIEWS_BY_APPLICATION,
-        variables: { applicationId },
-      });
-      return (data as any).interviewsByApplication || [];
-    } catch (error) {
-      throw error;
-    }
+    const { data } = await graphqlClient.query({
+      query: GET_INTERVIEWS_BY_APPLICATION,
+      variables: { applicationId },
+    });
+    return (data as any).interviewsByApplication || [];
   },
 
   fetchInterview: async (id: string) => {
-    try {
-      const { data } = await graphqlClient.query({
-        query: GET_INTERVIEW,
-        variables: { id },
-      });
-      return (data as any).interview;
-    } catch (error) {
-      throw error;
-    }
+    const { data } = await graphqlClient.query({
+      query: GET_INTERVIEW,
+      variables: { id },
+    });
+    return (data as any).interview;
   },
 
   createInterview: async (interview: Omit<Interview, 'id' | 'createdAt' | 'updatedAt'>) => {
@@ -314,7 +336,18 @@ export const useInterviewsStore = create<InterviewsState>((set, get) => ({
   },
 
   addInterview: async (interview) => {
-    return createInterview(interview);
+    const { data } = await graphqlClient.mutate({
+      mutation: CREATE_INTERVIEW,
+      variables: { input: interview },
+    });
+    const newInterview = (data as any)?.createInterview;
+    if (newInterview) {
+      set((state) => ({
+        interviews: [...state.interviews, newInterview],
+        loading: false,
+      }));
+    }
+    return newInterview;
   },
 
   isLoading: false,

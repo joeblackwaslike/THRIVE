@@ -139,7 +139,12 @@ export function KanbanCard({ application, isOverlay = false }: KanbanCardProps) 
     // Process each file
     for (const file of validFiles) {
       try {
-        const content = await file.text();
+        const reader = new FileReader();
+        const fileContent: string = await new Promise((resolve, reject) => {
+          reader.onload = () => resolve(reader.result as string);
+          reader.onerror = reject;
+          reader.readAsDataURL(file);
+        });
 
         // Detect document type based on filename
         const fileName = file.name.toLowerCase();
@@ -166,9 +171,12 @@ export function KanbanCard({ application, isOverlay = false }: KanbanCardProps) 
         // Create the document
         const { addDocument } = useDocumentsStore.getState();
         const newDocument = await addDocument({
-          name: file.name.replace(/\.[^/.]+$/, ''), // Remove extension
-          type,
-          content,
+          name: file.name.replace(/\.[^/.]+$/, ''),
+          type: (type as any).replace(/-/g, '_'),
+          fileName: file.name,
+          fileUrl: fileContent,
+          fileSize: file.size,
+          mimeType: file.type,
           tags: [application.companyName, application.position],
           version: 1,
         });

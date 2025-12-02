@@ -45,18 +45,22 @@ export function InterviewFilters({ savedFiltersButton }: InterviewFiltersProps) 
   // Toggle filter functions
   const toggleTypeFilter = (
     type:
+      | 'recruiter-screen'
       | 'phone-screen'
+      | 'hiring-manager-chat'
       | 'video'
+      | 'technical-assessment'
       | 'on-site'
-      | 'technical'
-      | 'behavioral'
+      | 'technical-interview'
+      | 'behavioral-interview'
+      | 'leadership-interview'
       | 'panel'
       | 'final'
       | 'other'
   ) => {
-    const newTypes = typeFilters.includes(type)
+    const newTypes = typeFilters?.includes(type as any)
       ? typeFilters.filter((t) => t !== type)
-      : [...typeFilters, type];
+      : [...(typeFilters || []), type];
     setFilters({ type: newTypes.length > 0 ? newTypes : undefined });
   };
 

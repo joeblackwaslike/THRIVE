@@ -75,7 +75,9 @@ export function BulkActions({ selectedRows, onClearSelection }: BulkActionsProps
     try {
       await processBatch(
         selectedRows,
-        async (row) => await deleteApplication(row.id),
+        async (row) => {
+          await deleteApplication(row.id);
+        },
         5, // Process 5 at a time
         50 // 50ms delay between batches
       );
@@ -106,7 +108,9 @@ export function BulkActions({ selectedRows, onClearSelection }: BulkActionsProps
     try {
       await processBatch(
         selectedRows,
-        async (row) => await updateApplication(row.id, { status }),
+        async (row) => {
+          await updateApplication(row.id, { status });
+        },
         10, // Process 10 at a time (updates are faster than deletes)
         30 // 30ms delay between batches
       );
@@ -136,7 +140,9 @@ export function BulkActions({ selectedRows, onClearSelection }: BulkActionsProps
     try {
       await processBatch(
         selectedRows,
-        async (row) => await updateApplication(row.id, { priority }),
+        async (row) => {
+          await updateApplication(row.id, { priority });
+        },
         10, // Process 10 at a time
         30 // 30ms delay between batches
       );

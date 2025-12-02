@@ -130,6 +130,7 @@ export function useAutoSaveBatcher<T>(
   );
 
   useEffect(() => {
+    if (!id) return;
     batcherRef.current.update(id, changes);
     // biome-ignore lint/correctness/useExhaustiveDependencies: Dependencies provided by caller
   }, dependencies);

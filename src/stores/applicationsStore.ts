@@ -8,12 +8,13 @@ import {
   GET_APPLICATIONS,
   UPDATE_APPLICATION,
 } from '../lib/graphql/queries';
-import type { Application } from '../types';
+import type { Application, ApplicationFilters } from '../types';
 
 interface ApplicationsState {
   applications: Application[];
   loading: boolean;
   error: string | null;
+  filters: ApplicationFilters;
 
   // Actions
   fetchApplications: () => Promise<void>;
@@ -29,8 +30,11 @@ interface ApplicationsState {
   addApplication: (application: Application) => void;
   updateApplicationInStore: (id: string, updates: Partial<Application>) => void;
   removeApplication: (id: string) => void;
+  clearApplications: () => void;
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
+  setFilters: (filters: Partial<ApplicationFilters>) => void;
+  getFilteredApplications: () => Application[];
 }
 
 export const useApplicationsStore = create<ApplicationsState>()(
@@ -39,6 +43,7 @@ export const useApplicationsStore = create<ApplicationsState>()(
       applications: [],
       loading: false,
       error: null,
+      filters: {},
 
       fetchApplications: async () => {
         set({ loading: true, error: null });
@@ -349,8 +354,62 @@ export const useApplicationsStore = create<ApplicationsState>()(
         const updatedApplications = currentApplications.filter((app) => app.id !== id);
         set({ applications: updatedApplications });
       },
+      clearApplications: () => {
+        set({ applications: [] });
+      },
       setLoading: (loading: boolean) => set({ loading }),
       setError: (error: string | null) => set({ error }),
+      setFilters: (filters: Partial<ApplicationFilters>) =>
+        set((state) => ({ filters: { ...state.filters, ...filters } })),
+      getFilteredApplications: () => {
+        const { applications, filters } = get();
+        const search = (filters.searchQuery || '').toLowerCase();
+        const statusSet = filters.status ? new Set(filters.status) : null;
+        const prioritySet = filters.priority ? new Set(filters.priority) : null;
+        const workTypeSet = filters.workType ? new Set(filters.workType) : null;
+        const employmentTypeSet = filters.employmentType ? new Set(filters.employmentType) : null;
+
+        return applications.filter((app) => {
+          if (statusSet && !statusSet.has(app.status)) return false;
+          if (prioritySet && (!app.priority || !prioritySet.has(app.priority))) return false;
+          if (workTypeSet && (!app.workType || !workTypeSet.has(app.workType))) return false;
+          if (
+            employmentTypeSet &&
+            (!app.employmentType || !employmentTypeSet.has(app.employmentType))
+          )
+            return false;
+
+          if (filters.dateRange?.start || filters.dateRange?.end) {
+            const applied = app.appliedDate ? new Date(app.appliedDate).getTime() : null;
+            const start = filters.dateRange.start ? filters.dateRange.start.getTime() : null;
+            const end = filters.dateRange.end ? filters.dateRange.end.getTime() : null;
+            if (applied === null) return false;
+            if (start !== null && applied < start) return false;
+            if (end !== null && applied > end) return false;
+          }
+
+          if (filters.salaryRange) {
+            const min = filters.salaryRange.min ?? null;
+            const max = filters.salaryRange.max ?? null;
+            const appMin = app.salary?.min ?? null;
+            const appMax = app.salary?.max ?? appMin;
+            if (min !== null && (appMax === null || appMax < min)) return false;
+            if (max !== null && (appMin === null || appMin > max)) return false;
+          }
+
+          if (filters.tags && filters.tags.length > 0) {
+            const appTags = app.tags || [];
+            if (!filters.tags.some((t) => appTags.includes(t))) return false;
+          }
+
+          if (search) {
+            const hay = `${app.position} ${app.companyName} ${app.location || ''}`.toLowerCase();
+            if (!hay.includes(search)) return false;
+          }
+
+          return true;
+        });
+      },
     }),
     {
       name: 'applications-store',

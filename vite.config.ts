@@ -1,3 +1,4 @@
+import { sentryVitePlugin } from '@sentry/vite-plugin';
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
 import { traeBadgePlugin } from 'vite-plugin-trae-solo-badge';
@@ -6,11 +7,7 @@ import tsconfigPaths from 'vite-tsconfig-paths';
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [
-    react({
-      babel: {
-        plugins: ['react-dev-locator'],
-      },
-    }),
+    react(),
     traeBadgePlugin({
       variant: 'dark',
       position: 'bottom-right',
@@ -21,7 +18,23 @@ export default defineConfig({
       autoThemeTarget: '#root',
     }),
     tsconfigPaths(),
+    // Sentry source maps plugin - only in production
+    ...(['production', 'development'].includes(process.env.NODE_ENV || 'development') && process.env.SENTRY_AUTH_TOKEN
+      ? [
+          sentryVitePlugin({
+            org: 'joeblackwaslike', // Replace with your Sentry org
+            project: 'thrive', // Replace with your Sentry project
+            authToken: process.env.SENTRY_AUTH_TOKEN,
+            sourcemaps: {
+              filesToDeleteAfterUpload: ['dist/**/*.map.js'],
+            },
+          }),
+        ]
+      : []),
   ],
+  build: {
+    sourcemap: true, // Generate source maps
+  },
   server: {
     proxy: {
       '/api': {

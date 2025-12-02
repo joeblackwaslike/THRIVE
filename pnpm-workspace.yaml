@@ -1,0 +1,2 @@
+overrides:
+  "@tanstack/react-ranger>react": "19.2.0"

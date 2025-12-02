@@ -1,15 +1,15 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
-import { Request, Response, NextFunction } from 'express';
-import { supabase } from '../../lib/supabase';
-import { authenticateToken, optionalAuth, getUserIdFromRequest } from '../../lib/auth';
+import type { NextFunction } from 'express';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { authenticateToken, getUserIdFromRequest, optionalAuth } from '../../lib/auth.ts';
+import { supabase } from '../../lib/supabase.ts';
 
 // Mock the supabase module
-vi.mock('../../lib/supabase', () => ({
+vi.mock('../../lib/supabase.ts', () => ({
   supabase: {
     auth: {
-      getUser: vi.fn()
-    }
-  }
+      getUser: vi.fn(),
+    },
+  },
 }));
 
 describe('Authentication Middleware', () => {
@@ -20,11 +20,11 @@ describe('Authentication Middleware', () => {
   beforeEach(() => {
     req = {
       headers: {},
-      user: undefined
+      user: undefined,
     };
     res = {
       status: vi.fn().mockReturnThis(),
-      json: vi.fn()
+      json: vi.fn(),
     };
     next = vi.fn();
     vi.clearAllMocks();
@@ -34,7 +34,7 @@ describe('Authentication Middleware', () => {
     it('should authenticate with valid token', async () => {
       const mockUser = { id: 'user123', email: 'test@example.com' };
       const token = 'valid.jwt.token';
-      
+
       req.headers.authorization = `Bearer ${token}`;
       (supabase.auth.getUser as any).mockResolvedValue({ data: { user: mockUser }, error: null });
 
@@ -64,17 +64,20 @@ describe('Authentication Middleware', () => {
 
       // The middleware catches the error and returns 500
       expect(res.status).toHaveBeenCalledWith(500);
-      expect(res.json).toHaveBeenCalledWith({ success: false, error: 'Authentication server error' });
+      expect(res.json).toHaveBeenCalledWith({
+        success: false,
+        error: 'Authentication server error',
+      });
       expect(next).not.toHaveBeenCalled();
     });
 
     it('should reject request with invalid token', async () => {
       const token = 'invalid.token';
       req.headers.authorization = `Bearer ${token}`;
-      
-      (supabase.auth.getUser as any).mockResolvedValue({ 
-        data: { user: null }, 
-        error: new Error('Invalid token') 
+
+      (supabase.auth.getUser as any).mockResolvedValue({
+        data: { user: null },
+        error: new Error('Invalid token'),
       });
 
       await authenticateToken(req, res, next);
@@ -87,10 +90,10 @@ describe('Authentication Middleware', () => {
     it('should handle Supabase errors gracefully', async () => {
       const token = 'valid.token';
       req.headers.authorization = `Bearer ${token}`;
-      
-      (supabase.auth.getUser as any).mockResolvedValue({ 
-        data: { user: null }, 
-        error: new Error('Supabase error') 
+
+      (supabase.auth.getUser as any).mockResolvedValue({
+        data: { user: null },
+        error: new Error('Supabase error'),
       });
 
       await authenticateToken(req, res, next);
@@ -105,7 +108,7 @@ describe('Authentication Middleware', () => {
     it('should authenticate with valid token', async () => {
       const mockUser = { id: 'user123', email: 'test@example.com' };
       const token = 'valid.jwt.token';
-      
+
       req.headers.authorization = `Bearer ${token}`;
       (supabase.auth.getUser as any).mockResolvedValue({ data: { user: mockUser }, error: null });
 
@@ -127,10 +130,10 @@ describe('Authentication Middleware', () => {
     it('should continue without authentication when token is invalid', async () => {
       const token = 'invalid.token';
       req.headers.authorization = `Bearer ${token}`;
-      
-      (supabase.auth.getUser as any).mockResolvedValue({ 
-        data: { user: null }, 
-        error: new Error('Invalid token') 
+
+      (supabase.auth.getUser as any).mockResolvedValue({
+        data: { user: null },
+        error: new Error('Invalid token'),
       });
 
       await optionalAuth(req, res, next);
@@ -143,7 +146,7 @@ describe('Authentication Middleware', () => {
     it('should handle Supabase errors gracefully', async () => {
       const token = 'valid.token';
       req.headers.authorization = `Bearer ${token}`;
-      
+
       (supabase.auth.getUser as any).mockRejectedValue(new Error('Network error'));
 
       await optionalAuth(req, res, next);

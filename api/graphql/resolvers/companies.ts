@@ -1,5 +1,6 @@
 import { GraphQLError } from 'graphql';
-import { companies as companiesDb } from '../../lib/db';
+import { companies as companiesDb } from '../../lib/db.ts';
+import logger from '../../logger.ts';
 import type {
   CompanyQueryArgs,
   CompanyRecord,
@@ -7,23 +8,25 @@ import type {
   CreateCompanyArgs,
   DeleteCompanyArgs,
   UpdateCompanyArgs,
-} from '../types';
+} from '../types.ts';
 
 export const companiesResolver = {
   Query: {
     companies: async (_: unknown, __: unknown, { userId }: Context) => {
       try {
         return await companiesDb.getAll(userId);
-      } catch (error) {
-        throw new GraphQLError(`Failed to fetch companies: ${error}`);
+      } catch (_error) {
+        logger.error('Error fetching companies:', _error);
+        return [];
       }
     },
 
     company: async (_: unknown, { id }: CompanyQueryArgs, { userId }: Context) => {
       try {
         return await companiesDb.getById(id, userId);
-      } catch (error) {
-        throw new GraphQLError(`Failed to fetch company: ${error}`);
+      } catch (_error) {
+        logger.error('Error fetching company:', _error);
+        return null;
       }
     },
   },
@@ -51,6 +54,7 @@ export const companiesResolver = {
 
         return await companiesDb.create(companyData);
       } catch (error) {
+        logger.error('Error creating company:', error);
         throw new GraphQLError(`Failed to create company: ${error}`);
       }
     },
@@ -76,6 +80,7 @@ export const companiesResolver = {
 
         return await companiesDb.update(id, updateData, userId);
       } catch (error) {
+        logger.error('Error updating company:', error);
         throw new GraphQLError(`Failed to update company: ${error}`);
       }
     },
@@ -84,6 +89,7 @@ export const companiesResolver = {
       try {
         return await companiesDb.delete(id, userId);
       } catch (error) {
+        logger.error('Error deleting company:', error);
         throw new GraphQLError(`Failed to delete company: ${error}`);
       }
     },

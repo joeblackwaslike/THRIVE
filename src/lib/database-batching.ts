@@ -73,10 +73,12 @@ export function createDatabaseBatcher<T>(config: BatcherConfig<T>) {
     }
 
     // Get all pending updates
-    const updates = Array.from(pendingUpdates.entries()).map(([id, changes]) => ({
-      key: id,
-      changes: { ...changes, updatedAt: new Date() } as UpdateSpec<T>,
-    }));
+    const updates = Array.from(pendingUpdates.entries())
+      .filter(([id]) => !!id)
+      .map(([id, changes]) => ({
+        key: id,
+        changes: { ...changes, updatedAt: new Date() } as UpdateSpec<T>,
+      }));
 
     const count = updates.length;
 
@@ -85,8 +87,10 @@ export function createDatabaseBatcher<T>(config: BatcherConfig<T>) {
     isProcessing = true;
 
     try {
-      // Execute bulk update
-      await table.bulkUpdate(updates);
+      // Execute updates individually to avoid Dexie bulkUpdate issues
+      for (const u of updates) {
+        await table.update(u.key as any, u.changes as any);
+      }
 
       if (onSuccess) {
         onSuccess(count);

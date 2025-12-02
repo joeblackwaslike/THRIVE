@@ -212,7 +212,12 @@ export function ApplicationForm({
     if (!file) return;
 
     try {
-      const content = await file.text();
+      const reader = new FileReader();
+      const fileContent: string = await new Promise((resolve, reject) => {
+        reader.onload = () => resolve(reader.result as string);
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
 
       // Auto-detect document type from filename
       const fileName = file.name.toLowerCase();
@@ -223,7 +228,7 @@ export function ApplicationForm({
       else if (fileName.includes('transcript')) detectedType = 'transcript';
       else if (fileName.includes('cert')) detectedType = 'certification';
 
-      setUploadedFile({ file, content });
+      setUploadedFile({ file, content: fileContent });
       setSelectedDocType(detectedType);
       setUploadDialogOpen(true);
 
@@ -242,18 +247,13 @@ export function ApplicationForm({
 
     setIsUploading(true);
     try {
-      const fileExtension = uploadedFile.file.name.split('.').pop()?.toLowerCase();
-
-      // Determine format
-      let format: 'pdf' | 'markdown' | 'text' = 'text';
-      if (fileExtension === 'pdf') format = 'pdf';
-      else if (fileExtension === 'md') format = 'markdown';
-
       const newDoc = await addDocument({
-        name: uploadedFile.file.name.replace(/\.[^/.]+$/, ''), // Remove extension
-        type: selectedDocType,
-        format,
-        content: uploadedFile.content,
+        name: uploadedFile.file.name.replace(/\.[^/.]+$/, ''),
+        type: (selectedDocType as any).replace(/-/g, '_'),
+        fileName: uploadedFile.file.name,
+        fileUrl: uploadedFile.content,
+        fileSize: uploadedFile.file.size,
+        mimeType: uploadedFile.file.type,
         version: 1,
       });
 

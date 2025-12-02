@@ -400,7 +400,7 @@ export function AnalyticsDashboard() {
                         cx="50%"
                         cy="50%"
                         outerRadius={100}
-                        label={(entry) => `${entry.status}: ${entry.count}`}
+                        label={(entry: any) => `${entry.status}: ${entry.count}`}
                       >
                         {statusDistribution.map((entry) => (
                           <Cell key={entry.status} fill={entry.color} />

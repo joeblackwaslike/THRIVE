@@ -3,8 +3,9 @@
  * Handle user registration, login, token management, etc.
  */
 import { type Request, type Response, Router } from 'express';
-import { type AuthenticatedRequest, authenticateToken } from '../lib/auth';
-import { supabase } from '../lib/supabase';
+import { type AuthenticatedRequest, authenticateToken } from '../lib/auth.ts';
+import { supabase } from '../lib/supabase.ts';
+import logger from '../logger.ts';
 
 const router = Router();
 
@@ -40,6 +41,12 @@ router.post('/register', async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
+    if (data.user) {
+      await supabase
+        .from('users')
+        .upsert({ id: data.user.id, email: data.user.email || email }, { onConflict: 'id' });
+    }
+
     res.status(201).json({
       success: true,
       data: {
@@ -49,7 +56,7 @@ router.post('/register', async (req: Request, res: Response): Promise<void> => {
       message: 'Registration successful. Please check your email for confirmation.',
     });
   } catch (error) {
-    console.error('Registration error:', error);
+    logger.error('Registration error:', error);
     res.status(500).json({
       success: false,
       error: 'Internal server error',
@@ -66,6 +73,7 @@ router.post('/login', async (req: Request, res: Response): Promise<void> => {
     const { email, password } = req.body;
 
     if (!email || !password) {
+      logger.error('Login error: Email and password are required');
       res.status(400).json({
         success: false,
         error: 'Email and password are required',
@@ -79,6 +87,7 @@ router.post('/login', async (req: Request, res: Response): Promise<void> => {
     });
 
     if (error) {
+      logger.error('Login error:', error);
       res.status(401).json({
         success: false,
         error: 'Invalid credentials',
@@ -86,6 +95,13 @@ router.post('/login', async (req: Request, res: Response): Promise<void> => {
       return;
     }
 
+    if (data.user) {
+      await supabase
+        .from('users')
+        .upsert({ id: data.user.id, email: data.user.email || email }, { onConflict: 'id' });
+    }
+
+    logger.info('Login successful for user:', email);
     res.status(200).json({
       success: true,
       data: {
@@ -95,7 +111,7 @@ router.post('/login', async (req: Request, res: Response): Promise<void> => {
       message: 'Login successful',
     });
   } catch (error) {
-    console.error('Login error:', error);
+    logger.error('Login error:', error);
     res.status(500).json({
       success: false,
       error: 'Internal server error',
@@ -110,11 +126,12 @@ router.post('/login', async (req: Request, res: Response): Promise<void> => {
 router.post(
   '/logout',
   authenticateToken,
-  async (req: AuthenticatedRequest, res: Response): Promise<void> => {
+  async (_req: AuthenticatedRequest, res: Response): Promise<void> => {
     try {
       const { error } = await supabase.auth.signOut();
 
       if (error) {
+        logger.error('Logout error:', error);
         res.status(400).json({
           success: false,
           error: error.message,
@@ -127,7 +144,7 @@ router.post(
         message: 'Logout successful',
       });
     } catch (error) {
-      console.error('Logout error:', error);
+      logger.error('Logout error:', error);
       res.status(500).json({
         success: false,
         error: 'Internal server error',
@@ -141,6 +158,7 @@ router.post(
  * GET /api/auth/me
  */
 router.get('/me', authenticateToken, (req: AuthenticatedRequest, res: Response): void => {
+  logger.info('Get current user request:', req.user);
   res.status(200).json({
     success: true,
     data: {
@@ -158,6 +176,7 @@ router.post('/refresh', async (req: Request, res: Response): Promise<void> => {
     const { refresh_token } = req.body;
 
     if (!refresh_token) {
+      logger.error('Refresh token error: Refresh token is required');
       res.status(400).json({
         success: false,
         error: 'Refresh token is required',
@@ -170,6 +189,7 @@ router.post('/refresh', async (req: Request, res: Response): Promise<void> => {
     });
 
     if (error) {
+      logger.error('Refresh token error:', error);
       res.status(401).json({
         success: false,
         error: 'Invalid refresh token',
@@ -185,7 +205,7 @@ router.post('/refresh', async (req: Request, res: Response): Promise<void> => {
       },
     });
   } catch (error) {
-    console.error('Token refresh error:', error);
+    logger.error('Token refresh error:', error);
     res.status(500).json({
       success: false,
       error: 'Internal server error',

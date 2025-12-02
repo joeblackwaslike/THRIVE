@@ -72,7 +72,7 @@ interface CompaniesState {
   addCompany: (company: Omit<Company, 'id' | 'createdAt' | 'updatedAt'>) => Promise<Company>;
 }
 
-export const useCompaniesStore = create<CompaniesState>((set, get) => ({
+export const useCompaniesStore = create<CompaniesState>((set, _get) => ({
   companies: [],
   loading: false,
   error: null,
@@ -171,6 +171,17 @@ export const useCompaniesStore = create<CompaniesState>((set, get) => ({
   },
 
   addCompany: async (company) => {
-    return createCompany(company);
+    const { data } = await graphqlClient.mutate({
+      mutation: CREATE_COMPANY,
+      variables: { input: company },
+    });
+    const newCompany = (data as any)?.createCompany;
+    if (newCompany) {
+      set((state) => ({
+        companies: [...state.companies, newCompany],
+        loading: false,
+      }));
+    }
+    return newCompany;
   },
 }));
