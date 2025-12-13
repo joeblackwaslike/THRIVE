@@ -13,9 +13,6 @@ export function useSentryUser() {
       setSentryUser({
         id: user.id,
         email: user.email,
-        username: user.name,
-        role: user.role,
-        subscription: user.subscription_type,
       });
     } else {
       setSentryUser(null);

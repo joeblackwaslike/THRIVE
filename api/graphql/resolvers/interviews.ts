@@ -15,6 +15,7 @@ export const interviewsResolver = {
   Query: {
     interviews: async (_: unknown, __: unknown, { userId }: Context) => {
       try {
+        if (!userId || userId === 'null') return [];
         return await interviewsDb.getAll(userId);
       } catch (_error) {
         logger.error('Error fetching interviews:', _error);
@@ -24,6 +25,7 @@ export const interviewsResolver = {
 
     interview: async (_: unknown, { id }: InterviewQueryArgs, { userId }: Context) => {
       try {
+        if (!userId || userId === 'null') return null;
         const { data, error } = await supabase
           .from('interviews')
           .select('*')
@@ -45,9 +47,10 @@ export const interviewsResolver = {
     interviewsByApplication: async (
       _: unknown,
       { applicationId }: { applicationId: string },
-      { userId }: Context
+      { userId }: Context,
     ) => {
       try {
+        if (!userId || userId === 'null') return [];
         return await interviewsDb.getByApplicationId(applicationId, userId);
       } catch (_error) {
         logger.error('Error fetching interviews by application:', _error);
@@ -59,6 +62,7 @@ export const interviewsResolver = {
   Mutation: {
     createInterview: async (_: unknown, { input }: CreateInterviewArgs, { userId }: Context) => {
       try {
+        if (!userId || userId === 'null') throw new GraphQLError('Authentication required');
         const interviewData = {
           ...input,
           user_id: userId,
@@ -81,9 +85,10 @@ export const interviewsResolver = {
     updateInterview: async (
       _: unknown,
       { id, input }: UpdateInterviewArgs,
-      { userId }: Context
+      { userId }: Context,
     ) => {
       try {
+        if (!userId || userId === 'null') throw new GraphQLError('Authentication required');
         const updateData = {
           ...input,
           // Convert GraphQL enum values to database values
@@ -104,6 +109,7 @@ export const interviewsResolver = {
 
     deleteInterview: async (_: unknown, { id }: DeleteInterviewArgs, { userId }: Context) => {
       try {
+        if (!userId || userId === 'null') throw new GraphQLError('Authentication required');
         return await interviewsDb.delete(id, userId);
       } catch (_error) {
         logger.error('Error deleting interview:', _error);

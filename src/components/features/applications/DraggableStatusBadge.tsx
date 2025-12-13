@@ -65,7 +65,7 @@ export function DraggableStatusBadge({ application }: DraggableStatusBadgeProps)
           whileHover={{ scale: 1.02 }}
           className={cn(
             'inline-flex items-center gap-1 cursor-grab active:cursor-grabbing',
-            isDragging && 'z-50'
+            isDragging && 'z-50',
           )}
         >
           <GripVertical className="h-3 w-3 text-muted-foreground opacity-50" />
@@ -79,7 +79,7 @@ export function DraggableStatusBadge({ application }: DraggableStatusBadgeProps)
             onClick={() => handleStatusChange(option.value)}
             className={cn(
               'flex items-center gap-2',
-              option.value === application.status && 'bg-accent'
+              option.value === application.status && 'bg-accent',
             )}
           >
             <span className="text-base">{option.emoji}</span>

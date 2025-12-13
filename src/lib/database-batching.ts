@@ -1,29 +1,15 @@
 /**
- * Database Batching Utilities using TanStack Pacer
- *
- * Groups multiple database operations together for better performance.
- * Useful for rapid updates like tag editing, bulk imports, or form auto-save.
+ * Database batching utilities
  */
-
-import type { Table, UpdateSpec } from 'dexie';
 
 /**
  * Configuration for a database batcher
  */
 export interface BatcherConfig<T> {
-  /** Dexie table to batch operations on */
-  table: Table<T, string>;
-
-  /** Wait time in ms before executing batch (default: 500ms) */
+  update: (id: string, changes: Partial<T>) => Promise<any>;
   wait?: number;
-
-  /** Maximum batch size before forcing execution (default: 10) */
   maxBatchSize?: number;
-
-  /** Callback for successful batch */
   onSuccess?: (count: number) => void;
-
-  /** Callback for batch errors */
   onError?: (error: Error) => void;
 }
 
@@ -50,7 +36,7 @@ export interface BatcherConfig<T> {
  * ```
  */
 export function createDatabaseBatcher<T>(config: BatcherConfig<T>) {
-  const { table, wait = 500, maxBatchSize = 10, onSuccess, onError } = config;
+  const { update: updater, wait = 500, maxBatchSize = 10, onSuccess, onError } = config;
 
   // Pending updates keyed by ID (later updates override earlier ones)
   const pendingUpdates = new Map<string, Partial<T>>();
@@ -75,10 +61,7 @@ export function createDatabaseBatcher<T>(config: BatcherConfig<T>) {
     // Get all pending updates
     const updates = Array.from(pendingUpdates.entries())
       .filter(([id]) => !!id)
-      .map(([id, changes]) => ({
-        key: id,
-        changes: { ...changes, updatedAt: new Date() } as UpdateSpec<T>,
-      }));
+      .map(([id, changes]) => ({ key: id, changes: { ...changes, updatedAt: new Date() } }));
 
     const count = updates.length;
 
@@ -87,9 +70,8 @@ export function createDatabaseBatcher<T>(config: BatcherConfig<T>) {
     isProcessing = true;
 
     try {
-      // Execute updates individually to avoid Dexie bulkUpdate issues
       for (const u of updates) {
-        await table.update(u.key as any, u.changes as any);
+        await updater(u.key, u.changes as Partial<T>);
       }
 
       if (onSuccess) {
@@ -165,99 +147,5 @@ export function createDatabaseBatcher<T>(config: BatcherConfig<T>) {
     flush: forceFlush,
     getPendingCount,
     clear,
-  };
-}
-
-/**
- * Create a batched database adder for bulk inserts
- *
- * Similar to the updater but for adding new records.
- *
- * @example
- * ```ts
- * const batcher = createDatabaseAdder({
- *   table: db.applications,
- *   wait: 1000,
- *   maxBatchSize: 20,
- * });
- *
- * // Queue multiple adds
- * batcher.add({ id: 'id1', position: 'Engineer' });
- * batcher.add({ id: 'id2', position: 'Designer' });
- *
- * // Batch is automatically flushed
- * ```
- */
-export function createDatabaseAdder<T>(config: BatcherConfig<T>) {
-  const { table, wait = 1000, maxBatchSize = 20, onSuccess, onError } = config;
-
-  const pendingAdds: T[] = [];
-  let flushTimer: NodeJS.Timeout | null = null;
-  let isProcessing = false;
-
-  const flush = async (): Promise<void> => {
-    if (pendingAdds.length === 0 || isProcessing) {
-      return;
-    }
-
-    if (flushTimer) {
-      clearTimeout(flushTimer);
-      flushTimer = null;
-    }
-
-    const items = [...pendingAdds];
-    const count = items.length;
-
-    pendingAdds.length = 0;
-    isProcessing = true;
-
-    try {
-      await table.bulkAdd(items);
-
-      if (onSuccess) {
-        onSuccess(count);
-      }
-    } catch (error) {
-      if (onError && error instanceof Error) {
-        onError(error);
-      } else {
-        console.error('Database batch add failed:', error);
-      }
-    } finally {
-      isProcessing = false;
-    }
-  };
-
-  const scheduleFlush = (): void => {
-    if (flushTimer) {
-      return;
-    }
-
-    flushTimer = setTimeout(() => {
-      flush();
-    }, wait);
-  };
-
-  const add = (item: T): void => {
-    pendingAdds.push(item);
-
-    if (pendingAdds.length >= maxBatchSize) {
-      flush();
-    } else {
-      scheduleFlush();
-    }
-  };
-
-  return {
-    add,
-    flush,
-    getPendingCount: () => pendingAdds.length,
-    clear: () => {
-      pendingAdds.length = 0;
-      if (flushTimer) {
-        clearTimeout(flushTimer);
-        flushTimer = null;
-      }
-    },
   };
 }

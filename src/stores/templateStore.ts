@@ -10,7 +10,7 @@ interface TemplateStore {
   // Actions
   initializeTemplates: () => void;
   addTemplate: (
-    template: Omit<Template, 'id' | 'createdAt' | 'updatedAt' | 'usageCount'>
+    template: Omit<Template, 'id' | 'createdAt' | 'updatedAt' | 'usageCount'>,
   ) => Template;
   updateTemplate: (id: string, updates: Partial<Omit<Template, 'id' | 'createdAt'>>) => void;
   deleteTemplate: (id: string) => void;
@@ -77,7 +77,7 @@ export const useTemplateStore = create<TemplateStore>()(
                   ...updates,
                   updatedAt: new Date(),
                 }
-              : template
+              : template,
           ),
         }));
       },
@@ -102,7 +102,7 @@ export const useTemplateStore = create<TemplateStore>()(
           (template) =>
             template.name.toLowerCase().includes(lowerQuery) ||
             template.description?.toLowerCase().includes(lowerQuery) ||
-            template.tags?.some((tag) => tag.toLowerCase().includes(lowerQuery))
+            template.tags?.some((tag) => tag.toLowerCase().includes(lowerQuery)),
         );
       },
 
@@ -115,7 +115,7 @@ export const useTemplateStore = create<TemplateStore>()(
                   usageCount: template.usageCount + 1,
                   updatedAt: new Date(),
                 }
-              : template
+              : template,
           ),
         }));
       },
@@ -167,6 +167,6 @@ export const useTemplateStore = create<TemplateStore>()(
     {
       name: 'thrive-templates',
       version: 1,
-    }
-  )
+    },
+  ),
 );

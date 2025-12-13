@@ -89,8 +89,8 @@ export const useBackupStore = create<BackupState>()(
         backupHistory: state.backupHistory,
         settings: state.settings,
       }),
-    }
-  )
+    },
+  ),
 );
 
 /**

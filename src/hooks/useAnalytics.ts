@@ -24,25 +24,25 @@ export function useAnalytics() {
 
     // Applications this week/month
     const applicationsThisWeek = applications.filter(
-      (app) => app.appliedDate && isAfter(new Date(app.appliedDate), weekStart)
+      (app) => app.appliedDate && isAfter(new Date(app.appliedDate), weekStart),
     ).length;
 
     const applicationsThisMonth = applications.filter(
-      (app) => app.appliedDate && isAfter(new Date(app.appliedDate), monthStart)
+      (app) => app.appliedDate && isAfter(new Date(app.appliedDate), monthStart),
     ).length;
 
     // Interviews this week/month
     const interviewsThisWeek = interviews.filter(
-      (interview) => interview.scheduledAt && isAfter(new Date(interview.scheduledAt), weekStart)
+      (interview) => interview.scheduledAt && isAfter(new Date(interview.scheduledAt), weekStart),
     ).length;
 
     const interviewsThisMonth = interviews.filter(
-      (interview) => interview.scheduledAt && isAfter(new Date(interview.scheduledAt), monthStart)
+      (interview) => interview.scheduledAt && isAfter(new Date(interview.scheduledAt), monthStart),
     ).length;
 
     // Status breakdown
     const activeApplications = applications.filter((app) =>
-      ['applied', 'screening', 'interviewing'].includes(app.status)
+      ['applied', 'screening', 'interviewing'].includes(app.status),
     ).length;
 
     const offersReceived = applications.filter((app) => app.status === 'offer').length;
@@ -53,7 +53,7 @@ export function useAnalytics() {
     const completedInterviews = interviews.filter((i) => i.status === 'completed').length;
     const scheduledInterviews = interviews.filter((i) => i.status === 'scheduled').length;
     const upcomingInterviews = interviews.filter(
-      (i) => i.status === 'scheduled' && i.scheduledAt && isAfter(new Date(i.scheduledAt), now)
+      (i) => i.status === 'scheduled' && i.scheduledAt && isAfter(new Date(i.scheduledAt), now),
     ).length;
 
     // Response rate (applications with interviews / total applications)

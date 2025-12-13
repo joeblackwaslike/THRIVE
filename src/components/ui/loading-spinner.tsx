@@ -40,7 +40,7 @@ export function LoadingSpinner({
       className={cn(
         'flex flex-col items-center justify-center gap-3',
         fullScreen && 'min-h-[400px]',
-        className
+        className,
       )}
     >
       <motion.div

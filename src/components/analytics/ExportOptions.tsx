@@ -35,7 +35,7 @@ type PeriodType = 'all' | '7' | '30' | '90' | '180' | '365' | 'custom';
 export function ExportOptions({ applications, interviews, metrics }: ExportOptionsProps) {
   const [exportFormat, setExportFormat] = useState<'csv' | 'json'>('csv');
   const [exportType, setExportType] = useState<'applications' | 'interviews' | 'summary'>(
-    'applications'
+    'applications',
   );
   const [period, setPeriod] = useState<PeriodType>('all');
   const [customDateRange, setCustomDateRange] = useState<DateRange | undefined>();

@@ -33,24 +33,24 @@ export function AdditionalInsights({ period }: AdditionalInsightsProps = {}) {
 
   const avgTimeToOffer = useMemo(
     () => calculateAvgTimeToOffer(filteredApplications),
-    [filteredApplications]
+    [filteredApplications],
   );
 
   const sourcePerformance = useMemo(
     () => calculateSourcePerformance(filteredApplications),
-    [filteredApplications]
+    [filteredApplications],
   );
 
   const dayOfWeekPerformance = useMemo(
     () => calculateDayOfWeekPerformance(filteredApplications),
-    [filteredApplications]
+    [filteredApplications],
   );
 
   const bestSource = sourcePerformance.length > 0 ? sourcePerformance[0] : null;
   const bestDay =
     dayOfWeekPerformance.length > 0
       ? dayOfWeekPerformance.reduce((best, current) =>
-          current.successRate > best.successRate ? current : best
+          current.successRate > best.successRate ? current : best,
         )
       : null;
 

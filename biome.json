@@ -9,19 +9,11 @@
     "ignoreUnknown": false,
     "includes": [
       "**",
-      "!**/node_modules",
-      "!**/dist",
-      "!**/build",
-      "!**/.next",
-      "!**/coverage",
-      "!**/storybook-static",
-      "!**/*.min.js",
-      "!**/*.css",
-      "!**/routeTree.gen.ts",
-      "!**/.claude",
-      "!**/.github",
-      "!**/.local",
-      "!**/wiki"
+      "!!**/dist",
+      "!!**/node_modules",
+      "!!**/.local",
+      "!!**/.docs",
+      "!!**/.react-router"
     ]
   },
   "formatter": {
@@ -30,28 +22,21 @@
     "indentWidth": 2,
     "lineWidth": 100
   },
-  "assist": { "actions": { "source": { "organizeImports": "on" } } },
   "linter": {
     "enabled": true,
     "rules": {
-      "recommended": true,
-      "suspicious": {
-        "noExplicitAny": "warn",
-        "noArrayIndexKey": "off"
-      },
-      "style": {
-        "useImportType": "error",
-        "useConst": "error",
-        "useNodejsImportProtocol": "error",
-        "noNonNullAssertion": "warn"
-      },
-      "correctness": {
-        "noUnusedVariables": "warn",
-        "useExhaustiveDependencies": "warn",
-        "useUniqueElementIds": "off"
-      },
-      "a11y": {
-        "useSemanticElements": "warn"
+      "recommended": true
+    }
+  },
+  "assist": {
+    "enabled": true,
+    "actions": {
+      "source": {
+        "organizeImports": {
+          "options": {
+            "identifierOrder": "lexicographic"
+          }
+        }
       }
     }
   },
@@ -59,9 +44,17 @@
     "formatter": {
       "quoteStyle": "single",
       "jsxQuoteStyle": "double",
-      "trailingCommas": "es5",
-      "semicolons": "always",
-      "arrowParentheses": "always"
+      "semicolons": "always"
+    }
+  },
+  "json": {
+    "formatter": {
+      "enabled": true
+    }
+  },
+  "css": {
+    "parser": {
+      "tailwindDirectives": true
     }
   }
 }

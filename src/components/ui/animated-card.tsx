@@ -27,7 +27,7 @@ interface AnimatedCardProps extends React.HTMLAttributes<HTMLDivElement> {
 const AnimatedCard = forwardRef<HTMLDivElement, AnimatedCardProps>(
   (
     { children, className, hoverEffect = 'lift', animateOnMount = true, delay = 0, ...props },
-    ref
+    ref,
   ) => {
     const hoverVariants = {
       lift: {
@@ -65,7 +65,7 @@ const AnimatedCard = forwardRef<HTMLDivElement, AnimatedCardProps>(
         <Card {...props}>{children}</Card>
       </motion.div>
     );
-  }
+  },
 );
 
 AnimatedCard.displayName = 'AnimatedCard';

@@ -28,7 +28,7 @@ export function ResponseTimeChart({ period }: ResponseTimeChartProps = {}) {
 
   const distributionData = useMemo(
     () => calculateResponseTimeDistribution(filteredApplications),
-    [filteredApplications]
+    [filteredApplications],
   );
 
   const hasData = distributionData.some((d) => d.count > 0);

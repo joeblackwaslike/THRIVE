@@ -101,7 +101,7 @@ export function ApplicationsTable({ onTableReady }: ApplicationsTableProps = {})
       if (documentId) {
         // Handle existing document linking
         const isAlreadyLinked = documents.some(
-          (doc) => doc.id === documentId && doc.usedInApplicationIds?.includes(application.id)
+          (doc) => doc.id === documentId && doc.usedInApplicationIds?.includes(application.id),
         );
 
         if (isAlreadyLinked) {
@@ -197,7 +197,7 @@ export function ApplicationsTable({ onTableReady }: ApplicationsTableProps = {})
         }
       }
     },
-    [documents, linkDocumentToApplications]
+    [documents, linkDocumentToApplications],
   );
 
   const columns = useMemo<ColumnDef<Application>[]>(
@@ -335,7 +335,7 @@ export function ApplicationsTable({ onTableReady }: ApplicationsTableProps = {})
         header: 'Documents',
         cell: ({ row }) => {
           const linkedDocs = documents.filter((doc) =>
-            doc.usedInApplicationIds?.includes(row.original.id)
+            doc.usedInApplicationIds?.includes(row.original.id),
           );
 
           if (linkedDocs.length === 0) {
@@ -356,7 +356,7 @@ export function ApplicationsTable({ onTableReady }: ApplicationsTableProps = {})
         },
       },
     ],
-    [documents]
+    [documents],
   );
 
   return (

@@ -57,7 +57,7 @@ export function KanbanCard({ application, isOverlay = false }: KanbanCardProps) 
 
   // Get linked documents for this application
   const linkedDocuments = documents.filter((doc) =>
-    doc.usedInApplicationIds?.includes(application.id)
+    doc.usedInApplicationIds?.includes(application.id),
   );
 
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
@@ -208,7 +208,7 @@ export function KanbanCard({ application, isOverlay = false }: KanbanCardProps) 
           'cursor-grab active:cursor-grabbing transition-all',
           isOverlay && 'rotate-3 shadow-lg',
           isDragging && 'opacity-50',
-          isDragOver && 'ring-2 ring-primary ring-offset-2 scale-105'
+          isDragOver && 'ring-2 ring-primary ring-offset-2 scale-105',
         )}
       >
         <CardHeader className="p-3 pb-2">

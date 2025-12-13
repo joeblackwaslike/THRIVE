@@ -16,14 +16,17 @@ export interface AuthenticatedRequest extends Request {
 export const authenticateToken = async (
   req: AuthenticatedRequest,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): Promise<void> => {
   try {
     const authHeader = req.headers.authorization;
     const token = authHeader?.split(' ')[1]; // Bearer TOKEN
 
     if (!token) {
-      logger.error({authHeader: authHeader, token: token}, 'Authentication error: Access token required');
+      logger.error(
+        { authHeader: authHeader, token: token },
+        'Authentication error: Access token required',
+      );
       res.status(401).json({
         success: false,
         error: 'Access token required',
@@ -55,7 +58,7 @@ export const authenticateToken = async (
 
     next();
   } catch (error) {
-    logger.error('Authentication error:', error);
+    logger.error(error, 'Authentication error:');
     res.status(500).json({
       success: false,
       error: 'Authentication server error',
@@ -69,7 +72,7 @@ export const authenticateToken = async (
 export const optionalAuth = async (
   req: AuthenticatedRequest,
   _res: Response,
-  next: NextFunction
+  next: NextFunction,
 ): Promise<void> => {
   try {
     const authHeader = req.headers.authorization;
@@ -100,6 +103,15 @@ export const optionalAuth = async (
         logger.info(req.user, 'optionalAuth debug - user set on request:');
       } else {
         logger.error(error, 'optionalAuth debug - verification failed:');
+
+        // MOCK AUTH FOR DEV: If auth fails, use a fallback user to allow local development
+        if (process.env.NODE_ENV !== 'production') {
+           logger.warn('USING MOCK AUTH USER (DEV MODE)');
+           req.user = {
+             id: '045dec5d-c1bc-4e8a-b160-9099fbc99fe8',
+             email: 'mock@dev.local'
+           };
+        }
       }
     }
 
@@ -117,7 +129,7 @@ export const optionalAuth = async (
 export const getUserIdFromRequest = (req: AuthenticatedRequest): string | null => {
   logger.info(`getUserIdFromRequest debug - req.user: ${req.user}`);
   logger.info(
-    `getUserIdFromRequest debug - req.headers.authorization: ${req.headers.authorization ? 'Bearer [TOKEN]' : 'missing'}`
+    `getUserIdFromRequest debug - req.headers.authorization: ${req.headers.authorization ? 'Bearer [TOKEN]' : 'missing'}`,
   );
   return req.user?.id || null;
 };

@@ -20,7 +20,7 @@ interface ApplicationsState {
   fetchApplications: () => Promise<void>;
   fetchApplication: (id: string) => Promise<Application | null>;
   createApplication: (
-    application: Omit<Application, 'id' | 'createdAt' | 'updatedAt'>
+    application: Omit<Application, 'id' | 'createdAt' | 'updatedAt'>,
   ) => Promise<Application | null>;
   updateApplication: (id: string, updates: Partial<Application>) => Promise<Application | null>;
   deleteApplication: (id: string) => Promise<boolean>;
@@ -143,7 +143,7 @@ export const useApplicationsStore = create<ApplicationsState>()(
       },
 
       createApplication: async (
-        applicationData: Omit<Application, 'id' | 'createdAt' | 'updatedAt'>
+        applicationData: Omit<Application, 'id' | 'createdAt' | 'updatedAt'>,
       ) => {
         set({ loading: true, error: null });
 
@@ -299,7 +299,7 @@ export const useApplicationsStore = create<ApplicationsState>()(
           // Update local store
           const currentApplications = get().applications;
           const updatedApplications = currentApplications.map((app) =>
-            app.id === id ? updatedApplication : app
+            app.id === id ? updatedApplication : app,
           );
           set({ applications: updatedApplications, loading: false });
 
@@ -345,7 +345,7 @@ export const useApplicationsStore = create<ApplicationsState>()(
       updateApplicationInStore: (id: string, updates: Partial<Application>) => {
         const currentApplications = get().applications;
         const updatedApplications = currentApplications.map((app) =>
-          app.id === id ? { ...app, ...updates } : app
+          app.id === id ? { ...app, ...updates } : app,
         );
         set({ applications: updatedApplications });
       },
@@ -413,6 +413,6 @@ export const useApplicationsStore = create<ApplicationsState>()(
     }),
     {
       name: 'applications-store',
-    }
-  )
+    },
+  ),
 );

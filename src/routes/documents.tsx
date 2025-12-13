@@ -74,7 +74,6 @@ import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Textarea } from '@/components/ui/textarea';
 import { useAutoSaveBatcher } from '@/hooks/useDatabaseBatching';
-import { db } from '@/lib/db';
 import {
   getDocumentTypeColors,
   getDocumentTypeIcon,
@@ -163,7 +162,7 @@ function DocumentsPage() {
   >('all');
   const [filterByVersion, setFilterByVersion] = useState<'all' | 'latest' | 'outdated'>('all');
   const [sortBy, setSortBy] = useState<'name' | 'date-modified' | 'document-type' | 'usage-count'>(
-    'date-modified'
+    'date-modified',
   );
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
   const [showFilters, setShowFilters] = useState(false);
@@ -283,7 +282,9 @@ function DocumentsPage() {
 
   // Auto-save document content while editing
   useAutoSaveBatcher(
-    db.documents,
+    async (id, changes) => {
+      await useDocumentsStore.getState().updateDocument(id, changes as any);
+    },
     selectedDocument?.id || '',
     {
       name: editingName,
@@ -292,7 +293,7 @@ function DocumentsPage() {
     },
     [editingContent, editingName],
     {
-      wait: 3000, // 3 seconds after last change
+      wait: 3000,
       onSuccess: () => {
         setLastSaved(new Date());
         setIsSaving(false);
@@ -305,7 +306,7 @@ function DocumentsPage() {
           duration: 3000,
         });
       },
-    }
+    },
   );
 
   // Track when content is being edited to show saving indicator
@@ -357,7 +358,7 @@ function DocumentsPage() {
       // Get current documents from the store after fetching
       const currentDocs = useDocumentsStore.getState().documents;
       const oldDeletedDocs = currentDocs.filter(
-        (doc) => doc.deletedAt && new Date(doc.deletedAt) <= autoDeleteDate
+        (doc) => doc.deletedAt && new Date(doc.deletedAt) <= autoDeleteDate,
       );
 
       // Permanently delete old documents
@@ -418,10 +419,10 @@ function DocumentsPage() {
   const activeDocuments = documents.filter((doc) => !doc.deletedAt);
   const recentlyDeletedThreshold = new Date();
   recentlyDeletedThreshold.setDate(
-    recentlyDeletedThreshold.getDate() - documentSettings.recentlyDeletedDays
+    recentlyDeletedThreshold.getDate() - documentSettings.recentlyDeletedDays,
   );
   const recentlyDeleted = documents.filter(
-    (doc) => doc.deletedAt && new Date(doc.deletedAt) > recentlyDeletedThreshold
+    (doc) => doc.deletedAt && new Date(doc.deletedAt) > recentlyDeletedThreshold,
   );
 
   // Apply filters to active documents
@@ -588,7 +589,7 @@ function DocumentsPage() {
       | 'portfolio'
       | 'transcript'
       | 'certification'
-      | 'other' = 'other'
+      | 'other' = 'other',
   ) => {
     const files = event.target.files;
     if (files && files.length > 0) {
@@ -1066,7 +1067,7 @@ Sincerely,
                                     | 'portfolio'
                                     | 'transcript'
                                     | 'certification'
-                                    | 'other'
+                                    | 'other',
                                 )
                               }
                               className={`
@@ -1134,7 +1135,7 @@ Sincerely,
                               type="button"
                               onClick={() =>
                                 setFilterByDate(
-                                  value as 'all' | 'recent' | 'old' | 'this-week' | 'this-month'
+                                  value as 'all' | 'recent' | 'old' | 'this-week' | 'this-month',
                                 )
                               }
                               className={`
@@ -1242,7 +1243,7 @@ Sincerely,
                                     | 'name'
                                     | 'date-modified'
                                     | 'document-type'
-                                    | 'usage-count'
+                                    | 'usage-count',
                                 )
                               }
                               className={`
@@ -2412,7 +2413,7 @@ Sincerely,
                       | 'portfolio'
                       | 'transcript'
                       | 'certification'
-                      | 'other'
+                      | 'other',
                   )
                 }
                 className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
@@ -2480,7 +2481,7 @@ Sincerely,
                       | 'portfolio'
                       | 'transcript'
                       | 'certification'
-                      | 'other'
+                      | 'other',
                   )
                 }
                 className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"

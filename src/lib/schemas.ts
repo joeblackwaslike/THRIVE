@@ -87,7 +87,7 @@ export const interviewSchema = z.object({
         name: z.string().min(1, 'Interviewer name is required'),
         role: z.string().optional(),
         email: z.string().email('Invalid email').optional().or(z.literal('')),
-      })
+      }),
     )
     .default([]),
   notes: z.string().optional(),

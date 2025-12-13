@@ -74,13 +74,13 @@ export function CompanyComparison({ applications, interviews }: CompanyCompariso
 
       // Interview rate
       const appsWithInterviews = companyApps.filter((app) =>
-        interviews.some((interview) => interview.applicationId === app.id)
+        interviews.some((interview) => interview.applicationId === app.id),
       ).length;
       const interviewRate = (appsWithInterviews / totalApplications) * 100;
 
       // Offer rate
       const offersReceived = companyApps.filter(
-        (app) => app.status === 'offer' || app.status === 'accepted'
+        (app) => app.status === 'offer' || app.status === 'accepted',
       ).length;
       const offerRate = (offersReceived / totalApplications) * 100;
 
@@ -113,7 +113,7 @@ export function CompanyComparison({ applications, interviews }: CompanyCompariso
 
       // Active vs rejected
       const activeApplications = companyApps.filter(
-        (app) => !['rejected', 'withdrawn', 'accepted'].includes(app.status)
+        (app) => !['rejected', 'withdrawn', 'accepted'].includes(app.status),
       ).length;
       const rejectedApplications = companyApps.filter((app) => app.status === 'rejected').length;
 
@@ -129,7 +129,7 @@ export function CompanyComparison({ applications, interviews }: CompanyCompariso
         successRate,
       };
     },
-    [applications, interviews]
+    [applications, interviews],
   );
 
   const companyMetrics = useMemo(() => {
@@ -166,7 +166,7 @@ export function CompanyComparison({ applications, interviews }: CompanyCompariso
       {
         metric: 'Interview Rate',
         ...Object.fromEntries(
-          companyMetrics.map((m) => [m.companyName, m.interviewRate.toFixed(1)])
+          companyMetrics.map((m) => [m.companyName, m.interviewRate.toFixed(1)]),
         ),
       },
       {
@@ -176,7 +176,7 @@ export function CompanyComparison({ applications, interviews }: CompanyCompariso
       {
         metric: 'Response Time',
         ...Object.fromEntries(
-          companyMetrics.map((m) => [m.companyName, m.avgResponseTime.toFixed(0)])
+          companyMetrics.map((m) => [m.companyName, m.avgResponseTime.toFixed(0)]),
         ),
       },
     ];

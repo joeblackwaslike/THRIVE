@@ -144,7 +144,7 @@ export const useDocumentsStore = create<DocumentsState>((set, get) => ({
       const updatedDocument = (data as any).updateDocument;
       set((state) => ({
         documents: state.documents.map((document) =>
-          document.id === id ? updatedDocument : document
+          document.id === id ? updatedDocument : document,
         ),
         loading: false,
       }));
@@ -196,7 +196,7 @@ export const useDocumentsStore = create<DocumentsState>((set, get) => ({
     const updatedDocument = (data as any).updateDocument;
     set((state) => ({
       documents: state.documents.map((document) =>
-        document.id === id ? updatedDocument : document
+        document.id === id ? updatedDocument : document,
       ),
     }));
     return updatedDocument;
@@ -213,7 +213,7 @@ export const useDocumentsStore = create<DocumentsState>((set, get) => ({
       const updatedDocument = (data as any).updateDocument;
       set((state) => ({
         documents: state.documents.map((document) =>
-          document.id === documentId ? updatedDocument : document
+          document.id === documentId ? updatedDocument : document,
         ),
       }));
       return updatedDocument;

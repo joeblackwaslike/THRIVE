@@ -81,7 +81,7 @@ export function AdvancedSearch({
           text: h.query,
           timestamp: h.timestamp,
           resultCount: h.resultCount,
-        }))
+        })),
       );
 
       // Add popular searches
@@ -91,7 +91,7 @@ export function AdvancedSearch({
             type: 'popular' as const,
             text: p.query,
             resultCount: p.resultCount,
-          }))
+          })),
         );
       }
     }
@@ -204,7 +204,7 @@ export function AdvancedSearch({
                   className={cn(
                     'w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors text-left',
                     'hover:bg-muted/50',
-                    index === selectedIndex && 'bg-muted'
+                    index === selectedIndex && 'bg-muted',
                   )}
                 >
                   {item.type === 'history' && (

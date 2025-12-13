@@ -73,7 +73,7 @@ export function ScrollIndicator({ containerRef, threshold = 50 }: ScrollIndicato
     <div
       className={cn(
         'pointer-events-none absolute z-10',
-        isVertical ? 'bottom-4 left-1/2 -translate-x-1/2' : 'right-4 top-1/2 -translate-y-1/2'
+        isVertical ? 'bottom-4 left-1/2 -translate-x-1/2' : 'right-4 top-1/2 -translate-y-1/2',
       )}
     >
       <div
@@ -83,7 +83,7 @@ export function ScrollIndicator({ containerRef, threshold = 50 }: ScrollIndicato
           'border border-border/50 shadow-lg',
           'w-10 h-10',
           isVertical ? 'animate-bounce' : 'animate-pulse',
-          'opacity-60 hover:opacity-100 transition-opacity'
+          'opacity-60 hover:opacity-100 transition-opacity',
         )}
       >
         {isVertical ? (

@@ -44,7 +44,7 @@ export function CompanyResearchHub() {
   const [editingId, setEditingId] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
   const [filterResearched, setFilterResearched] = useState<'all' | 'researched' | 'not-researched'>(
-    'all'
+    'all',
   );
 
   const companies = useCompaniesStore((state) => state.companies);
@@ -207,7 +207,7 @@ export function CompanyResearchHub() {
 
   const getApplicationsForCompany = (companyName: string) => {
     return applications.filter(
-      (app) => app.companyName.toLowerCase() === companyName.toLowerCase()
+      (app) => app.companyName.toLowerCase() === companyName.toLowerCase(),
     );
   };
 
@@ -266,7 +266,7 @@ export function CompanyResearchHub() {
                 companies.filter(
                   (c) =>
                     (c.applicationIds && c.applicationIds.length > 0) ||
-                    getApplicationsForCompany(c.name).length > 0
+                    getApplicationsForCompany(c.name).length > 0,
                 ).length
               }
             </div>
@@ -1019,7 +1019,7 @@ export function CompanyResearchHub() {
                                 variant="outline"
                                 className={
                                   INTERVIEW_DIFFICULTIES.find(
-                                    (d) => d.value === company.interviewDifficulty
+                                    (d) => d.value === company.interviewDifficulty,
                                   )?.color
                                 }
                               >

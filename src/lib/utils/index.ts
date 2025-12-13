@@ -18,7 +18,7 @@ export function cn(...inputs: ClassValue[]) {
  */
 export function formatDate(
   date: Date | string | undefined,
-  options?: Intl.DateTimeFormatOptions
+  options?: Intl.DateTimeFormatOptions,
 ): string {
   if (!date) return '';
   const dateObj = typeof date === 'string' ? new Date(date) : date;
@@ -78,7 +78,7 @@ export function generateId(): string {
 // biome-ignore lint/suspicious/noExplicitAny: Generic function requires any for flexibility
 export function debounce<T extends (...args: any[]) => any>(
   func: T,
-  wait: number
+  wait: number,
 ): (...args: Parameters<T>) => void {
   let timeout: NodeJS.Timeout | null = null;
 
@@ -168,7 +168,7 @@ export function groupBy<T>(array: T[], key: keyof T): Record<string, T[]> {
       result[groupKey].push(item);
       return result;
     },
-    {} as Record<string, T[]>
+    {} as Record<string, T[]>,
   );
 }
 

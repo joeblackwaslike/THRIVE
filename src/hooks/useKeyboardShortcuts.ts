@@ -50,7 +50,7 @@ export function useKeyboardShortcuts(shortcuts: KeyboardShortcut[], enabled = tr
         }
       }
     },
-    [shortcuts, enabled]
+    [shortcuts, enabled],
   );
 
   useEffect(() => {
@@ -111,7 +111,7 @@ export function useNavigationShortcuts() {
  * Format shortcut keys for display
  */
 export function formatShortcutKeys(
-  shortcut: Pick<KeyboardShortcut, 'key' | 'ctrl' | 'alt' | 'shift' | 'meta'>
+  shortcut: Pick<KeyboardShortcut, 'key' | 'ctrl' | 'alt' | 'shift' | 'meta'>,
 ): string {
   const keys: string[] = [];
 

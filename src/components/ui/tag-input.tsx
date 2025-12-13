@@ -18,7 +18,7 @@ export function TagInput({ value = '', onChange, placeholder, className }: TagIn
           .split(',')
           .map((t) => t.trim())
           .filter(Boolean)
-      : []
+      : [],
   );
   const [highlightedIndex, setHighlightedIndex] = useState<number | null>(null);
 
@@ -79,7 +79,7 @@ export function TagInput({ value = '', onChange, placeholder, className }: TagIn
     <div
       className={cn(
         'flex flex-wrap gap-2 p-2 border rounded-md min-h-[42px] focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2 bg-background',
-        className
+        className,
       )}
     >
       {tags.map((tag, index) => (
@@ -88,7 +88,7 @@ export function TagInput({ value = '', onChange, placeholder, className }: TagIn
           variant="secondary"
           className={cn(
             'flex items-center gap-1 px-2 py-1 transition-colors',
-            highlightedIndex === index && 'ring-2 ring-primary'
+            highlightedIndex === index && 'ring-2 ring-primary',
           )}
         >
           <span>{tag}</span>

@@ -36,15 +36,15 @@ export function InterviewPrepPage() {
         acc[q.category] = (acc[q.category] || 0) + 1;
         return acc;
       },
-      {} as Record<string, number>
+      {} as Record<string, number>,
     );
 
     const companiesResearched = companyNotes.filter((n) => n.researched).length;
     const challengesCompleted = challenges.filter(
-      (c) => c.status === 'completed' || c.status === 'submitted'
+      (c) => c.status === 'completed' || c.status === 'submitted',
     ).length;
     const challengesPending = challenges.filter(
-      (c) => c.status === 'not-started' || c.status === 'in-progress'
+      (c) => c.status === 'not-started' || c.status === 'in-progress',
     ).length;
 
     return {

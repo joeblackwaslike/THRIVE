@@ -27,7 +27,7 @@ function levenshteinDistance(str1: string, str2: string): number {
         matrix[i][j] = Math.min(
           matrix[i - 1][j - 1] + 1, // substitution
           matrix[i][j - 1] + 1, // insertion
-          matrix[i - 1][j] + 1 // deletion
+          matrix[i - 1][j] + 1, // deletion
         );
       }
     }

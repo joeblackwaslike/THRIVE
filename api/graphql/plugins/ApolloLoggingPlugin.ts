@@ -1,103 +1,40 @@
-// // import {ApolloServerPlugin} from 'apollo-server-plugin-base';
-// // Apollo Server Plugin Event Reference: https://www.apollographql.com/docs/apollo-server/integrations/plugins-event-reference
-// // Creating Apollo Server Plugins: https://www.apollographql.com/docs/apollo-server/integrations/plugins
-// import * as Sentry from "@sentry/node"
-// import "@sentry/tracing"
-// import { Transaction } from "@sentry/types"
-// import { ApolloServerPlugin, GraphQLRequestContext } from 'apollo-server-plugin-base'
-// import { ApolloError } from 'apollo-server'
+import type { ApolloServerPlugin } from '@apollo/server';
+import * as Sentry from '@sentry/node';
+import logger from '../../logger.ts';
 
+const ApolloLoggingPlugin = (): ApolloServerPlugin<any> => ({
+  async requestDidStart(ctx) {
+    const start = Date.now();
+    const operationName = ctx.request.operationName ?? 'anonymous';
+    const variables = ctx.request.variables ? Object.keys(ctx.request.variables) : [];
+    const span = operationName === 'IntrospectionQuery'
+      ? null
+      : ((Sentry as any).startSpan
+          ? (Sentry as any).startSpan({ name: operationName, op: 'graphql', attributes: { operationName } }, () => {})
+          : null);
 
+    logger.info({ operationName, variables }, 'GraphQL request start');
 
-// export function getApolloSentryPlugin(name: String = 'Server', timeout: number = 2000): ApolloServerPlugin {
+    return {
+      async didEncounterErrors(errCtx) {
+        for (const error of errCtx.errors) {
+          logger.error({ operationName, path: error.path, code: (error.extensions as any)?.code }, error.message);
+          Sentry.withScope((scope) => {
+            scope.setTag('operation', operationName);
+            if (error.path) scope.setTag('path', error.path.join('.'));
+            Sentry.captureException(error);
+          });
+        }
+      },
+      async willSendResponse() {
+        const durationMs = Date.now() - start;
+        logger.info({ operationName, durationMs }, 'GraphQL request end');
+        if (span && typeof (span as any).end === 'function') {
+          (span as any).end();
+        }
+      },
+    };
+  },
+});
 
-// 	const apolloSentryPlugin: ApolloServerPlugin = {
-// 		async serverWillStart() {
-// 			console.log(`2. ${name} Sentry intitialised!`)
-// 		},
-
-// 		async requestDidStart(ctx: GraphQLRequestContext) {
-// 			const transaction: Transaction = Sentry.startTransaction({
-// 				op: 'gql',
-// 				name: ctx.request.operationName || '',
-// 				data: ctx.request.variables
-// 			})
-
-// 			// console.log(`4. tx: %s`, transaction.traceId)
-
-// 			// Set transaction as the span of the scope, so that if an error happens during the transaction,
-// 			// the transaction context will be attached to the error event.
-// 			Sentry.configureScope(scope => {
-// 				scope.setSpan(transaction);
-// 			})
-
-// 			return {
-// 				async willSendResponse(ctx) {
-// 					transaction.finish()
-// 					await Sentry.flush(timeout)
-// 				},
-
-// 				// TODO: Generate a span for each resolver for granular monitoring. See https://blog.sentry.io/2021/08/31/guest-post-performance-monitoring-in-graphql
-// 				// async executionDidStart() {
-// 				// 	return {
-// 				// 		willResolveField({context: any, info: any}) { // hook for each new resolver
-// 				// 			// const span = context.transaction.startChild({
-// 				// 			const span = transaction.startChild({
-// 				// 				op: "resolver",
-// 				// 				description: `${info.parentType.name}.${info.fieldName}`,
-// 				// 			})
-// 				// 			return () => { // this will execute once the resolver is finished
-// 				// 				span.finish()
-// 				// 			}
-// 				// 		}
-// 				// 	}
-// 				// },
-
-// 				async didEncounterErrors(ctx: GraphQLRequestContext) {
-
-// 					// Ignore if operation could not be resolved, including validation errors.
-// 					if (!ctx.operation) {
-// 						return
-// 					}
-// 					// Iterate over the errors found and capture each.
-// 					for (const error of ctx.errors || []) {
-// 						console.error(error)
-
-// 						// Report internal server errors only.
-// 						if (error instanceof ApolloError) {
-// 							// TODO: Use a feature flag to control whether to log all errors or not.
-// 							console.warn(`This seems to be a validation error. Won't send it to Sentry.. %o`, error)
-// 							continue
-// 						}
-
-// 						Sentry.configureScope(scope => {
-// 							// Annotate whether failing operation was query/mutation/subscription
-// 							scope.setTag("kind", ctx.operation?.operation)
-
-// 							// Log query resolver and variables.
-// 							scope.setExtra('resolver', ctx.operationName)
-// 							scope.setExtra("query", ctx.request.query)
-// 							scope.setExtra('variables', ctx.request?.variables)
-// 							scope.setExtra('context', ctx)
-// 							if (error.path) {
-// 								// Add the path as breadcrumb
-// 								scope.addBreadcrumb({
-// 									category: "query-path",
-// 									message: error.path.join(" > "),
-// 									// level: Sentry.Severity.Debug
-// 								})
-// 							}
-// 						})
-
-// 						// TODO: Sentry complains that this is not a proper error. Must transform it into one.
-// 						Sentry.captureException(error)
-// 					}
-
-// 					// await Sentry.flush(timeout)
-// 				}
-// 			}
-// 		},
-// 	}
-
-// 	return apolloSentryPlugin
-// }
+export default ApolloLoggingPlugin;

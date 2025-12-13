@@ -30,7 +30,7 @@ interface ThrottleConfig {
  * ```
  */
 export function useThrottledToast(
-  config: ThrottleConfig = { wait: 5000, leading: true, trailing: false }
+  config: ThrottleConfig = { wait: 5000, leading: true, trailing: false },
 ) {
   const lastCallTimeRef = useRef<number>(0);
   const trailingTimerRef = useRef<NodeJS.Timeout | null>(null);
@@ -64,7 +64,7 @@ export function useThrottledToast(
       }
       lastCallTimeRef.current = Date.now();
     },
-    []
+    [],
   );
 
   const createThrottledToast = useCallback(
@@ -93,14 +93,14 @@ export function useThrottledToast(
               executeToast(
                 lastArgsRef.current.type,
                 lastArgsRef.current.message,
-                lastArgsRef.current.data
+                lastArgsRef.current.data,
               );
             }
           }, timeUntilNext);
         }
       };
     },
-    [config.leading, config.trailing, config.wait, shouldThrottle, executeToast]
+    [config.leading, config.trailing, config.wait, shouldThrottle, executeToast],
   );
 
   return {
@@ -134,7 +134,7 @@ export function createThrottledToast(config: ThrottleConfig = { wait: 5000, lead
   const executeToast = (
     type: 'success' | 'error' | 'info' | 'warning',
     message: string,
-    data?: ExternalToast
+    data?: ExternalToast,
   ) => {
     switch (type) {
       case 'success':

@@ -14,6 +14,9 @@ export const companiesResolver = {
   Query: {
     companies: async (_: unknown, __: unknown, { userId }: Context) => {
       try {
+        if (!userId || userId === 'null') {
+          return [];
+        }
         return await companiesDb.getAll(userId);
       } catch (_error) {
         logger.error('Error fetching companies:', _error);
@@ -23,6 +26,9 @@ export const companiesResolver = {
 
     company: async (_: unknown, { id }: CompanyQueryArgs, { userId }: Context) => {
       try {
+        if (!userId || userId === 'null') {
+          return null;
+        }
         return await companiesDb.getById(id, userId);
       } catch (_error) {
         logger.error('Error fetching company:', _error);
@@ -34,13 +40,26 @@ export const companiesResolver = {
   Mutation: {
     createCompany: async (_: unknown, { input }: CreateCompanyArgs, { userId }: Context) => {
       try {
+        if (!userId || userId === 'null') {
+          throw new GraphQLError('Authentication required');
+        }
         const companyData = {
-          ...input,
           user_id: userId,
-          // Convert GraphQL field names to database column names
+          name: input.name,
+          website: input.website,
+          industry: input.industry,
+          size: input.size,
+          location: input.location,
+          founded: input.founded,
           remote_policy: input.remotePolicy,
+          description: input.description,
+          culture: input.culture,
           culture_notes: input.cultureNotes,
           tech_stack: input.techStack,
+          benefits: input.benefits,
+          pros: input.pros,
+          cons: input.cons,
+          notes: input.notes,
           employee_reviews: input.employeeReviews,
           news_and_updates: input.newsAndUpdates,
           competitor_comparison: input.competitorComparison,
@@ -50,32 +69,54 @@ export const companiesResolver = {
           interview_difficulty: input.interviewDifficulty,
           interview_experience: input.interviewExperience,
           salary_range: input.salaryRange,
+          status: input.status,
+          priority: input.priority,
+          researched: input.researched !== undefined ? input.researched : false,
+          tags: input.tags,
         };
 
         return await companiesDb.create(companyData);
-      } catch (error) {
+      } catch (error: any) {
         logger.error('Error creating company:', error);
-        throw new GraphQLError(`Failed to create company: ${error}`);
+        throw new GraphQLError(`Failed to create company: ${error.message || JSON.stringify(error)}`);
       }
     },
 
     updateCompany: async (_: unknown, { id, input }: UpdateCompanyArgs, { userId }: Context) => {
       try {
-        const updateData = {
-          ...input,
-          // Convert GraphQL field names to database column names
-          remote_policy: input.remotePolicy,
-          culture_notes: input.cultureNotes,
-          tech_stack: input.techStack,
-          employee_reviews: input.employeeReviews,
-          news_and_updates: input.newsAndUpdates,
-          competitor_comparison: input.competitorComparison,
-          company_links: input.companyLinks,
-          ats_params: input.atsParams,
-          interview_process: input.interviewProcess,
-          interview_difficulty: input.interviewDifficulty,
-          interview_experience: input.interviewExperience,
-          salary_range: input.salaryRange,
+        if (!userId || userId === 'null') {
+          throw new GraphQLError('Authentication required');
+        }
+        const updateData: any = {
+          // Explicitly map fields to avoid sending unknown columns from GraphQL input
+          ...(input.name !== undefined && { name: input.name }),
+          ...(input.website !== undefined && { website: input.website }),
+          ...(input.industry !== undefined && { industry: input.industry }),
+          ...(input.size !== undefined && { size: input.size }),
+          ...(input.location !== undefined && { location: input.location }),
+          ...(input.founded !== undefined && { founded: input.founded }),
+          ...(input.remotePolicy !== undefined && { remote_policy: input.remotePolicy }),
+          ...(input.description !== undefined && { description: input.description }),
+          ...(input.culture !== undefined && { culture: input.culture }),
+          ...(input.cultureNotes !== undefined && { culture_notes: input.cultureNotes }),
+          ...(input.techStack !== undefined && { tech_stack: input.techStack }),
+          ...(input.benefits !== undefined && { benefits: input.benefits }),
+          ...(input.pros !== undefined && { pros: input.pros }),
+          ...(input.cons !== undefined && { cons: input.cons }),
+          ...(input.notes !== undefined && { notes: input.notes }),
+          ...(input.employeeReviews !== undefined && { employee_reviews: input.employeeReviews }),
+          ...(input.newsAndUpdates !== undefined && { news_and_updates: input.newsAndUpdates }),
+          ...(input.competitorComparison !== undefined && { competitor_comparison: input.competitorComparison }),
+          ...(input.companyLinks !== undefined && { company_links: input.companyLinks }),
+          ...(input.atsParams !== undefined && { ats_params: input.atsParams }),
+          ...(input.interviewProcess !== undefined && { interview_process: input.interviewProcess }),
+          ...(input.interviewDifficulty !== undefined && { interview_difficulty: input.interviewDifficulty }),
+          ...(input.interviewExperience !== undefined && { interview_experience: input.interviewExperience }),
+          ...(input.salaryRange !== undefined && { salary_range: input.salaryRange }),
+          ...(input.status !== undefined && { status: input.status }),
+          ...(input.priority !== undefined && { priority: input.priority }),
+          ...(input.researched !== undefined && { researched: input.researched }),
+          ...(input.tags !== undefined && { tags: input.tags }),
         };
 
         return await companiesDb.update(id, updateData, userId);
@@ -87,6 +128,9 @@ export const companiesResolver = {
 
     deleteCompany: async (_: unknown, { id }: DeleteCompanyArgs, { userId }: Context) => {
       try {
+        if (!userId || userId === 'null') {
+          throw new GraphQLError('Authentication required');
+        }
         return await companiesDb.delete(id, userId);
       } catch (error) {
         logger.error('Error deleting company:', error);

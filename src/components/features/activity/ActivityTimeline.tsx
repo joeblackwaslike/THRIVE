@@ -91,7 +91,7 @@ export function ActivityTimeline({
             <div
               className={cn(
                 'relative z-10 flex-shrink-0 w-7 h-7 rounded-full flex items-center justify-center',
-                ACTIVITY_COLORS[activity.type]
+                ACTIVITY_COLORS[activity.type],
               )}
             >
               <Icon className="h-3.5 w-3.5 text-white" />

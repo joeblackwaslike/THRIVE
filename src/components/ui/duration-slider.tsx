@@ -157,7 +157,7 @@ export function DurationSlider({
                   'border border-input hover:bg-accent hover:text-accent-foreground',
                   'focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2',
                   value === preset.value && 'bg-primary text-primary-foreground border-primary',
-                  disabled && 'cursor-not-allowed opacity-50'
+                  disabled && 'cursor-not-allowed opacity-50',
                 )}
               >
                 {preset.label}
@@ -179,7 +179,7 @@ export function DurationSlider({
                     ? 'bg-green-500'
                     : value < max * 0.66
                       ? 'bg-yellow-500'
-                      : 'bg-orange-500'
+                      : 'bg-orange-500',
                 )}
                 style={{ width: `${(value / max) * 100}%` }}
               />

@@ -106,7 +106,7 @@ export function AnimatedIconButton({
         'inline-flex items-center justify-center rounded-md p-2 transition-colors',
         'hover:bg-accent hover:text-accent-foreground',
         'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
-        className
+        className,
       )}
       whileHover={animation !== 'none' ? animations[animation] : { scale: 1.05 }}
       whileTap={{ scale: 0.95 }}

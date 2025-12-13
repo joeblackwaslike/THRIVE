@@ -341,7 +341,7 @@ export function CompanyForm({
 
       onSubmit(companyData);
     },
-    [onSubmit]
+    [onSubmit],
   );
 
   const handleSaveAndAddAnother = useCallback(
@@ -415,7 +415,7 @@ export function CompanyForm({
         form.reset(); // Reset form for next entry
       }
     },
-    [onSaveAndAddAnother, form]
+    [onSaveAndAddAnother, form],
   );
 
   return (

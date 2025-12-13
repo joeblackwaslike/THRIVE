@@ -51,7 +51,7 @@ export function UnifiedFilters() {
   };
 
   const toggleEmploymentTypeFilter = (
-    employmentType: 'full-time' | 'part-time' | 'contract' | 'internship'
+    employmentType: 'full-time' | 'part-time' | 'contract' | 'internship',
   ) => {
     const newTypes = employmentTypeFilters.includes(employmentType)
       ? employmentTypeFilters.filter((t) => t !== employmentType)
@@ -199,11 +199,11 @@ export function UnifiedFilters() {
                       className="h-3.5 w-3.5"
                       id={`employment-${type}`}
                       checked={employmentTypeFilters.includes(
-                        type as 'full-time' | 'part-time' | 'contract' | 'internship'
+                        type as 'full-time' | 'part-time' | 'contract' | 'internship',
                       )}
                       onCheckedChange={() =>
                         toggleEmploymentTypeFilter(
-                          type as 'full-time' | 'part-time' | 'contract' | 'internship'
+                          type as 'full-time' | 'part-time' | 'contract' | 'internship',
                         )
                       }
                     />

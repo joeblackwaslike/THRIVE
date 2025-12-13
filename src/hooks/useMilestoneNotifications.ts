@@ -138,7 +138,7 @@ export function useMetricChangeNotifications(
     responseRate: number;
     interviewConversionRate: number;
     offerRate: number;
-  }
+  },
 ) {
   const [notifiedChanges, setNotifiedChanges] = useState<Set<string>>(new Set());
 

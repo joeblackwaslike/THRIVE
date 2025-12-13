@@ -17,7 +17,7 @@ interface ApiErrorContext {
 export function captureApiError(
   error: Error,
   context: ApiErrorContext,
-  tags?: Record<string, string>
+  tags?: Record<string, string>,
 ) {
   const enhancedContext = {
     ...context,
@@ -27,8 +27,8 @@ export function captureApiError(
   captureException(error, {
     tags: {
       type: 'api_error',
-      method: context.method,
-      status: context.status?.toString(),
+      method: context.method || '',
+      status: (context.status ?? '').toString(),
       ...tags,
     },
     extra: enhancedContext,
@@ -49,7 +49,7 @@ export function captureGraphQLError(
   context?: {
     userId?: string;
     timestamp?: string;
-  }
+  },
 ) {
   const enhancedContext = {
     operation: {
@@ -79,7 +79,7 @@ export function trackApiCall(
   method: string,
   duration: number,
   status: number,
-  context?: Record<string, any>
+  context?: Record<string, any>,
 ) {
   addSentryBreadcrumb(`API ${method} ${url}`, 'api_call', status >= 400 ? 'error' : 'info', {
     url,
@@ -88,25 +88,6 @@ export function trackApiCall(
     duration,
     ...context,
   });
-
-  // Create a transaction for performance monitoring
-  const transaction = Sentry.startTransaction({
-    name: `API ${method} ${url}`,
-    op: 'http',
-    tags: {
-      method,
-      status: status.toString(),
-    },
-    data: {
-      duration,
-      ...context,
-    },
-  });
-
-  // Finish the transaction
-  setTimeout(() => {
-    transaction.finish();
-  }, 0);
 }
 
 /**
@@ -125,7 +106,7 @@ export function trackUserAction(action: string, category: string, data?: Record<
 export function captureValidationError(
   error: Error,
   formData: Record<string, any>,
-  validationErrors: Record<string, string>
+  validationErrors: Record<string, string>,
 ) {
   captureException(error, {
     tags: {
@@ -150,13 +131,13 @@ export function captureAuthError(
     provider?: string;
     userId?: string;
     metadata?: Record<string, any>;
-  }
+  },
 ) {
   captureException(error, {
     tags: {
       type: 'auth_error',
       action: context.action,
-      provider: context.provider,
+      provider: context.provider || 'unknown',
     },
     extra: {
       ...context,

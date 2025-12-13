@@ -139,15 +139,15 @@ input[type="search"]::-webkit-search-results-decoration {
   .safe-bottom {
     padding-bottom: env(safe-area-inset-bottom);
   }
-  
+
   .safe-top {
     padding-top: env(safe-area-inset-top);
   }
-  
+
   .safe-left {
     padding-left: env(safe-area-inset-left);
   }
-  
+
   .safe-right {
     padding-right: env(safe-area-inset-right);
   }
@@ -233,7 +233,7 @@ body {
   textarea {
     border: 2px solid currentColor;
   }
-  
+
   .card,
   .border {
     border: 2px solid currentColor !important;
@@ -268,25 +268,25 @@ body {
   .no-print {
     display: none !important;
   }
-  
+
   /* Ensure dark backgrounds don't print */
   * {
     background: white !important;
     color: black !important;
   }
-  
+
   /* Show links */
   a[href]::after {
     content: " (" attr(href) ")";
   }
-  
+
   /* Page breaks */
   h1,
   h2,
   h3 {
     page-break-after: avoid;
   }
-  
+
   /* Avoid breaking inside elements */
   .card,
   .section {

@@ -251,3 +251,9 @@ This is a personal project, but suggestions and ideas are welcome!
 ## 📄 License
 
 MIT
+
+## Development login credentials.
+Use the following credentials to log in to the development environment.
+
+Email: me@joeblack.nyc
+Password: Prosperis123!

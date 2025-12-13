@@ -55,7 +55,7 @@ export function useAnimatedNumber(value: number, duration: number = 800): number
  */
 export function useChangeIndicator<T>(
   value: T,
-  debounceMs: number = 2000
+  debounceMs: number = 2000,
 ): { value: T; hasChanged: boolean; isIncreasing: boolean | null } {
   const [hasChanged, setHasChanged] = useState(false);
   const [isIncreasing, setIsIncreasing] = useState<boolean | null>(null);

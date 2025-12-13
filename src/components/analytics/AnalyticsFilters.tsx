@@ -42,8 +42,8 @@ export function AnalyticsFiltersPanel({
 
   const uniqueSources = Array.from(
     new Set(
-      applications.map((app) => (app as Application & { source?: string }).source).filter(Boolean)
-    )
+      applications.map((app) => (app as Application & { source?: string }).source).filter(Boolean),
+    ),
   );
 
   const uniqueTags = Array.from(new Set(applications.flatMap((app) => app.tags || [])));
@@ -311,7 +311,7 @@ export function AnalyticsFiltersPanel({
  */
 export function applyAnalyticsFilters(
   applications: Application[],
-  filters: AnalyticsFilters
+  filters: AnalyticsFilters,
 ): Application[] {
   return applications.filter((app) => {
     // Status filter

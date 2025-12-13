@@ -45,7 +45,7 @@ export function BulkActions({ selectedRows, onClearSelection }: BulkActionsProps
     items: T[],
     processor: (item: T) => Promise<void>,
     batchSize: number = 5,
-    delayMs: number = 50
+    delayMs: number = 50,
   ): Promise<void> => {
     const total = items.length;
     let completed = 0;
@@ -79,7 +79,7 @@ export function BulkActions({ selectedRows, onClearSelection }: BulkActionsProps
           await deleteApplication(row.id);
         },
         5, // Process 5 at a time
-        50 // 50ms delay between batches
+        50, // 50ms delay between batches
       );
 
       toast.success('Success', {
@@ -112,7 +112,7 @@ export function BulkActions({ selectedRows, onClearSelection }: BulkActionsProps
           await updateApplication(row.id, { status });
         },
         10, // Process 10 at a time (updates are faster than deletes)
-        30 // 30ms delay between batches
+        30, // 30ms delay between batches
       );
 
       toast.success('Success', {
@@ -144,7 +144,7 @@ export function BulkActions({ selectedRows, onClearSelection }: BulkActionsProps
           await updateApplication(row.id, { priority });
         },
         10, // Process 10 at a time
-        30 // 30ms delay between batches
+        30, // 30ms delay between batches
       );
 
       toast.success('Success', {

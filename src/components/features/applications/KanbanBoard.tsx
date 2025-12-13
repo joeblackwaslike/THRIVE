@@ -27,7 +27,7 @@ export function KanbanBoard() {
       activationConstraint: {
         distance: 8,
       },
-    })
+    }),
   );
 
   // Group applications by status and sort by sortOrder

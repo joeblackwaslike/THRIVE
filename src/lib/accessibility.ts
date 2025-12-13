@@ -96,7 +96,7 @@ export function getTextContent(element: HTMLElement): string {
  */
 export function createDescribedBy(
   description: string,
-  id: string
+  id: string,
 ): { 'aria-describedby': string; description: string; id: string } {
   return {
     'aria-describedby': id,
@@ -124,7 +124,7 @@ export function getTransitionDuration(defaultMs: number = 200): number {
  */
 export function announceToScreenReader(
   message: string,
-  politeness: 'polite' | 'assertive' = 'polite'
+  politeness: 'polite' | 'assertive' = 'polite',
 ): void {
   const region = document.getElementById('global-announcer');
   if (region) {
@@ -143,7 +143,7 @@ export function createFormFieldProps(
   id: string,
   label: string,
   required: boolean = false,
-  error?: string
+  error?: string,
 ): {
   id: string;
   'aria-label': string;

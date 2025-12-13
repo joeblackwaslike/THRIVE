@@ -140,7 +140,7 @@ function isValidPriority(value: string): value is 'low' | 'medium' | 'high' {
 export function mapRowToApplication(
   row: string[],
   headers: string[],
-  mapping: FieldMapping[]
+  mapping: FieldMapping[],
 ): Partial<Application> {
   const app: Partial<Application> = {};
 
@@ -233,7 +233,7 @@ export function mapRowToApplication(
  */
 export function validateApplication(
   app: Partial<Application>,
-  rowIndex: number
+  rowIndex: number,
 ): ValidationError[] {
   const errors: ValidationError[] = [];
 
@@ -271,14 +271,14 @@ export function validateApplication(
  */
 export function checkDuplicate(
   app: Partial<Application>,
-  existingApps: Application[]
+  existingApps: Application[],
 ): Application | null {
   // Consider it a duplicate if company name AND position match
   return (
     existingApps.find(
       (existing) =>
         existing.companyName.toLowerCase() === app.companyName?.toLowerCase() &&
-        existing.position.toLowerCase() === app.position?.toLowerCase()
+        existing.position.toLowerCase() === app.position?.toLowerCase(),
     ) || null
   );
 }
@@ -290,7 +290,7 @@ export function previewImport(
   rows: string[][],
   headers: string[],
   mapping: FieldMapping[],
-  existingApps: Application[]
+  existingApps: Application[],
 ): ImportPreview {
   const valid: Application[] = [];
   const invalid: Array<{ row: number; data: Record<string, string>; errors: ValidationError[] }> =
@@ -526,7 +526,7 @@ function validateJSONApplication(data: unknown): {
  */
 export function validateJSONImport(
   content: string,
-  existingApps: Application[]
+  existingApps: Application[],
 ): JSONValidationResult {
   const result: JSONValidationResult = {
     valid: false,

@@ -30,12 +30,12 @@ export function ResponseMetricsCard() {
 
     // Applications that reached screening stage
     const screening = applications.filter((app) =>
-      ['screening', 'interviewing', 'offer', 'accepted'].includes(app.status)
+      ['screening', 'interviewing', 'offer', 'accepted'].includes(app.status),
     ).length;
 
     // Applications that reached interview stage
     const interviewing = applications.filter((app) =>
-      ['interviewing', 'offer', 'accepted'].includes(app.status)
+      ['interviewing', 'offer', 'accepted'].includes(app.status),
     ).length;
 
     // Offers received
@@ -67,7 +67,7 @@ export function ResponseMetricsCard() {
 
     if (responseTimes.length > 0) {
       avgTimeToResponse = Math.round(
-        responseTimes.reduce((sum, time) => sum + time, 0) / responseTimes.length
+        responseTimes.reduce((sum, time) => sum + time, 0) / responseTimes.length,
       );
     }
 
@@ -228,7 +228,7 @@ export function ResponseMetricsCard() {
             <p className="text-2xl font-bold">
               {
                 applications.filter((app) =>
-                  ['applied', 'screening', 'interviewing'].includes(app.status)
+                  ['applied', 'screening', 'interviewing'].includes(app.status),
                 ).length
               }
             </p>

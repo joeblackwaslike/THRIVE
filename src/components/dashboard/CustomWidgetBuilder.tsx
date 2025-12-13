@@ -40,7 +40,7 @@ export function CustomWidgetBuilder() {
   const [dataSource, setDataSource] = useState<'applications' | 'interviews'>('applications');
   const [displayType, setDisplayType] = useState<'number' | 'list' | 'bar-chart'>('number');
   const [colorScheme, setColorScheme] = useState<'primary' | 'success' | 'warning' | 'danger'>(
-    'primary'
+    'primary',
   );
   const [size, setSize] = useState<'small' | 'medium' | 'large'>('medium');
   const [filters, setFilters] = useState<WidgetFilter[]>([]);

@@ -38,15 +38,6 @@ import {
 import { Switch } from '@/components/ui/switch';
 import { useConfirm } from '@/hooks/useConfirm';
 import { CREDITS, HELP_RESOURCES } from '@/lib/about';
-import {
-  backupUserData,
-  clearAllData,
-  deleteBackup,
-  getBackupInfo,
-  hasUserData,
-  restoreUserData,
-} from '@/lib/demoMode';
-import { seedDatabase } from '@/lib/seed';
 import { useApplicationsStore } from '@/stores/applicationsStore';
 import { useCompaniesStore } from '@/stores/companiesStore';
 import { useContactsStore } from '@/stores/contactsStore';
@@ -141,17 +132,17 @@ function SettingsPage() {
     try {
       // Disable demo mode if it's enabled (to prevent re-seeding on reload)
       if (demoMode.enabled) {
-        updateDemoMode({ enabled: false, hasUserData: false });
+        // updateDemoMode({ enabled: false, hasUserData: false });
         console.log('🔄 Disabled demo mode before clearing data');
         // Give it a moment for Zustand persist to save to localStorage
         await new Promise((resolve) => setTimeout(resolve, 100));
       }
 
       // Clear all data from the database and localStorage
-      await clearAllData();
+      // await clearAllData();
 
       // Delete any backup that might exist
-      deleteBackup();
+      // deleteBackup();
 
       toast.success('All Data Deleted', {
         description: 'All data has been permanently removed. The page will reload.',
@@ -192,22 +183,22 @@ function SettingsPage() {
           }
 
           // Check if user has data
-          const hasData = await hasUserData();
+          // const hasData = await hasUserData();
 
-          if (hasData) {
-            // Backup existing data
-            await backupUserData();
-            toast.info('Backing up your data...');
-          }
+          // if (hasData) {
+          //   // Backup existing data
+          //   // await backupUserData();
+          //   toast.info('Backing up your data...');
+          // }
 
           // Clear database
-          await clearAllData();
+          // await clearAllData();
 
           // Seed with demo data
-          await seedDatabase();
+          // await seedDatabase();
 
           // Update settings
-          updateDemoMode({ enabled: true, hasUserData: hasData });
+          // updateDemoMode({ enabled: true, hasUserData: hasData });
 
           // Refresh all stores
           await Promise.all([
@@ -223,13 +214,13 @@ function SettingsPage() {
           });
         } else {
           // Disabling demo mode
-          const backupInfo = getBackupInfo();
-          const hasBackupData = backupInfo !== null;
+          // const backupInfo = getBackupInfo();
+          // const hasBackupData = backupInfo !== null;
 
           const confirmed = await confirm({
             title: 'Disable Demo Mode',
-            description: hasBackupData
-              ? `This will restore your original data from the backup (${backupInfo.itemCount} items backed up). The demo data will be removed.`
+            description: false
+              ? `This will restore your original data from the backup (x items backed up). The demo data will be removed.`
               : "This will remove the demo data. You don't have any backed up data to restore.",
             type: 'confirm',
             confirmText: 'Disable Demo Mode',
@@ -242,17 +233,17 @@ function SettingsPage() {
           }
 
           // Clear demo data
-          await clearAllData();
+          // await clearAllData();
 
           // Restore user data if it exists
-          if (demoMode.hasUserData) {
-            await restoreUserData();
-            deleteBackup();
-            toast.info('Restoring your data...');
-          }
+          // if (demoMode.hasUserData) {
+          //   await restoreUserData();
+          //   // deleteBackup();
+          //   toast.info('Restoring your data...');
+          // }
 
           // Update settings
-          updateDemoMode({ enabled: false, hasUserData: false });
+          // updateDemoMode({ enabled: false, hasUserData: false });
 
           // Refresh all stores
           await Promise.all([
@@ -264,7 +255,7 @@ function SettingsPage() {
           ]);
 
           toast.success('Demo Mode Disabled', {
-            description: demoMode.hasUserData
+            description: false
               ? 'Your original data has been restored.'
               : 'Demo data has been removed.',
           });
@@ -280,14 +271,14 @@ function SettingsPage() {
     },
     [
       confirm,
-      demoMode.hasUserData,
+      false,
       updateDemoMode,
       fetchApplications,
       fetchCompanies,
       fetchContacts,
       fetchDocuments,
       fetchInterviews,
-    ]
+    ],
   );
 
   return (
@@ -665,7 +656,7 @@ function SettingsPage() {
                   onCheckedChange={(checked: boolean) => {
                     updateData({ confirmDelete: checked });
                     toast.success(
-                      checked ? 'Delete Confirmation Enabled' : 'Delete Confirmation Disabled'
+                      checked ? 'Delete Confirmation Enabled' : 'Delete Confirmation Disabled',
                     );
                   }}
                 />

@@ -158,7 +158,7 @@ export function SavedFiltersDialog({
           badges.push(
             <Badge key={`status-${status}`} variant="outline" className="text-xs">
               {config.label}
-            </Badge>
+            </Badge>,
           );
         }
       });
@@ -171,7 +171,7 @@ export function SavedFiltersDialog({
           badges.push(
             <Badge key={`remote-${policy}`} variant="outline" className="text-xs">
               {config.label}
-            </Badge>
+            </Badge>,
           );
         }
       });
@@ -184,7 +184,7 @@ export function SavedFiltersDialog({
           badges.push(
             <Badge key={`priority-${priority}`} variant="outline" className="text-xs">
               {config.label}
-            </Badge>
+            </Badge>,
           );
         }
       });
@@ -194,7 +194,7 @@ export function SavedFiltersDialog({
       badges.push(
         <Badge key="researched" variant="secondary" className="text-xs">
           {filters.researched ? 'Researched' : 'Not Researched'}
-        </Badge>
+        </Badge>,
       );
     }
 
@@ -205,7 +205,7 @@ export function SavedFiltersDialog({
     ? savedFilters.filter(
         (filter) =>
           filter.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          filter.description?.toLowerCase().includes(searchQuery.toLowerCase())
+          filter.description?.toLowerCase().includes(searchQuery.toLowerCase()),
       )
     : savedFilters;
 

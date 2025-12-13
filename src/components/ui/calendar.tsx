@@ -139,33 +139,33 @@ function Calendar({
         month: cn('flex w-full flex-col gap-3', defaultClassNames.month),
         nav: cn(
           'absolute inset-x-0 top-0 flex w-full items-center justify-between gap-1',
-          defaultClassNames.nav
+          defaultClassNames.nav,
         ),
         button_previous: cn(
           buttonVariants({ variant: buttonVariant, size: 'icon' }),
           'h-7 w-7 select-none p-0 opacity-50 hover:opacity-100',
-          defaultClassNames.button_previous
+          defaultClassNames.button_previous,
         ),
         button_next: cn(
           buttonVariants({ variant: buttonVariant, size: 'icon' }),
           'h-7 w-7 select-none p-0 opacity-50 hover:opacity-100',
-          defaultClassNames.button_next
+          defaultClassNames.button_next,
         ),
         month_caption: cn(
           'flex h-7 w-full items-center justify-center px-8',
-          defaultClassNames.month_caption
+          defaultClassNames.month_caption,
         ),
         caption_label: cn('text-xs font-medium select-none', defaultClassNames.caption_label),
         table: 'w-full border-collapse',
         weekdays: cn('flex', defaultClassNames.weekdays),
         weekday: cn(
           'text-muted-foreground w-9 flex-1 select-none text-[0.65rem] font-normal',
-          defaultClassNames.weekday
+          defaultClassNames.weekday,
         ),
         week: cn('mt-1 flex w-full', defaultClassNames.week),
         day: cn(
           'group/day relative h-9 w-9 p-0 text-center text-xs font-normal select-none',
-          defaultClassNames.day
+          defaultClassNames.day,
         ),
         range_start: cn('rounded-l-md', defaultClassNames.range_start),
         range_middle: cn('rounded-none', defaultClassNames.range_middle),
@@ -225,7 +225,7 @@ function CalendarDayButton({
         'data-[range-middle=true]:bg-accent data-[range-middle=true]:text-accent-foreground',
         'data-[range-start=true]:rounded-l-md data-[range-end=true]:rounded-r-md data-[range-middle=true]:rounded-none',
         defaultClassNames.day,
-        className
+        className,
       )}
       {...props}
     />

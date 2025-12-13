@@ -36,7 +36,7 @@ export const useActivityStore = create<ActivityStore>()(
         return get().activities.filter(
           (activity) =>
             activity.entityId === entityId &&
-            (entityType === undefined || activity.entityType === entityType)
+            (entityType === undefined || activity.entityType === entityType),
         );
       },
 
@@ -54,7 +54,7 @@ export const useActivityStore = create<ActivityStore>()(
 
         set((state) => ({
           activities: state.activities.filter(
-            (activity) => new Date(activity.timestamp) > cutoffDate
+            (activity) => new Date(activity.timestamp) > cutoffDate,
           ),
         }));
       },
@@ -62,6 +62,6 @@ export const useActivityStore = create<ActivityStore>()(
     {
       name: 'thrive-activities',
       version: 1,
-    }
-  )
+    },
+  ),
 );

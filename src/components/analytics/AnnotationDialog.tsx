@@ -65,7 +65,7 @@ export function AnnotationDialog({
 }: AnnotationDialogProps) {
   const [internalOpen, setInternalOpen] = useState(false);
   const [date, setDate] = useState(
-    defaultDate ? format(defaultDate, 'yyyy-MM-dd') : format(new Date(), 'yyyy-MM-dd')
+    defaultDate ? format(defaultDate, 'yyyy-MM-dd') : format(new Date(), 'yyyy-MM-dd'),
   );
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');

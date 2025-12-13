@@ -64,7 +64,7 @@ export function useSavedFilters(filterType: 'applications' | 'interviews') {
         console.error('Failed to save filters:', error);
       }
     },
-    [storageKey]
+    [storageKey],
   );
 
   // Save a new filter
@@ -80,7 +80,7 @@ export function useSavedFilters(filterType: 'applications' | 'interviews') {
       const updated = [...savedFilters, newFilter];
       persistFilters(updated);
     },
-    [savedFilters, persistFilters]
+    [savedFilters, persistFilters],
   );
 
   // Delete a saved filter
@@ -89,7 +89,7 @@ export function useSavedFilters(filterType: 'applications' | 'interviews') {
       const updated = savedFilters.filter((f) => f.id !== id);
       persistFilters(updated);
     },
-    [savedFilters, persistFilters]
+    [savedFilters, persistFilters],
   );
 
   // Update a saved filter
@@ -98,7 +98,7 @@ export function useSavedFilters(filterType: 'applications' | 'interviews') {
       const updated = savedFilters.map((f) => (f.id === id ? { ...f, ...updates } : f));
       persistFilters(updated);
     },
-    [savedFilters, persistFilters]
+    [savedFilters, persistFilters],
   );
 
   // Generate a human-readable label for filters
@@ -177,7 +177,7 @@ export function useSavedFilters(filterType: 'applications' | 'interviews') {
 
       return parts.length > 0 ? parts.join(' • ') : 'No filters';
     },
-    [filterType]
+    [filterType],
   );
 
   return {

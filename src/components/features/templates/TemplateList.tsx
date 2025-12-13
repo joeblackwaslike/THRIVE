@@ -62,7 +62,7 @@ export function TemplateList({
 }: TemplateListProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<TemplateCategory | 'all'>(
-    category || 'all'
+    category || 'all',
   );
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [templateToDelete, setTemplateToDelete] = useState<string | null>(null);
@@ -74,7 +74,7 @@ export function TemplateList({
 
   // Filter templates
   const filteredTemplates = (searchQuery ? searchTemplates(searchQuery) : templates).filter(
-    (t) => selectedCategory === 'all' || t.category === selectedCategory
+    (t) => selectedCategory === 'all' || t.category === selectedCategory,
   );
 
   // Sort by usage count and default status
@@ -157,7 +157,7 @@ export function TemplateList({
                 key={template.id}
                 className={cn(
                   'group relative rounded-lg border p-4 hover:border-primary/50 transition-colors',
-                  template.isDefault && 'bg-muted/50'
+                  template.isDefault && 'bg-muted/50',
                 )}
               >
                 {/* Header */}

@@ -80,7 +80,7 @@ const FormItem = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivEl
         <div ref={ref} className={cn('space-y-2', className)} {...props} />
       </FormItemContext.Provider>
     );
-  }
+  },
 );
 FormItem.displayName = 'FormItem';
 

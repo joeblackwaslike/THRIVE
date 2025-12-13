@@ -109,7 +109,8 @@ export function GoalsTracking({ applications, interviews }: GoalsTrackingProps) 
             return isWithinInterval(date, period);
           });
           const responded = periodApps.filter(
-            (app) => app.status !== 'applied' && app.status !== 'target' && app.status !== 'hunting'
+            (app) =>
+              app.status !== 'applied' && app.status !== 'target' && app.status !== 'hunting',
           ).length;
           current = periodApps.length > 0 ? (responded / periodApps.length) * 100 : 0;
           break;
@@ -124,7 +125,7 @@ export function GoalsTracking({ applications, interviews }: GoalsTrackingProps) 
         status: percentage >= 100 ? 'achieved' : percentage >= 75 ? 'on-track' : 'behind',
       };
     },
-    [applications, interviews, getCurrentPeriod]
+    [applications, interviews, getCurrentPeriod],
   );
 
   const activeGoals = goals.filter((g) => g.active);

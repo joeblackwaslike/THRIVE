@@ -27,7 +27,7 @@ export function createDebouncedFn<T extends (...args: any[]) => any>(
   options?: {
     leading?: boolean;
     trailing?: boolean;
-  }
+  },
 ): (...args: Parameters<T>) => void {
   let timeoutId: ReturnType<typeof setTimeout> | null = null;
   let lastCallTime = 0;
@@ -76,7 +76,7 @@ export function createThrottledFn<T extends (...args: any[]) => any>(
   options?: {
     leading?: boolean;
     trailing?: boolean;
-  }
+  },
 ): (...args: Parameters<T>) => void {
   let timeoutId: ReturnType<typeof setTimeout> | null = null;
   let lastCallTime = 0;

@@ -231,8 +231,7 @@ describe('GraphQL API Integration Tests', () => {
     });
 
     it('should serve Apollo Sandbox or redirect on GET /graphql', async () => {
-      const response = await request(app)
-        .get('/graphql');
+      const response = await request(app).get('/graphql');
 
       // Accept either a direct 200 HTML or a 302 redirect to Sandbox
       expect([200, 302]).toContain(response.status);

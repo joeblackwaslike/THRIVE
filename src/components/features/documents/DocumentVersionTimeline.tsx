@@ -79,7 +79,7 @@ export function DocumentVersionTimeline({ document }: DocumentVersionTimelinePro
         // Use the earliest linked date for this version
         versionDate = apps.reduce(
           (earliest, app) => (app.linkedAt < earliest ? app.linkedAt : earliest),
-          apps[0].linkedAt
+          apps[0].linkedAt,
         );
       }
 
@@ -301,7 +301,7 @@ export function DocumentVersionTimeline({ document }: DocumentVersionTimelinePro
                               <div className="flex items-start gap-2 w-full text-left">
                                 <div
                                   className={`w-1.5 h-1.5 rounded-full mt-1.5 shrink-0 ${getStatusColor(
-                                    app.status
+                                    app.status,
                                   )}`}
                                 />
                                 <div className="flex-1 min-w-0">

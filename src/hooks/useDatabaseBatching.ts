@@ -3,11 +3,9 @@
  *
  * Provides easy-to-use hooks for batching database operations in React components.
  */
-
-import type { Table } from 'dexie';
 import { useEffect, useRef } from 'react';
 import type { BatcherConfig } from '@/lib/database-batching';
-import { createDatabaseAdder, createDatabaseBatcher } from '@/lib/database-batching';
+import { createDatabaseBatcher } from '@/lib/database-batching';
 
 /**
  * Hook for batched database updates
@@ -46,47 +44,6 @@ export function useDatabaseBatcher<T>(config: BatcherConfig<T>) {
 }
 
 /**
- * Hook for batched database adds
- *
- * Useful for bulk imports or rapid creation of records.
- *
- * @example
- * ```tsx
- * function BulkImport() {
- *   const [importing, setImporting] = useState(false);
- *   const adder = useDatabaseAdder({
- *     table: db.applications,
- *     wait: 1000,
- *     maxBatchSize: 50,
- *     onSuccess: (count) => {
- *       setImporting(false);
- *       toast.success(`Imported ${count} records`);
- *     },
- *   });
- *
- *   const handleImport = (records: Application[]) => {
- *     setImporting(true);
- *     records.forEach(record => adder.add(record));
- *   };
- *
- *   return <ImportButton onClick={handleImport} />;
- * }
- * ```
- */
-export function useDatabaseAdder<T>(config: BatcherConfig<T>) {
-  const adderRef = useRef(createDatabaseAdder(config));
-
-  // Flush on unmount
-  useEffect(() => {
-    return () => {
-      adderRef.current.flush();
-    };
-  }, []);
-
-  return adderRef.current;
-}
-
-/**
  * Hook for auto-save functionality with batching
  *
  * Automatically updates the database when a value changes.
@@ -108,7 +65,7 @@ export function useDatabaseAdder<T>(config: BatcherConfig<T>) {
  * ```
  */
 export function useAutoSaveBatcher<T>(
-  table: Table<T, string>,
+  updater: (id: string, changes: Partial<T>) => Promise<any>,
   id: string,
   changes: Partial<T>,
   // biome-ignore lint/suspicious/noExplicitAny: Dependencies array needs to accept any types
@@ -117,16 +74,16 @@ export function useAutoSaveBatcher<T>(
     wait?: number;
     onSuccess?: () => void;
     onError?: (error: Error) => void;
-  }
+  },
 ) {
   const batcherRef = useRef(
     createDatabaseBatcher({
-      table,
+      update: updater,
       wait: options?.wait || 1000,
       maxBatchSize: 1, // Auto-save typically updates one item
       onSuccess: options?.onSuccess ? () => options.onSuccess?.() : undefined,
       onError: options?.onError,
-    })
+    }),
   );
 
   useEffect(() => {

@@ -76,7 +76,7 @@ export function LinkApplicationDialog({ company, open, onOpenChange }: LinkAppli
     updateCompany(company.id, { applicationIds: updatedApplicationIds });
 
     toast.success(
-      `Linked ${selectedAppIds.length} ${selectedAppIds.length === 1 ? 'application' : 'applications'} to ${company.name}`
+      `Linked ${selectedAppIds.length} ${selectedAppIds.length === 1 ? 'application' : 'applications'} to ${company.name}`,
     );
 
     setSelectedAppIds([]);
@@ -92,7 +92,7 @@ export function LinkApplicationDialog({ company, open, onOpenChange }: LinkAppli
 
   const toggleSelection = (appId: string) => {
     setSelectedAppIds((prev) =>
-      prev.includes(appId) ? prev.filter((id) => id !== appId) : [...prev, appId]
+      prev.includes(appId) ? prev.filter((id) => id !== appId) : [...prev, appId],
     );
   };
 

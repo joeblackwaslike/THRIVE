@@ -34,7 +34,7 @@ export function StatCard({
   const numericValue = typeof value === 'number' ? value : parseFloat(value as string);
   const animatedValue = useAnimatedNumber(
     !Number.isNaN(numericValue) && enableAnimation ? numericValue : 0,
-    600
+    600,
   );
 
   // Pulse animation when value changes
@@ -68,7 +68,7 @@ export function StatCard({
         className,
         isPulsing &&
           enableAnimation &&
-          'ring-2 ring-primary/20 ring-offset-2 transition-all duration-500'
+          'ring-2 ring-primary/20 ring-offset-2 transition-all duration-500',
       )}
     >
       <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -79,7 +79,7 @@ export function StatCard({
         <div
           className={cn(
             'text-2xl font-bold transition-all duration-300',
-            isPulsing && enableAnimation && 'scale-110'
+            isPulsing && enableAnimation && 'scale-110',
           )}
         >
           {displayValue}

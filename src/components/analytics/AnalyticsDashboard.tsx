@@ -82,7 +82,7 @@ export function AnalyticsDashboard() {
   // Apply filters to applications
   const filteredApplications = useMemo(
     () => applyAnalyticsFilters(applications, filters),
-    [applications, filters]
+    [applications, filters],
   );
 
   // Calculate period dates
@@ -118,14 +118,14 @@ export function AnalyticsDashboard() {
   // Calculate analytics with filtered data
   const metrics = useMemo(
     () => calculateAnalytics(filteredApplications, interviews, period),
-    [filteredApplications, interviews, period]
+    [filteredApplications, interviews, period],
   );
 
   // Calculate previous period metrics for comparison
   const previousMetrics = useMemo(
     () =>
       previousPeriod ? calculateAnalytics(filteredApplications, interviews, previousPeriod) : null,
-    [filteredApplications, interviews, previousPeriod]
+    [filteredApplications, interviews, previousPeriod],
   );
 
   // Real-time metric change notifications
@@ -141,7 +141,7 @@ export function AnalyticsDashboard() {
           interviewConversionRate: previousMetrics.interviewConversionRate,
           offerRate: previousMetrics.offerRate,
         }
-      : undefined
+      : undefined,
   );
 
   // Calculate trends
@@ -157,22 +157,22 @@ export function AnalyticsDashboard() {
 
   const timeSeriesData = useMemo(
     () => generateTimeSeriesData(applications, interviews, periodDays, period),
-    [applications, interviews, periodDays, period]
+    [applications, interviews, periodDays, period],
   );
 
   const statusDistribution = useMemo(
     () => calculateStatusDistribution(applications, period),
-    [applications, period]
+    [applications, period],
   );
 
   const companyStats = useMemo(
     () => calculateCompanyStats(filteredApplications, interviews, period),
-    [filteredApplications, interviews, period]
+    [filteredApplications, interviews, period],
   );
 
   const monthlyTrends = useMemo(
     () => calculateMonthlyTrends(filteredApplications, interviews, 6, period),
-    [filteredApplications, interviews, period]
+    [filteredApplications, interviews, period],
   );
 
   const resetFilters = () => {
@@ -272,7 +272,7 @@ export function AnalyticsDashboard() {
             description="Days to hear back"
             trend={calculateTrend(
               metrics.averageResponseTime,
-              previousMetrics?.averageResponseTime
+              previousMetrics?.averageResponseTime,
             )}
           />
           <StatCard
@@ -282,7 +282,7 @@ export function AnalyticsDashboard() {
             description="Apps → Interviews"
             trend={calculateTrend(
               metrics.interviewConversionRate,
-              previousMetrics?.interviewConversionRate
+              previousMetrics?.interviewConversionRate,
             )}
           />
           <StatCard
@@ -292,7 +292,7 @@ export function AnalyticsDashboard() {
             description="Interviews → Offers"
             trend={calculateTrend(
               metrics.interviewToOfferRate,
-              previousMetrics?.interviewToOfferRate
+              previousMetrics?.interviewToOfferRate,
             )}
           />
           <StatCard
@@ -328,7 +328,7 @@ export function AnalyticsDashboard() {
             <CardContent>
               {timeSeriesData.length > 0 &&
               timeSeriesData.some(
-                (d) => d.applications > 0 || d.interviews > 0 || d.offers > 0 || d.rejections > 0
+                (d) => d.applications > 0 || d.interviews > 0 || d.offers > 0 || d.rejections > 0,
               ) ? (
                 <ResponsiveContainer width="100%" height={350}>
                   <LineChart data={timeSeriesData}>

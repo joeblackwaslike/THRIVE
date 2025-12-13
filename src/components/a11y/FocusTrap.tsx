@@ -36,7 +36,7 @@ export function FocusTrap({ children, active = true, restoreFocus = true }: Focu
       ].join(',');
 
       return Array.from(container.querySelectorAll<HTMLElement>(selectors)).filter(
-        (el) => !el.hasAttribute('disabled')
+        (el) => !el.hasAttribute('disabled'),
       );
     };
 

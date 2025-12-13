@@ -115,7 +115,7 @@ export function CustomWidgetRenderer({ widget }: CustomWidgetRendererProps) {
             acc[status] = (acc[status] || 0) + 1;
             return acc;
           },
-          {}
+          {},
         );
 
         const maxCount = Math.max(...Object.values(statusCounts).map(Number), 1);

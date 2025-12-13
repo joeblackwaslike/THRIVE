@@ -72,7 +72,7 @@ export const useInterviewPrepStore = create<InterviewPrepState>()(
       updateQuestion: (id, updates) =>
         set((state) => ({
           questions: state.questions.map((q) =>
-            q.id === id ? { ...q, ...updates, updatedAt: new Date() } : q
+            q.id === id ? { ...q, ...updates, updatedAt: new Date() } : q,
           ),
         })),
 
@@ -100,7 +100,7 @@ export const useInterviewPrepStore = create<InterviewPrepState>()(
       updateAnswer: (id, updates) =>
         set((state) => ({
           answers: state.answers.map((a) =>
-            a.id === id ? { ...a, ...updates, updatedAt: new Date() } : a
+            a.id === id ? { ...a, ...updates, updatedAt: new Date() } : a,
           ),
         })),
 
@@ -130,7 +130,7 @@ export const useInterviewPrepStore = create<InterviewPrepState>()(
       updateCompanyNote: (id, updates) =>
         set((state) => ({
           companyNotes: state.companyNotes.map((n) =>
-            n.id === id ? { ...n, ...updates, updatedAt: new Date() } : n
+            n.id === id ? { ...n, ...updates, updatedAt: new Date() } : n,
           ),
         })),
 
@@ -141,7 +141,7 @@ export const useInterviewPrepStore = create<InterviewPrepState>()(
 
       getCompanyNote: (companyName) => {
         return get().companyNotes.find(
-          (n) => n.companyName.toLowerCase() === companyName.toLowerCase()
+          (n) => n.companyName.toLowerCase() === companyName.toLowerCase(),
         );
       },
 
@@ -162,7 +162,7 @@ export const useInterviewPrepStore = create<InterviewPrepState>()(
       updateChallenge: (id, updates) =>
         set((state) => ({
           challenges: state.challenges.map((c) =>
-            c.id === id ? { ...c, ...updates, updatedAt: new Date() } : c
+            c.id === id ? { ...c, ...updates, updatedAt: new Date() } : c,
           ),
         })),
 
@@ -207,15 +207,15 @@ export const useInterviewPrepStore = create<InterviewPrepState>()(
             acc[q.category] = (acc[q.category] || 0) + 1;
             return acc;
           },
-          {} as Record<string, number>
+          {} as Record<string, number>,
         );
 
         const companiesResearched = state.companyNotes.filter((n) => n.researched).length;
         const challengesCompleted = state.challenges.filter(
-          (c) => c.status === 'completed' || c.status === 'submitted'
+          (c) => c.status === 'completed' || c.status === 'submitted',
         ).length;
         const challengesPending = state.challenges.filter(
-          (c) => c.status === 'not-started' || c.status === 'in-progress'
+          (c) => c.status === 'not-started' || c.status === 'in-progress',
         ).length;
 
         return {
@@ -232,6 +232,6 @@ export const useInterviewPrepStore = create<InterviewPrepState>()(
     }),
     {
       name: 'interview-prep-storage',
-    }
-  )
+    },
+  ),
 );

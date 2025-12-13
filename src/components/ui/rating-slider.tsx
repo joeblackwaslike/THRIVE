@@ -49,7 +49,7 @@ export function RatingSlider({
             <div className="absolute inset-0 overflow-hidden" style={{ width: '50%' }}>
               <Star className="h-3.5 w-3.5 fill-yellow-400 text-yellow-400" />
             </div>
-          </div>
+          </div>,
         );
       } else {
         // Empty star
@@ -94,7 +94,7 @@ export function RatingSlider({
             <Star
               className={cn(
                 'h-2.5 w-2.5',
-                value >= rating ? 'fill-yellow-400 text-yellow-400' : 'text-muted-foreground/30'
+                value >= rating ? 'fill-yellow-400 text-yellow-400' : 'text-muted-foreground/30',
               )}
             />
             <span className="text-[10px] text-muted-foreground">{rating}</span>

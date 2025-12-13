@@ -59,6 +59,6 @@ export const useGoalsStore = create<GoalsState>()(
     }),
     {
       name: 'job-search-goals',
-    }
-  )
+    },
+  ),
 );

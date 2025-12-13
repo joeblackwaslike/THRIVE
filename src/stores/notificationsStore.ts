@@ -54,7 +54,7 @@ interface NotificationsState {
       status: string;
       type: string;
       applicationId?: string;
-    }>
+    }>,
   ) => void;
   dismissSuggestion: (id: string) => void;
   acceptSuggestion: (suggestion: SmartReminderSuggestion) => void;
@@ -101,7 +101,7 @@ export const useNotificationsStore = create<NotificationsState>()(
       updateNotification: (id, updates) =>
         set((state) => ({
           notifications: state.notifications.map((n) =>
-            n.id === id ? { ...n, ...updates, updatedAt: new Date() } : n
+            n.id === id ? { ...n, ...updates, updatedAt: new Date() } : n,
           ),
         })),
 
@@ -120,7 +120,7 @@ export const useNotificationsStore = create<NotificationsState>()(
                   readAt: new Date(),
                   updatedAt: new Date(),
                 }
-              : n
+              : n,
           ),
         })),
 
@@ -134,7 +134,7 @@ export const useNotificationsStore = create<NotificationsState>()(
                   readAt: new Date(),
                   updatedAt: new Date(),
                 }
-              : n
+              : n,
           ),
         })),
 
@@ -148,7 +148,7 @@ export const useNotificationsStore = create<NotificationsState>()(
                   dismissedAt: new Date(),
                   updatedAt: new Date(),
                 }
-              : n
+              : n,
           ),
         })),
 
@@ -165,7 +165,7 @@ export const useNotificationsStore = create<NotificationsState>()(
                     snoozedUntil,
                     updatedAt: new Date(),
                   }
-                : n
+                : n,
             ),
           };
         }),
@@ -188,7 +188,7 @@ export const useNotificationsStore = create<NotificationsState>()(
       updateReminder: (id, updates) =>
         set((state) => ({
           reminders: state.reminders.map((r) =>
-            r.id === id ? { ...r, ...updates, updatedAt: new Date() } : r
+            r.id === id ? { ...r, ...updates, updatedAt: new Date() } : r,
           ),
         })),
 
@@ -201,7 +201,7 @@ export const useNotificationsStore = create<NotificationsState>()(
       toggleReminder: (id) =>
         set((state) => ({
           reminders: state.reminders.map((r) =>
-            r.id === id ? { ...r, isActive: !r.isActive, updatedAt: new Date() } : r
+            r.id === id ? { ...r, isActive: !r.isActive, updatedAt: new Date() } : r,
           ),
         })),
 
@@ -222,7 +222,7 @@ export const useNotificationsStore = create<NotificationsState>()(
           (n) =>
             n.status === 'pending' &&
             new Date(n.scheduledFor) <= now &&
-            (!n.snoozedUntil || new Date(n.snoozedUntil) <= now)
+            (!n.snoozedUntil || new Date(n.snoozedUntil) <= now),
         );
       },
 
@@ -234,14 +234,14 @@ export const useNotificationsStore = create<NotificationsState>()(
             r.isActive &&
             r.nextTrigger &&
             new Date(r.nextTrigger) >= now &&
-            new Date(r.nextTrigger) <= tomorrow
+            new Date(r.nextTrigger) <= tomorrow,
         );
       },
 
       getStats: () => {
         const { notifications } = get();
         const unreadCount = notifications.filter(
-          (n) => n.status === 'sent' || n.status === 'pending'
+          (n) => n.status === 'sent' || n.status === 'pending',
         ).length;
         const pendingCount = notifications.filter((n) => n.status === 'pending').length;
         const snoozedCount = notifications.filter((n) => n.status === 'snoozed').length;
@@ -251,7 +251,7 @@ export const useNotificationsStore = create<NotificationsState>()(
             acc[n.type] = (acc[n.type] || 0) + 1;
             return acc;
           },
-          {} as Record<string, number>
+          {} as Record<string, number>,
         );
 
         const byPriority = notifications.reduce(
@@ -259,7 +259,7 @@ export const useNotificationsStore = create<NotificationsState>()(
             acc[n.priority] = (acc[n.priority] || 0) + 1;
             return acc;
           },
-          {} as Record<string, number>
+          {} as Record<string, number>,
         );
 
         const upcomingReminders = get().getUpcomingReminders().length;
@@ -376,7 +376,7 @@ export const useNotificationsStore = create<NotificationsState>()(
           if (app.status === 'applied' && app.appliedDate) {
             const appliedDate = new Date(app.appliedDate);
             const daysSinceApplied = Math.floor(
-              (now.getTime() - appliedDate.getTime()) / (1000 * 60 * 60 * 24)
+              (now.getTime() - appliedDate.getTime()) / (1000 * 60 * 60 * 24),
             );
 
             if (daysSinceApplied >= 7 && daysSinceApplied <= 10) {
@@ -399,7 +399,7 @@ export const useNotificationsStore = create<NotificationsState>()(
           if (interview.scheduledAt && interview.status === 'scheduled') {
             const interviewDate = new Date(interview.scheduledAt);
             const daysUntilInterview = Math.floor(
-              (interviewDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24)
+              (interviewDate.getTime() - now.getTime()) / (1000 * 60 * 60 * 24),
             );
 
             if (daysUntilInterview >= 1 && daysUntilInterview <= 3) {
@@ -423,7 +423,7 @@ export const useNotificationsStore = create<NotificationsState>()(
           if (app.status === 'interviewing' && app.lastContactDate) {
             const lastContact = new Date(app.lastContactDate);
             const daysSinceContact = Math.floor(
-              (now.getTime() - lastContact.getTime()) / (1000 * 60 * 60 * 24)
+              (now.getTime() - lastContact.getTime()) / (1000 * 60 * 60 * 24),
             );
 
             if (daysSinceContact >= 14) {
@@ -473,6 +473,6 @@ export const useNotificationsStore = create<NotificationsState>()(
     }),
     {
       name: 'notifications-storage',
-    }
-  )
+    },
+  ),
 );

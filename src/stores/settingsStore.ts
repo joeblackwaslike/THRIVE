@@ -144,6 +144,6 @@ export const useSettingsStore = create<SettingsState>()(
     }),
     {
       name: 'thrive-settings',
-    }
-  )
+    },
+  ),
 );

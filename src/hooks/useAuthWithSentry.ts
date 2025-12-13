@@ -15,15 +15,11 @@ export function useAuthWithSentry() {
       setSentryUser({
         id: auth.user.id,
         email: auth.user.email,
-        username: auth.user.name,
-        role: auth.user.role,
-        subscription: auth.user.subscription_type,
       });
 
       // Track successful authentication
       addSentryBreadcrumb(`User authenticated: ${auth.user.email}`, 'auth', 'info', {
         userId: auth.user.id,
-        provider: auth.user.app_metadata?.provider,
       });
     } else if (!auth.isLoading) {
       // Clear user context when logged out
@@ -32,10 +28,10 @@ export function useAuthWithSentry() {
   }, [auth.user, auth.isAuthenticated, auth.isLoading]);
 
   // Enhanced login function with error tracking
-  const enhancedLogin = async (credentials: any) => {
+  const enhancedLogin = async (credentials: { email: string; password: string }) => {
     try {
       addSentryBreadcrumb('Login attempt', 'auth', 'info');
-      const result = await auth.login(credentials);
+      const result = await auth.login(credentials.email, credentials.password);
       addSentryBreadcrumb('Login successful', 'auth', 'info');
       return result;
     } catch (error) {

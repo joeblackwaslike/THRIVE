@@ -28,8 +28,8 @@ function App() {
             </CardHeader>
             <CardContent className="space-y-4">
               <p className="text-sm text-muted-foreground">
-                Phase 1 is now complete! We have Tailwind CSS v4, shadcn/ui components, layout system,
-                and dark mode fully working.
+                Phase 1 is now complete! We have Tailwind CSS v4, shadcn/ui components, layout
+                system, and dark mode fully working.
               </p>
 
               {/* Counter Demo */}

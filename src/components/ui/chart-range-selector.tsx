@@ -49,7 +49,7 @@ export function ChartRangeSelector({
   height = 40,
 }: ChartRangeSelectorProps) {
   const [values, setValues] = useState<number[]>(
-    initialRange ? [initialRange.start, initialRange.end] : [min, max]
+    initialRange ? [initialRange.start, initialRange.end] : [min, max],
   );
 
   const rangerRef = useRef<HTMLDivElement>(null);
@@ -145,7 +145,7 @@ export function ChartRangeSelector({
               key={i}
               className={cn(
                 'flex-1 h-full rounded-sm transition-colors',
-                isInRange ? 'bg-primary/60' : 'bg-muted/50'
+                isInRange ? 'bg-primary/60' : 'bg-muted/50',
               )}
             />
           );

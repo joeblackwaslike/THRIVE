@@ -30,7 +30,7 @@ const authLink = setContext((_, { headers }) => {
   console.log('GraphQL auth debug - User ID:', userId);
   console.log(
     'GraphQL auth debug - Authorization header:',
-    token ? `Bearer ${token.substring(0, 20)}...` : 'none'
+    token ? `Bearer ${token.substring(0, 20)}...` : 'none',
   );
 
   return {

@@ -15,6 +15,7 @@ export const contactsResolver = {
   Query: {
     contacts: async (_: unknown, __: unknown, { userId }: Context) => {
       try {
+        if (!userId || userId === 'null') return [];
         return await contactsDb.getAll(userId);
       } catch (error) {
         logger.error('Error fetching contacts:', error);
@@ -24,6 +25,7 @@ export const contactsResolver = {
 
     contact: async (_: unknown, { id }: ContactQueryArgs, { userId }: Context) => {
       try {
+        if (!userId || userId === 'null') return null;
         const { data, error } = await supabase
           .from('contacts')
           .select('*')
@@ -42,9 +44,10 @@ export const contactsResolver = {
     contactsByCompany: async (
       _: unknown,
       { companyId }: { companyId: string },
-      { userId }: Context
+      { userId }: Context,
     ) => {
       try {
+        if (!userId || userId === 'null') return [];
         return await contactsDb.getByCompanyId(companyId, userId);
       } catch (error) {
         logger.error('Error fetching contacts by company:', error);
@@ -56,6 +59,7 @@ export const contactsResolver = {
   Mutation: {
     createContact: async (_: unknown, { input }: CreateContactArgs, { userId }: Context) => {
       try {
+        if (!userId || userId === 'null') throw new GraphQLError('Authentication required');
         const contactData = {
           ...input,
           user_id: userId,

@@ -150,7 +150,7 @@ router.post(
         error: 'Internal server error',
       });
     }
-  }
+  },
 );
 
 /**

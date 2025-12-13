@@ -119,11 +119,11 @@ export function CSVImportDialog({ open, onOpenChange }: CSVImportDialogProps) {
     (csvColumn: string, appField: keyof Application | 'none') => {
       setFieldMappings((prev) =>
         prev.map((m) =>
-          m.csvColumn === csvColumn ? { ...m, appField: appField === 'none' ? null : appField } : m
-        )
+          m.csvColumn === csvColumn ? { ...m, appField: appField === 'none' ? null : appField } : m,
+        ),
       );
     },
-    []
+    [],
   );
 
   const handleGeneratePreview = useCallback(() => {
@@ -244,7 +244,7 @@ export function CSVImportDialog({ open, onOpenChange }: CSVImportDialogProps) {
                           onValueChange={(value) =>
                             handleMappingChange(
                               mapping.csvColumn,
-                              value as keyof Application | 'none'
+                              value as keyof Application | 'none',
                             )
                           }
                         >

@@ -15,6 +15,7 @@ export const documentsResolver = {
   Query: {
     documents: async (_: unknown, __: unknown, { userId }: Context) => {
       try {
+        if (!userId || userId === 'null') return [];
         return await documentsDb.getAll(userId);
       } catch (_error) {
         logger.error('Error fetching documents:', _error);
@@ -24,6 +25,7 @@ export const documentsResolver = {
 
     document: async (_: unknown, { id }: DocumentQueryArgs, { userId }: Context) => {
       try {
+        if (!userId || userId === 'null') return null;
         return await documentsDb.getById(id, userId);
       } catch (_error) {
         logger.error('Error fetching document:', _error);
@@ -34,9 +36,10 @@ export const documentsResolver = {
     documentsByApplication: async (
       _: unknown,
       { applicationId }: { applicationId: string },
-      { userId }: Context
+      { userId }: Context,
     ) => {
       try {
+        if (!userId || userId === 'null') return [];
         const { data, error } = await supabase
           .from('documents')
           .select('*')
@@ -59,9 +62,10 @@ export const documentsResolver = {
     documentVersions: async (
       _: unknown,
       { baseDocumentId }: { baseDocumentId: string },
-      { userId }: Context
+      { userId }: Context,
     ) => {
       try {
+        if (!userId || userId === 'null') return [];
         return await documentsDb.getVersions(baseDocumentId, userId);
       } catch (_error) {
         logger.error('Error fetching document versions:', _error);
@@ -77,8 +81,8 @@ export const documentsResolver = {
         logger.info('Document resolver debug - input:', input);
 
         // Ensure user is authenticated
-        if (!userId) {
-          logger.error('Document resolver debug - Authentication failed: userId is null');
+        if (!userId || userId === 'null') {
+          logger.error('Document resolver debug - Authentication failed: userId is null/invalid');
           throw new GraphQLError('Authentication required to upload documents');
         }
 
@@ -103,7 +107,7 @@ export const documentsResolver = {
                 id: userId,
                 email: authUser?.email || 'unknown@example.com',
               },
-              { onConflict: 'id' }
+              { onConflict: 'id' },
             );
           }
         } catch (_) {
@@ -137,7 +141,7 @@ export const documentsResolver = {
           mimeType = mimeType || 'text/plain';
           logger.debug(
             'Document upload debug - Text content provided, length:',
-            input.content.length
+            input.content.length,
           );
         }
 
@@ -161,7 +165,7 @@ export const documentsResolver = {
             'Document upload debug - Uploading to path:',
             path,
             'with mimeType:',
-            mimeType
+            mimeType,
           );
 
           try {
@@ -224,7 +228,7 @@ export const documentsResolver = {
     updateDocument: async (_: unknown, { id, input }: UpdateDocumentArgs, { userId }: Context) => {
       try {
         // Ensure user is authenticated
-        if (!userId) {
+        if (!userId || userId === 'null') {
           throw new GraphQLError('Authentication required to update documents');
         }
         let uploadUrl = input.url || input.fileUrl || null;
@@ -318,7 +322,7 @@ export const documentsResolver = {
     deleteDocument: async (_: unknown, { id }: DeleteDocumentArgs, { userId }: Context) => {
       try {
         // Ensure user is authenticated
-        if (!userId) {
+        if (!userId || userId === 'null') {
           throw new GraphQLError('Authentication required to delete documents');
         }
         return await documentsDb.delete(id, userId);

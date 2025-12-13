@@ -65,7 +65,7 @@ if (!rootElement) throw new Error('Root element not found');
 
 createRoot(rootElement).render(
   <StrictMode>
-    <Sentry.ErrorBoundary fallback={null}>
+    <Sentry.ErrorBoundary fallback={<div />}>
       <ThemeProvider>
         <QueryProvider>
           <ConfirmProvider>
@@ -74,5 +74,5 @@ createRoot(rootElement).render(
         </QueryProvider>
       </ThemeProvider>
     </Sentry.ErrorBoundary>
-  </StrictMode>
+  </StrictMode>,
 );

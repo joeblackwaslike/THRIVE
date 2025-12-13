@@ -43,8 +43,8 @@ export const useUIStore = create<UIState>()(
           sidebarOpen: state.sidebarOpen,
           activeView: state.activeView,
         }),
-      }
+      },
     ),
-    { name: 'UIStore' }
-  )
+    { name: 'UIStore' },
+  ),
 );

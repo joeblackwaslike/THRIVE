@@ -3,8 +3,10 @@
  */
 import { createServer } from 'node:http';
 import dotenv from 'dotenv';
-import type { Request, Response } from 'express';
-import app, { setupApolloServer } from './app.ts';
+
+import app, { setupExpressErrorHandlers } from './app.ts';
+import { createApolloServer } from './graphql/server.ts';
+
 import logger from './logger.ts';
 
 dotenv.config({ quiet: true });
@@ -18,11 +20,11 @@ const httpServer = createServer(app);
 
 // Setup Apollo Server and start listening with port fallback
 async function start() {
-  await setupApolloServer(app, httpServer);
-
-  app.use((_req: Request, res: Response) => {
-    res.status(404).json({ success: false, error: 'API not found' });
-  });
+  await createApolloServer(app, httpServer);
+  
+  // Setup error handlers AFTER GraphQL middleware is attached
+  // This ensures that the 404 handler doesn't catch GraphQL requests
+  setupExpressErrorHandlers(app);
 
   let port = BASE_PORT;
   const maxPort = BASE_PORT + 10;
@@ -77,9 +79,8 @@ process.on('uncaughtException', (err) => {
   // shut down the process completely
   setTimeout(() => {
     process.abort(); // exit immediately and generate a core dump file
-  }, 1000).unref()
+  }, 1000).unref();
   process.exit(1);
 });
-
 
 export default app;

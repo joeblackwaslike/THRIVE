@@ -52,7 +52,7 @@ export function CompaniesTable({ companies, onTableReady, onEditCompany }: Compa
         toast.success(`${company.name} deleted`);
       }
     },
-    [confirm, deleteCompany]
+    [confirm, deleteCompany],
   );
 
   const handleRowClick = useCallback((company: Company) => {
@@ -305,7 +305,7 @@ export function CompaniesTable({ companies, onTableReady, onEditCompany }: Compa
       getStatusLabel,
       getStatusColor,
       getRemotePolicyLabel,
-    ]
+    ],
   );
 
   return (

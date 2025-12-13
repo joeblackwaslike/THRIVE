@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { SentryMonitor } from '@/components/monitoring/SentryMonitor';
 
-export const Route = createFileRoute('/monitoring')({
+export const Route = createFileRoute('/monitoring' as any)({
   component: MonitoringPage,
 });
 

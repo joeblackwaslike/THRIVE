@@ -32,7 +32,7 @@ export function CompanyNotesTab() {
     (note) =>
       searchQuery === '' ||
       note.companyName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      note.notes?.toLowerCase().includes(searchQuery.toLowerCase())
+      note.notes?.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {

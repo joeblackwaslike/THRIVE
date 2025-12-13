@@ -104,7 +104,7 @@ export const useTagStore = create<TagStore>()(
         return get().tags.filter(
           (tag) =>
             tag.name.toLowerCase().includes(lowerQuery) ||
-            tag.description?.toLowerCase().includes(lowerQuery)
+            tag.description?.toLowerCase().includes(lowerQuery),
         );
       },
 
@@ -123,7 +123,7 @@ export const useTagStore = create<TagStore>()(
               [entityId]: [...currentTags, tagId],
             },
             tags: state.tags.map((tag) =>
-              tag.id === tagId ? { ...tag, usageCount: tag.usageCount + 1 } : tag
+              tag.id === tagId ? { ...tag, usageCount: tag.usageCount + 1 } : tag,
             ),
           };
         });
@@ -146,7 +146,7 @@ export const useTagStore = create<TagStore>()(
             tags: state.tags.map((tag) =>
               tag.id === tagId && tag.usageCount > 0
                 ? { ...tag, usageCount: tag.usageCount - 1 }
-                : tag
+                : tag,
             ),
           };
         });
@@ -174,6 +174,6 @@ export const useTagStore = create<TagStore>()(
     {
       name: 'thrive-tags',
       version: 1,
-    }
-  )
+    },
+  ),
 );

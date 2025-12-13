@@ -55,22 +55,22 @@ export function SalaryAnalytics({ applications, period }: SalaryAnalyticsProps) 
 
   const salaryByStatus = useMemo(
     () => calculateSalaryByStatus(filteredApplications),
-    [filteredApplications]
+    [filteredApplications],
   );
 
   const salaryDistribution = useMemo(
     () => calculateSalaryDistribution(filteredApplications),
-    [filteredApplications]
+    [filteredApplications],
   );
 
   const expectedValue = useMemo(
     () => calculateExpectedValue(filteredApplications),
-    [filteredApplications]
+    [filteredApplications],
   );
 
   const offeredVsExpected = useMemo(
     () => calculateOfferedVsExpected(filteredApplications),
-    [filteredApplications]
+    [filteredApplications],
   );
 
   const formatCurrency = (value: number) => {

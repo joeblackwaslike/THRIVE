@@ -58,7 +58,7 @@ export function StatusChangeIndicator({
           className={cn(
             'fixed top-20 right-4 z-50',
             'flex items-center gap-3 p-4 rounded-lg shadow-lg',
-            'bg-green-50 dark:bg-green-950/20 border-2 border-green-500'
+            'bg-green-50 dark:bg-green-950/20 border-2 border-green-500',
           )}
         >
           <motion.div

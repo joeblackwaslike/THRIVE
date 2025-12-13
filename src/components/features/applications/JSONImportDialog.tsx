@@ -85,7 +85,7 @@ export function JSONImportDialog({ open, onOpenChange }: JSONImportDialogProps) 
 
       reader.readAsText(file);
     },
-    [applications]
+    [applications],
   );
 
   const handleModeSelect = useCallback(() => {

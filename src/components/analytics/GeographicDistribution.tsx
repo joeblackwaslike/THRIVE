@@ -62,12 +62,12 @@ export function GeographicDistribution({ period }: GeographicDistributionProps =
 
   const locationDistribution = useMemo(
     () => calculateLocationDistribution(workTypeFilteredApps),
-    [workTypeFilteredApps]
+    [workTypeFilteredApps],
   );
 
   const workTypeDistribution = useMemo(
     () => calculateWorkTypeDistribution(filteredApplications),
-    [filteredApplications]
+    [filteredApplications],
   );
 
   const hasLocationData = locationDistribution.length > 0;
@@ -227,7 +227,7 @@ export function GeographicDistribution({ period }: GeographicDistributionProps =
                       type="button"
                       onClick={() =>
                         setSelectedWorkType(
-                          selectedWorkType === item.workType ? null : item.workType
+                          selectedWorkType === item.workType ? null : item.workType,
                         )
                       }
                       className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-sm transition-colors ${

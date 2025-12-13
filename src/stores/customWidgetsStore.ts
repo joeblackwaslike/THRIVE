@@ -88,7 +88,7 @@ export const useCustomWidgetsStore = create<CustomWidgetsState>()(
       updateWidget: (id, updates) =>
         set((state) => ({
           widgets: state.widgets.map((widget) =>
-            widget.id === id ? { ...widget, ...updates, updatedAt: new Date() } : widget
+            widget.id === id ? { ...widget, ...updates, updatedAt: new Date() } : widget,
           ),
         })),
 
@@ -100,7 +100,7 @@ export const useCustomWidgetsStore = create<CustomWidgetsState>()(
       toggleWidget: (id) =>
         set((state) => ({
           widgets: state.widgets.map((widget) =>
-            widget.id === id ? { ...widget, visible: !widget.visible } : widget
+            widget.id === id ? { ...widget, visible: !widget.visible } : widget,
           ),
         })),
 
@@ -114,6 +114,6 @@ export const useCustomWidgetsStore = create<CustomWidgetsState>()(
     }),
     {
       name: 'custom-widgets',
-    }
-  )
+    },
+  ),
 );

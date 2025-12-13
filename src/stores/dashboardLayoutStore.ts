@@ -145,7 +145,7 @@ export const DEFAULT_LAYOUTS: DashboardLayout[] = [
         acc[widget.id] = widget.defaultVisible;
         return acc;
       },
-      {} as Record<WidgetId, boolean>
+      {} as Record<WidgetId, boolean>,
     ),
   },
   {
@@ -179,7 +179,7 @@ export const DEFAULT_LAYOUTS: DashboardLayout[] = [
         acc[widget.id] = true;
         return acc;
       },
-      {} as Record<WidgetId, boolean>
+      {} as Record<WidgetId, boolean>,
     ),
   },
   {
@@ -333,7 +333,7 @@ export const useDashboardLayoutStore = create<DashboardLayoutState>()(
                       [widgetId]: !layout.widgetVisibility[widgetId],
                     },
                   }
-                : layout
+                : layout,
             ),
           });
         }
@@ -362,7 +362,7 @@ export const useDashboardLayoutStore = create<DashboardLayoutState>()(
           // Update existing custom layout
           set({
             customLayouts: customLayouts.map((layout) =>
-              layout.id === currentLayoutId ? { ...layout, widgets: newOrder } : layout
+              layout.id === currentLayoutId ? { ...layout, widgets: newOrder } : layout,
             ),
           });
         }
@@ -374,6 +374,6 @@ export const useDashboardLayoutStore = create<DashboardLayoutState>()(
     }),
     {
       name: 'dashboard-layout-storage',
-    }
-  )
+    },
+  ),
 );

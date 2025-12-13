@@ -1,5 +1,5 @@
 import * as Sentry from '@sentry/react';
-import { AlertCircle, CheckCircle, Info, Warning } from 'lucide-react';
+import { AlertCircle, CheckCircle, Info, AlertTriangle } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -24,18 +24,30 @@ export function SentryMonitor() {
 
   useEffect(() => {
     // Check if Sentry is configured
-    const client = Sentry.getCurrentHub().getClient();
-    setIsConnected(!!client && !!import.meta.env.VITE_SENTRY_DSN);
+    setIsConnected(!!import.meta.env.VITE_SENTRY_DSN);
 
     // Set up event listener for Sentry events
-    const unsubscribe = Sentry.addEventProcessor((event) => {
+    Sentry.addEventProcessor((event) => {
       const sentryEvent: SentryEvent = {
         id: event.event_id || 'unknown',
         level: event.level || 'info',
         message: event.message || event.exception?.values?.[0]?.value || 'Unknown error',
         timestamp: new Date().toISOString(),
-        tags: event.tags || {},
-        user: event.user,
+        tags: Object.fromEntries(
+          Object.entries((event.tags || {}) as Record<string, unknown>).map(([k, v]) => [
+            k,
+            String(v),
+          ]),
+        ),
+        user: event.user
+          ? {
+              id:
+                typeof event.user.id === 'number'
+                  ? String(event.user.id)
+                  : (event.user.id as string | undefined),
+              email: event.user.email,
+            }
+          : undefined,
       };
 
       setLastEvent(sentryEvent);
@@ -44,11 +56,7 @@ export function SentryMonitor() {
       return event;
     });
 
-    return () => {
-      if (unsubscribe) {
-        unsubscribe();
-      }
-    };
+    return () => {};
   }, []);
 
   const testError = () => {
@@ -64,7 +72,7 @@ export function SentryMonitor() {
       case 'error':
         return <AlertCircle className="h-4 w-4 text-destructive" />;
       case 'warning':
-        return <Warning className="h-4 w-4 text-warning" />;
+        return <AlertTriangle className="h-4 w-4 text-warning" />;
       case 'info':
         return <Info className="h-4 w-4 text-info" />;
       default:
@@ -85,7 +93,7 @@ export function SentryMonitor() {
           <CardTitle className="flex items-center gap-2">
             Sentry Monitoring
             {isConnected ? (
-              <Badge variant="success" className="ml-2">
+              <Badge variant="secondary" className="ml-2">
                 Connected
               </Badge>
             ) : (

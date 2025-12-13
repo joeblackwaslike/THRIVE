@@ -37,7 +37,7 @@ export function NotificationsList() {
   const readScrollRef = useRef<HTMLDivElement>(null);
 
   const unreadNotifications = notifications.filter(
-    (n) => n.status === 'sent' || n.status === 'pending'
+    (n) => n.status === 'sent' || n.status === 'pending',
   );
 
   const readNotifications = notifications

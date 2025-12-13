@@ -172,7 +172,7 @@ export function RelativeDateRangeSlider({
                   'flex flex-col items-center gap-1 cursor-pointer transition-colors',
                   'hover:text-foreground focus:outline-none focus:text-foreground',
                   index === currentIndex ? 'text-foreground' : 'text-muted-foreground',
-                  disabled && 'cursor-not-allowed opacity-50'
+                  disabled && 'cursor-not-allowed opacity-50',
                 )}
                 style={{ width: `${100 / ranges.length}%` }}
               >
@@ -184,7 +184,7 @@ export function RelativeDateRangeSlider({
                       ? 'bg-primary'
                       : index < currentIndex
                         ? 'bg-primary/50'
-                        : 'bg-muted'
+                        : 'bg-muted',
                   )}
                 />
                 {/* Label */}

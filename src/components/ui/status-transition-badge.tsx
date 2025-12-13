@@ -206,7 +206,7 @@ export function StatusTransitionBadge({
               colors.bg,
               colors.text,
               colors.border,
-              className
+              className,
             )}
           >
             <span className="flex items-center gap-1.5">

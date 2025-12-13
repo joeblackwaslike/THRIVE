@@ -7,6 +7,18 @@ export const analyticsResolver = {
   Query: {
     applicationStats: async (_: unknown, __: unknown, { userId }: Context) => {
       try {
+        if (!userId || userId === 'null') {
+          return {
+            total: 0,
+            byStatus: {},
+            averageResponseTime: null,
+            successRate: 0,
+            activeApplications: 0,
+            interviewsScheduled: 0,
+            offersReceived: 0,
+          };
+        }
+
         // Get total applications count
         const { data: totalData, error: totalError } = await supabase
           .from('applications')
@@ -78,6 +90,7 @@ export const analyticsResolver = {
 
     applicationsByStatusCount: async (_: unknown, __: unknown, { userId }: Context) => {
       try {
+        if (!userId || userId === 'null') return {};
         const { data, error } = await supabase
           .from('applications')
           .select('status')
@@ -103,9 +116,10 @@ export const analyticsResolver = {
     applicationsOverTime: async (
       _: unknown,
       { startDate, endDate }: ApplicationsOverTimeArgs,
-      { userId }: Context
+      { userId }: Context,
     ) => {
       try {
+        if (!userId || userId === 'null') return [];
         const { data, error } = await supabase
           .from('applications')
           .select('created_at, status')

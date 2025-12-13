@@ -43,7 +43,7 @@ export function AnnotationsList() {
   // Keep local state in sync with store
   useState(() => {
     const sorted = [...filteredAnnotations].sort(
-      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
     );
     setLocalAnnotations(sorted);
   });
@@ -51,7 +51,7 @@ export function AnnotationsList() {
   const sortedAnnotations = enableReorder
     ? localAnnotations
     : [...filteredAnnotations].sort(
-        (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+        (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
       );
 
   const handleDelete = (id: string, title: string) => {

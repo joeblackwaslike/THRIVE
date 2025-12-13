@@ -83,14 +83,14 @@ export function InterviewCalendarView({
                   'min-h-[120px] border rounded-lg p-2 transition-colors',
                   isCurrentMonth ? 'bg-background' : 'bg-muted/30',
                   isDayToday && 'ring-2 ring-primary',
-                  dayInterviews.length > 0 && 'hover:bg-accent/50 cursor-pointer'
+                  dayInterviews.length > 0 && 'hover:bg-accent/50 cursor-pointer',
                 )}
               >
                 <div
                   className={cn(
                     'text-sm font-medium mb-1',
                     isDayToday && 'text-primary font-bold',
-                    !isCurrentMonth && 'text-muted-foreground'
+                    !isCurrentMonth && 'text-muted-foreground',
                   )}
                 >
                   {format(day, 'd')}

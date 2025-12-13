@@ -25,7 +25,7 @@ import type {
 export function calculateAnalytics(
   applications: Application[],
   interviews: Interview[],
-  period?: { start: Date; end: Date }
+  period?: { start: Date; end: Date },
 ): AnalyticsMetrics {
   // Filter by period if specified
   const filteredApps = period
@@ -46,14 +46,14 @@ export function calculateAnalytics(
 
   const totalApplications = filteredApps.length;
   const activeApplications = filteredApps.filter(
-    (app) => !['rejected', 'withdrawn', 'accepted'].includes(app.status)
+    (app) => !['rejected', 'withdrawn', 'accepted'].includes(app.status),
   ).length;
   const rejectedApplications = filteredApps.filter((app) => app.status === 'rejected').length;
   const successfulApplications = filteredApps.filter((app) => app.status === 'accepted').length;
 
   // Response metrics (considering target and hunting as no response yet)
   const appsWithResponse = filteredApps.filter(
-    (app) => app.status !== 'target' && app.status !== 'hunting' && app.status !== 'applied'
+    (app) => app.status !== 'target' && app.status !== 'hunting' && app.status !== 'applied',
   );
   const responseRate =
     totalApplications > 0 ? (appsWithResponse.length / totalApplications) * 100 : 0;
@@ -78,10 +78,10 @@ export function calculateAnalytics(
   const interviewConversionRate =
     totalApplications > 0 ? (totalInterviews / totalApplications) * 100 : 0;
   const completedInterviews = filteredInterviews.filter(
-    (interview) => interview.status === 'completed'
+    (interview) => interview.status === 'completed',
   ).length;
   const scheduledInterviews = filteredInterviews.filter(
-    (interview) => interview.status === 'scheduled'
+    (interview) => interview.status === 'scheduled',
   ).length;
 
   // Success metrics
@@ -98,15 +98,15 @@ export function calculateAnalytics(
     })
     .map((app) => {
       const appInterviews = filteredInterviews.filter(
-        (i) => i.applicationId === app.id && i.scheduledAt
+        (i) => i.applicationId === app.id && i.scheduledAt,
       );
       const firstInterview = appInterviews.sort(
         (a, b) =>
-          new Date(a.scheduledAt as Date).getTime() - new Date(b.scheduledAt as Date).getTime()
+          new Date(a.scheduledAt as Date).getTime() - new Date(b.scheduledAt as Date).getTime(),
       )[0];
       return differenceInDays(
         new Date(firstInterview.scheduledAt as Date),
-        new Date(app.appliedDate as Date)
+        new Date(app.appliedDate as Date),
       );
     });
   const averageTimeToInterview =
@@ -131,16 +131,16 @@ export function calculateAnalytics(
   const monthStart = startOfMonth(now);
 
   const applicationsThisWeek = applications.filter(
-    (app) => app.appliedDate && new Date(app.appliedDate) >= weekStart
+    (app) => app.appliedDate && new Date(app.appliedDate) >= weekStart,
   ).length;
   const applicationsThisMonth = applications.filter(
-    (app) => app.appliedDate && new Date(app.appliedDate) >= monthStart
+    (app) => app.appliedDate && new Date(app.appliedDate) >= monthStart,
   ).length;
   const interviewsThisWeek = interviews.filter(
-    (interview) => interview.scheduledAt && new Date(interview.scheduledAt) >= weekStart
+    (interview) => interview.scheduledAt && new Date(interview.scheduledAt) >= weekStart,
   ).length;
   const interviewsThisMonth = interviews.filter(
-    (interview) => interview.scheduledAt && new Date(interview.scheduledAt) >= monthStart
+    (interview) => interview.scheduledAt && new Date(interview.scheduledAt) >= monthStart,
   ).length;
 
   return {
@@ -173,7 +173,7 @@ export function generateTimeSeriesData(
   applications: Application[],
   interviews: Interview[],
   days: number = 30,
-  period?: { start: Date; end: Date }
+  period?: { start: Date; end: Date },
 ): TimeSeriesData[] {
   const endDate = period ? period.end : new Date();
   const startDate = period ? period.start : subDays(endDate, days - 1);
@@ -197,7 +197,7 @@ export function generateTimeSeriesData(
     });
 
     const dayOffers = dayApplications.filter(
-      (app) => app.status === 'accepted' || app.status === 'offer'
+      (app) => app.status === 'accepted' || app.status === 'offer',
     );
 
     const dayRejections = dayApplications.filter((app) => app.status === 'rejected');
@@ -217,7 +217,7 @@ export function generateTimeSeriesData(
  */
 export function calculateStatusDistribution(
   applications: Application[],
-  period?: { start: Date; end: Date }
+  period?: { start: Date; end: Date },
 ): StatusDistribution[] {
   // Filter by period if specified
   const filteredApps = period
@@ -246,7 +246,7 @@ export function calculateStatusDistribution(
       acc[app.status] = (acc[app.status] || 0) + 1;
       return acc;
     },
-    {} as Record<string, number>
+    {} as Record<string, number>,
   );
 
   const total = filteredApps.length;
@@ -267,7 +267,7 @@ export function calculateStatusDistribution(
 export function calculateCompanyStats(
   applications: Application[],
   interviews: Interview[],
-  period?: { start: Date; end: Date }
+  period?: { start: Date; end: Date },
 ): CompanyStats[] {
   // Filter by period if specified
   const filteredApps = period
@@ -338,7 +338,7 @@ export function calculateMonthlyTrends(
   applications: Application[],
   interviews: Interview[],
   months: number = 6,
-  period?: { start: Date; end: Date }
+  period?: { start: Date; end: Date },
 ): MonthlyTrend[] {
   const endDate = period ? period.end : new Date();
   const startDate = period
@@ -369,13 +369,13 @@ export function calculateMonthlyTrends(
     });
 
     const monthOffers = monthApps.filter(
-      (app) => app.status === 'accepted' || app.status === 'offer'
+      (app) => app.status === 'accepted' || app.status === 'offer',
     );
 
     const monthRejections = monthApps.filter((app) => app.status === 'rejected');
 
     const appsWithResponse = monthApps.filter(
-      (app) => app.status !== 'target' && app.status !== 'hunting' && app.status !== 'applied'
+      (app) => app.status !== 'target' && app.status !== 'hunting' && app.status !== 'applied',
     );
     const responseRate =
       monthApps.length > 0 ? (appsWithResponse.length / monthApps.length) * 100 : 0;
@@ -396,7 +396,7 @@ export function calculateMonthlyTrends(
  * Calculate response time distribution
  */
 export function calculateResponseTimeDistribution(
-  applications: Application[]
+  applications: Application[],
 ): ResponseTimeDistribution[] {
   const ranges = [
     { label: '0-7 days', min: 0, max: 7 },
@@ -410,7 +410,7 @@ export function calculateResponseTimeDistribution(
       app.status !== 'target' &&
       app.status !== 'hunting' &&
       app.status !== 'applied' &&
-      app.appliedDate
+      app.appliedDate,
   );
 
   const distribution = ranges.map((range) => {
@@ -449,7 +449,7 @@ export function formatNumber(value: number): string {
  */
 export function getTrend(
   current: number,
-  previous: number
+  previous: number,
 ): { direction: 'up' | 'down' | 'neutral'; color: string; percentage: number } {
   if (previous === 0) {
     return { direction: 'neutral', color: 'text-muted-foreground', percentage: 0 };
@@ -473,7 +473,7 @@ export function getTrend(
  */
 export function calculateInterviewStageStats(
   interviews: Interview[],
-  period?: { start: Date; end: Date }
+  period?: { start: Date; end: Date },
 ): InterviewStageStats[] {
   // Filter by period if provided
   const filteredInterviews = period
@@ -494,7 +494,7 @@ export function calculateInterviewStageStats(
       acc[stage].push(interview);
       return acc;
     },
-    {} as Record<string, Interview[]>
+    {} as Record<string, Interview[]>,
   );
 
   // Calculate stats for each stage
@@ -502,7 +502,7 @@ export function calculateInterviewStageStats(
     .map(([stage, stageInterviews]) => {
       const completedInterviews = stageInterviews.filter((i) => i.status === 'completed');
       const successfulInterviews = stageInterviews.filter(
-        (i) => i.status === 'completed' && i.result === 'passed'
+        (i) => i.status === 'completed' && i.result === 'passed',
       );
 
       // Calculate average duration (assuming duration field is in minutes)
@@ -536,7 +536,7 @@ export function calculateInterviewStageStats(
  */
 export function calculateAvgTimeToOffer(applications: Application[]): number {
   const offeredApps = applications.filter(
-    (app) => (app.status === 'offer' || app.status === 'accepted') && app.appliedDate
+    (app) => (app.status === 'offer' || app.status === 'accepted') && app.appliedDate,
   );
 
   if (offeredApps.length === 0) return 0;
@@ -556,7 +556,7 @@ export function calculateAvgTimeToOffer(applications: Application[]): number {
  * Calculate average time in each status
  */
 export function calculateAvgTimePerStatus(
-  applications: Application[]
+  applications: Application[],
 ): { status: string; avgDays: number; count: number }[] {
   const statusGroups = applications.reduce(
     (acc, app) => {
@@ -567,7 +567,7 @@ export function calculateAvgTimePerStatus(
       acc[status].push(app);
       return acc;
     },
-    {} as Record<string, Application[]>
+    {} as Record<string, Application[]>,
   );
 
   return Object.entries(statusGroups)
@@ -593,7 +593,7 @@ export function calculateAvgTimePerStatus(
  * Calculate success rate by application source
  */
 export function calculateSourcePerformance(
-  applications: Application[]
+  applications: Application[],
 ): { source: string; total: number; successful: number; successRate: number }[] {
   const sourceGroups = applications.reduce(
     (acc, app) => {
@@ -607,7 +607,7 @@ export function calculateSourcePerformance(
       }
       return acc;
     },
-    {} as Record<string, { total: number; successful: number }>
+    {} as Record<string, { total: number; successful: number }>,
   );
 
   return Object.entries(sourceGroups)
@@ -624,7 +624,7 @@ export function calculateSourcePerformance(
  * Calculate success rate by day of week
  */
 export function calculateDayOfWeekPerformance(
-  applications: Application[]
+  applications: Application[],
 ): { day: string; total: number; successful: number; successRate: number }[] {
   const dayGroups = applications.reduce(
     (acc, app) => {
@@ -639,7 +639,7 @@ export function calculateDayOfWeekPerformance(
       }
       return acc;
     },
-    {} as Record<string, { total: number; successful: number }>
+    {} as Record<string, { total: number; successful: number }>,
   );
 
   const dayOrder = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
@@ -659,7 +659,7 @@ export function calculateDayOfWeekPerformance(
  * Calculate geographic distribution of applications
  */
 export function calculateLocationDistribution(
-  applications: Application[]
+  applications: Application[],
 ): { location: string; total: number; successful: number; successRate: number }[] {
   const locationGroups = applications.reduce(
     (acc, app) => {
@@ -673,7 +673,7 @@ export function calculateLocationDistribution(
       }
       return acc;
     },
-    {} as Record<string, { total: number; successful: number }>
+    {} as Record<string, { total: number; successful: number }>,
   );
 
   return Object.entries(locationGroups)
@@ -690,7 +690,7 @@ export function calculateLocationDistribution(
  * Calculate work type (remote/hybrid/office) distribution
  */
 export function calculateWorkTypeDistribution(
-  applications: Application[]
+  applications: Application[],
 ): { workType: string; total: number; successful: number; successRate: number }[] {
   const workTypeGroups = applications.reduce(
     (acc, app) => {
@@ -704,7 +704,7 @@ export function calculateWorkTypeDistribution(
       }
       return acc;
     },
-    {} as Record<string, { total: number; successful: number }>
+    {} as Record<string, { total: number; successful: number }>,
   );
 
   return Object.entries(workTypeGroups)
@@ -736,7 +736,7 @@ export function calculateSalaryByStatus(applications: Application[]) {
 
       return acc;
     },
-    {} as Record<string, { total: number; count: number }>
+    {} as Record<string, { total: number; count: number }>,
   );
 
   return Object.entries(statusGroups)
@@ -814,7 +814,7 @@ export function calculateExpectedValue(applications: Application[]) {
   }, 0);
 
   const successfulApps = applicationsWithSalary.filter(
-    (app) => app.status === 'offer' || app.status === 'accepted'
+    (app) => app.status === 'offer' || app.status === 'accepted',
   ).length;
 
   const averageSalary = Math.round(totalSalary / applicationsWithSalary.length);
@@ -836,7 +836,7 @@ export function calculateExpectedValue(applications: Application[]) {
 export function calculateOfferedVsExpected(applications: Application[]) {
   const offeredApps = applications.filter(
     (app) =>
-      (app.status === 'offer' || app.status === 'accepted') && app.salary?.min && app.salary?.max
+      (app.status === 'offer' || app.status === 'accepted') && app.salary?.min && app.salary?.max,
   );
 
   if (offeredApps.length === 0) {

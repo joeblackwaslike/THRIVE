@@ -64,7 +64,7 @@ export function KanbanColumn({ status, applications, count }: KanbanColumnProps)
         ref={setNodeRef}
         className={cn(
           'flex-1 rounded-lg border-2 border-dashed bg-muted/20 p-2 min-h-[400px] transition-colors',
-          isOver && 'border-primary bg-primary/10'
+          isOver && 'border-primary bg-primary/10',
         )}
       >
         <div className="space-y-2">

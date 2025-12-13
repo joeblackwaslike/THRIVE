@@ -5,7 +5,8 @@
   "ignore": ["api/dist/*", "api/test/*"],
   "exec": "node --import ./api/instrument.mjs ./api/server.ts",
   "env": {
-    "NODE_ENV": "development"
+    "NODE_ENV": "development",
+    "NODE_OPTIONS": ""
   },
   "events": {
     "restart": "osascript -e 'display notification \"App restarted due to:\n'$FILENAME'\" with title \"nodemon\"'"

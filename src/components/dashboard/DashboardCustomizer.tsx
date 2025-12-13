@@ -284,7 +284,7 @@ export function DashboardCustomizer() {
                         'relative group rounded-lg border-2 transition-all p-3 text-left cursor-pointer hover:border-primary/50',
                         widget.visible
                           ? 'border-primary bg-primary/5'
-                          : 'border-border bg-background hover:bg-accent'
+                          : 'border-border bg-background hover:bg-accent',
                       )}
                     >
                       {/* Visibility indicator */}
@@ -329,7 +329,7 @@ export function DashboardCustomizer() {
                           'relative group rounded-lg border-2 transition-all p-3 text-left cursor-pointer hover:border-primary/50',
                           widget.visible
                             ? 'border-primary bg-primary/5'
-                            : 'border-border bg-background hover:bg-accent'
+                            : 'border-border bg-background hover:bg-accent',
                         )}
                       >
                         {/* Visibility indicator */}

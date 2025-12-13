@@ -34,7 +34,7 @@ export const useSearchStore = create<SearchState>()(
         set((state) => {
           // Remove duplicate if exists
           const filtered = state.recentSearches.filter(
-            (s) => s.query.toLowerCase() !== trimmedQuery.toLowerCase()
+            (s) => s.query.toLowerCase() !== trimmedQuery.toLowerCase(),
           );
 
           // Add to front
@@ -71,7 +71,7 @@ export const useSearchStore = create<SearchState>()(
 
         // Get unique searches with their frequency
         const uniqueSearches = recentSearches.filter(
-          (search, index, self) => index === self.findIndex((s) => s.query === search.query)
+          (search, index, self) => index === self.findIndex((s) => s.query === search.query),
         );
 
         // Sort by frequency
@@ -86,6 +86,6 @@ export const useSearchStore = create<SearchState>()(
     }),
     {
       name: 'thrive-search-history',
-    }
-  )
+    },
+  ),
 );

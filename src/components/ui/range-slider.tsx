@@ -50,7 +50,7 @@ export function RangeSlider({
         ref={rangerRef}
         className={cn(
           'relative h-2 rounded-full bg-secondary cursor-pointer touch-none',
-          disabled && 'opacity-50 cursor-not-allowed'
+          disabled && 'opacity-50 cursor-not-allowed',
         )}
         style={{ userSelect: 'none' }}
       >
@@ -82,7 +82,7 @@ export function RangeSlider({
                 'focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2',
                 'disabled:opacity-50 disabled:cursor-not-allowed',
                 'touch-manipulation cursor-grab active:cursor-grabbing',
-                handle.isActive && 'shadow-lg scale-110'
+                handle.isActive && 'shadow-lg scale-110',
               )}
               style={{
                 left: `${percentage}%`,

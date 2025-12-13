@@ -133,14 +133,14 @@ export function ExportPage() {
     // Employment type filter
     if (selectedEmploymentTypes.length > 0) {
       filtered = filtered.filter(
-        (app) => app.employmentType && selectedEmploymentTypes.includes(app.employmentType)
+        (app) => app.employmentType && selectedEmploymentTypes.includes(app.employmentType),
       );
     }
 
     // Priority filter
     if (selectedPriorities.length > 0) {
       filtered = filtered.filter(
-        (app) => app.priority && selectedPriorities.includes(app.priority)
+        (app) => app.priority && selectedPriorities.includes(app.priority),
       );
     }
 
@@ -199,7 +199,7 @@ export function ExportPage() {
   const withProgress = async (
     type: string,
     itemCount: number,
-    exportFn: () => void | Promise<void>
+    exportFn: () => void | Promise<void>,
   ) => {
     setIsExporting(true);
     setExportingType(type);
@@ -349,7 +349,7 @@ export function ExportPage() {
 
       setImportSuccess(
         `Successfully restored ${backupData.applications.length} applications, ` +
-          `${backupData.interviews.length} interviews, and ${backupData.documents.length} documents`
+          `${backupData.interviews.length} interviews, and ${backupData.documents.length} documents`,
       );
     } catch (error) {
       setImportError(`Failed to restore backup: ${error}`);
@@ -564,7 +564,7 @@ export function ExportPage() {
                             setSelectedEmploymentTypes([...selectedEmploymentTypes, type.value]);
                           } else {
                             setSelectedEmploymentTypes(
-                              selectedEmploymentTypes.filter((t) => t !== type.value)
+                              selectedEmploymentTypes.filter((t) => t !== type.value),
                             );
                           }
                         }}

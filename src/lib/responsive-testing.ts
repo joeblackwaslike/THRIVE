@@ -275,7 +275,7 @@ export function getComputedStyleValue(element: HTMLElement, property: string): s
  * Create a responsive breakpoint observer
  */
 export function observeBreakpoints(
-  callback: (breakpoint: keyof typeof TAILWIND_BREAKPOINTS | 'xs') => void
+  callback: (breakpoint: keyof typeof TAILWIND_BREAKPOINTS | 'xs') => void,
 ): () => void {
   let currentBreakpoint = getCurrentBreakpoint();
 

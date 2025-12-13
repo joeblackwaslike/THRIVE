@@ -14,6 +14,7 @@ export const applicationsResolver = {
   Query: {
     applications: async (_: unknown, __: unknown, { userId }: Context) => {
       try {
+        if (!userId || userId === 'null') return [];
         return await applicationsDb.getAll(userId);
       } catch (error) {
         logger.error('Error fetching applications:', error);
@@ -23,6 +24,7 @@ export const applicationsResolver = {
 
     application: async (_: unknown, { id }: ApplicationQueryArgs, { userId }: Context) => {
       try {
+        if (!userId || userId === 'null') return null;
         return await applicationsDb.getById(id, userId);
       } catch (error) {
         logger.error('Error fetching application:', error);
@@ -33,9 +35,10 @@ export const applicationsResolver = {
     applicationsByStatus: async (
       _: unknown,
       { status }: ApplicationQueryArgs,
-      { userId }: Context
+      { userId }: Context,
     ) => {
       try {
+        if (!userId || userId === 'null') return [];
         return await applicationsDb.getByStatus(userId, status);
       } catch (error) {
         logger.error('Error fetching applications by status:', error);
@@ -48,9 +51,12 @@ export const applicationsResolver = {
     createApplication: async (
       _: unknown,
       { input }: CreateApplicationArgs,
-      { userId }: Context
+      { userId }: Context,
     ) => {
       try {
+        if (!userId || userId === 'null') {
+          throw new GraphQLError('Authentication required');
+        }
         const applicationData = {
           user_id: userId,
           company_name: input.companyName,
@@ -83,9 +89,12 @@ export const applicationsResolver = {
     updateApplication: async (
       _: unknown,
       { id, input }: UpdateApplicationArgs,
-      { userId }: Context
+      { userId }: Context,
     ) => {
       try {
+        if (!userId || userId === 'null') {
+          throw new GraphQLError('Authentication required');
+        }
         const updateData = {
           company_name: input.companyName,
           position: input.position,
@@ -115,6 +124,9 @@ export const applicationsResolver = {
 
     deleteApplication: async (_: unknown, { id }: DeleteApplicationArgs, { userId }: Context) => {
       try {
+        if (!userId || userId === 'null') {
+          throw new GraphQLError('Authentication required');
+        }
         return await applicationsDb.delete(id, userId);
       } catch (error) {
         logger.error('Error deleting application:', error);

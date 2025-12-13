@@ -14,8 +14,8 @@ import { Separator } from '@/components/ui/separator';
 import { Textarea } from '@/components/ui/textarea';
 import { useAutoSaveBatcher } from '@/hooks/useDatabaseBatching';
 import { INTERVIEW_STATUSES, INTERVIEW_TYPES } from '@/lib/constants';
-import { db } from '@/lib/db';
 import { useApplicationsStore } from '@/stores/applicationsStore';
+import { useInterviewsStore } from '@/stores/interviewsStore';
 import type { Interview } from '@/types';
 
 interface InterviewFormProps {
@@ -91,7 +91,9 @@ export function InterviewForm({
   // Auto-save notes when editing existing interview
   // Only auto-save if we're editing (have an interview id)
   useAutoSaveBatcher(
-    db.interviews,
+    async (id, changes) => {
+      await useInterviewsStore.getState().updateInterview(id, changes as any);
+    },
     interview?.id || '',
     {
       preparationNotes: form.state.values.preparationNotes || undefined,
@@ -100,14 +102,14 @@ export function InterviewForm({
     },
     [form.state.values.preparationNotes, form.state.values.feedback],
     {
-      wait: 2000, // 2 seconds after last change
+      wait: 2000,
       onSuccess: () => {
         setLastSaved(new Date());
       },
       onError: (error) => {
         console.error('Auto-save failed:', error);
       },
-    }
+    },
   );
 
   return (

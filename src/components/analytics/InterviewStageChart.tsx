@@ -36,7 +36,7 @@ export function InterviewStageChart({ period }: InterviewStageChartProps = {}) {
 
   const stageStats = useMemo(
     () => calculateInterviewStageStats(interviews, period),
-    [interviews, period]
+    [interviews, period],
   );
 
   const hasData = stageStats.length > 0;

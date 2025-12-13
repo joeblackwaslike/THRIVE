@@ -56,7 +56,7 @@ export function InterviewFilters({ savedFiltersButton }: InterviewFiltersProps) 
       | 'leadership-interview'
       | 'panel'
       | 'final'
-      | 'other'
+      | 'other',
   ) => {
     const newTypes = typeFilters?.includes(type as any)
       ? typeFilters.filter((t) => t !== type)
@@ -65,7 +65,7 @@ export function InterviewFilters({ savedFiltersButton }: InterviewFiltersProps) 
   };
 
   const toggleStatusFilter = (
-    status: 'scheduled' | 'completed' | 'cancelled' | 'rescheduled' | 'no-show'
+    status: 'scheduled' | 'completed' | 'cancelled' | 'rescheduled' | 'no-show',
   ) => {
     const newStatuses = statusFilters.includes(status)
       ? statusFilters.filter((s) => s !== status)

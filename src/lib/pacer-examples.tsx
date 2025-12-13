@@ -33,7 +33,7 @@ export function DebouncedSearchExample() {
       const results = await performSearch(query);
       setSearchResults(results);
     },
-    { wait: 300 }
+    { wait: 300 },
   );
 
   return (
@@ -86,7 +86,7 @@ export function ThrottledScrollExample() {
     () => {
       setScrollY(window.scrollY);
     },
-    { wait: 100, leading: true }
+    { wait: 100, leading: true },
   );
 
   // useEffect(() => {

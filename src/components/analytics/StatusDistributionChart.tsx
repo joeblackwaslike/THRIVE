@@ -92,7 +92,7 @@ export function StatusDistributionChart() {
           acc[app.status] = (acc[app.status] || 0) + 1;
           return acc;
         },
-        {} as Record<string, number>
+        {} as Record<string, number>,
       );
 
       return Object.entries(statusCounts).map(([status, count]) => ({
@@ -111,7 +111,7 @@ export function StatusDistributionChart() {
           acc[priority] = (acc[priority] || 0) + 1;
           return acc;
         },
-        {} as Record<string, number>
+        {} as Record<string, number>,
       );
 
       return Object.entries(priorityCounts).map(([priority, count]) => ({

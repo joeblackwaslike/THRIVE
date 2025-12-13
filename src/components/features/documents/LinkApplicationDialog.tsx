@@ -60,7 +60,7 @@ export function LinkApplicationDialog({
 
   const handleToggleApplication = (appId: string) => {
     setSelectedAppIds((prev) =>
-      prev.includes(appId) ? prev.filter((id) => id !== appId) : [...prev, appId]
+      prev.includes(appId) ? prev.filter((id) => id !== appId) : [...prev, appId],
     );
   };
 
@@ -90,7 +90,7 @@ export function LinkApplicationDialog({
       toast.success(
         selectedAppIds.length === 0
           ? 'Document unlinked from all applications'
-          : `Document linked to ${selectedAppIds.length} application${selectedAppIds.length > 1 ? 's' : ''}`
+          : `Document linked to ${selectedAppIds.length} application${selectedAppIds.length > 1 ? 's' : ''}`,
       );
       onOpenChange(false);
     } catch (error) {

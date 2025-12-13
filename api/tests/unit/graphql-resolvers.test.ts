@@ -60,7 +60,7 @@ describe('Applications GraphQL Resolvers', () => {
       (supabase.from as any).mockReturnValue(mockSupabase);
 
       await expect(applicationsResolver.Query.applications(null, {}, mockContext)).rejects.toThrow(
-        'Database error'
+        'Database error',
       );
     });
 
@@ -132,7 +132,7 @@ describe('Applications GraphQL Resolvers', () => {
       (supabase.from as any).mockReturnValue(mockSupabase);
 
       await expect(
-        applicationsResolver.Query.application(null, { id: '1' }, mockContext)
+        applicationsResolver.Query.application(null, { id: '1' }, mockContext),
       ).rejects.toThrow('Database error');
     });
   });
@@ -166,7 +166,7 @@ describe('Applications GraphQL Resolvers', () => {
       const result = await applicationsResolver.Mutation.createApplication(
         null,
         { input },
-        mockContext
+        mockContext,
       );
 
       expect(supabase.from).toHaveBeenCalledWith('applications');
@@ -202,7 +202,7 @@ describe('Applications GraphQL Resolvers', () => {
       (supabase.from as any).mockReturnValue(mockSupabase);
 
       await expect(
-        applicationsResolver.Mutation.createApplication(null, { input }, mockContext)
+        applicationsResolver.Mutation.createApplication(null, { input }, mockContext),
       ).rejects.toThrow('Creation failed');
     });
   });
@@ -235,7 +235,7 @@ describe('Applications GraphQL Resolvers', () => {
       const result = await applicationsResolver.Mutation.updateApplication(
         null,
         { id, input },
-        mockContext
+        mockContext,
       );
 
       expect(supabase.from).toHaveBeenCalledWith('applications');
@@ -267,7 +267,7 @@ describe('Applications GraphQL Resolvers', () => {
       const result = await applicationsResolver.Mutation.updateApplication(
         null,
         { id, input },
-        mockContext
+        mockContext,
       );
 
       expect(result).toBeNull();
@@ -289,7 +289,7 @@ describe('Applications GraphQL Resolvers', () => {
       (supabase.from as any).mockReturnValue(mockSupabase);
 
       await expect(
-        applicationsResolver.Mutation.updateApplication(null, { id, input }, mockContext)
+        applicationsResolver.Mutation.updateApplication(null, { id, input }, mockContext),
       ).rejects.toThrow('Update failed');
     });
   });
@@ -312,7 +312,7 @@ describe('Applications GraphQL Resolvers', () => {
       const result = await applicationsResolver.Mutation.deleteApplication(
         null,
         { id },
-        mockContext
+        mockContext,
       );
 
       expect(supabase.from).toHaveBeenCalledWith('applications');
@@ -339,7 +339,7 @@ describe('Applications GraphQL Resolvers', () => {
       const result = await applicationsResolver.Mutation.deleteApplication(
         null,
         { id },
-        mockContext
+        mockContext,
       );
 
       expect(result).toBe(true);
@@ -361,7 +361,7 @@ describe('Applications GraphQL Resolvers', () => {
       (supabase.from as any).mockReturnValue(mockSupabase);
 
       await expect(
-        applicationsResolver.Mutation.deleteApplication(null, { id }, mockContext)
+        applicationsResolver.Mutation.deleteApplication(null, { id }, mockContext),
       ).rejects.toThrow('Deletion failed');
     });
   });

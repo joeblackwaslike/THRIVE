@@ -44,7 +44,7 @@ export function NotificationsPage() {
         status: interview.status,
         type: interview.type,
         applicationId: interview.applicationId,
-      }))
+      })),
     );
   }, [applications, interviews, generateSmartSuggestions]);
 

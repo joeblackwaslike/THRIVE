@@ -27,6 +27,7 @@ export function CompanyDialog({
   const [internalOpen, setInternalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
+
   const { addCompany, updateCompany } = useCompaniesStore();
 
   // Use controlled or uncontrolled state
@@ -92,6 +93,7 @@ export function CompanyDialog({
           onSaveAndAddAnother={!company ? handleSaveAndAddAnother : undefined}
           isLoading={isLoading}
         />
+
       </DialogContent>
     </Dialog>
   );

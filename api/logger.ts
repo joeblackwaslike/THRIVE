@@ -2,7 +2,7 @@ import pino from 'pino';
 
 const logger = pino({
   level: process.env.PINO_LOG_LEVEL || 'info',
-  transport: 
+  transport:
     process.env.NODE_ENV === 'development'
       ? {
           target: 'pino-pretty',
@@ -19,7 +19,7 @@ const logger = pino({
   },
   timestamp: pino.stdTimeFunctions.isoTime,
   formatters: {
-    level: (label: string) => { 
+    level: (label: string) => {
       return { level: label.toUpperCase() };
     },
   },

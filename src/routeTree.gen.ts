@@ -8,127 +8,126 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { Route as rootRouteImport } from './routes/__root'
-import { Route as LoginRouteImport } from './routes/login'
-import { Route as SettingsRouteImport } from './routes/settings'
-import { Route as InterviewsRouteImport } from './routes/interviews'
-import { Route as InterviewprepRouteImport } from './routes/interviewprep'
-import { Route as ExportRouteImport } from './routes/export'
-import { Route as DocumentsRouteImport } from './routes/documents'
-import { Route as DashboardRouteImport } from './routes/dashboard'
-import { Route as CompaniesRouteImport } from './routes/companies'
-import { Route as ApplicationsRouteImport } from './routes/applications'
-import { Route as AnalyticsRouteImport } from './routes/analytics'
-import { Route as SplatRouteImport } from './routes/$'
-import { Route as IndexRouteImport } from './routes/index'
-
+import { Route as rootRouteImport } from './routes/__root';
+import { Route as LoginRouteImport } from './routes/login';
+import { Route as SettingsRouteImport } from './routes/settings';
+import { Route as InterviewsRouteImport } from './routes/interviews';
+import { Route as InterviewprepRouteImport } from './routes/interviewprep';
+import { Route as ExportRouteImport } from './routes/export';
+import { Route as DocumentsRouteImport } from './routes/documents';
+import { Route as DashboardRouteImport } from './routes/dashboard';
+import { Route as CompaniesRouteImport } from './routes/companies';
+import { Route as ApplicationsRouteImport } from './routes/applications';
+import { Route as AnalyticsRouteImport } from './routes/analytics';
+import { Route as SplatRouteImport } from './routes/$';
+import { Route as IndexRouteImport } from './routes/index';
 
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 const SettingsRoute = SettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 const InterviewsRoute = InterviewsRouteImport.update({
   id: '/interviews',
   path: '/interviews',
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 const InterviewprepRoute = InterviewprepRouteImport.update({
   id: '/interviewprep',
   path: '/interviewprep',
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 const ExportRoute = ExportRouteImport.update({
   id: '/export',
   path: '/export',
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 const DocumentsRoute = DocumentsRouteImport.update({
   id: '/documents',
   path: '/documents',
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 const DashboardRoute = DashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 const CompaniesRoute = CompaniesRouteImport.update({
   id: '/companies',
   path: '/companies',
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 const ApplicationsRoute = ApplicationsRouteImport.update({
   id: '/applications',
   path: '/applications',
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 const AnalyticsRoute = AnalyticsRouteImport.update({
   id: '/analytics',
   path: '/analytics',
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 const SplatRoute = SplatRouteImport.update({
   id: '/$',
   path: '/$',
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
-} as any)
+} as any);
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/login': typeof LoginRoute
-  '/$': typeof SplatRoute
-  '/analytics': typeof AnalyticsRoute
-  '/applications': typeof ApplicationsRoute
-  '/companies': typeof CompaniesRoute
-  '/dashboard': typeof DashboardRoute
-  '/documents': typeof DocumentsRoute
-  '/export': typeof ExportRoute
-  '/interviewprep': typeof InterviewprepRoute
-  '/interviews': typeof InterviewsRoute
-  '/settings': typeof SettingsRoute
+  '/': typeof IndexRoute;
+  '/login': typeof LoginRoute;
+  '/$': typeof SplatRoute;
+  '/analytics': typeof AnalyticsRoute;
+  '/applications': typeof ApplicationsRoute;
+  '/companies': typeof CompaniesRoute;
+  '/dashboard': typeof DashboardRoute;
+  '/documents': typeof DocumentsRoute;
+  '/export': typeof ExportRoute;
+  '/interviewprep': typeof InterviewprepRoute;
+  '/interviews': typeof InterviewsRoute;
+  '/settings': typeof SettingsRoute;
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/login': typeof LoginRoute
-  '/$': typeof SplatRoute
-  '/analytics': typeof AnalyticsRoute
-  '/applications': typeof ApplicationsRoute
-  '/companies': typeof CompaniesRoute
-  '/dashboard': typeof DashboardRoute
-  '/documents': typeof DocumentsRoute
-  '/export': typeof ExportRoute
-  '/interviewprep': typeof InterviewprepRoute
-  '/interviews': typeof InterviewsRoute
-  '/settings': typeof SettingsRoute
+  '/': typeof IndexRoute;
+  '/login': typeof LoginRoute;
+  '/$': typeof SplatRoute;
+  '/analytics': typeof AnalyticsRoute;
+  '/applications': typeof ApplicationsRoute;
+  '/companies': typeof CompaniesRoute;
+  '/dashboard': typeof DashboardRoute;
+  '/documents': typeof DocumentsRoute;
+  '/export': typeof ExportRoute;
+  '/interviewprep': typeof InterviewprepRoute;
+  '/interviews': typeof InterviewsRoute;
+  '/settings': typeof SettingsRoute;
 }
 export interface FileRoutesById {
-  __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
-  '/login': typeof LoginRoute
-  '/$': typeof SplatRoute
-  '/analytics': typeof AnalyticsRoute
-  '/applications': typeof ApplicationsRoute
-  '/companies': typeof CompaniesRoute
-  '/dashboard': typeof DashboardRoute
-  '/documents': typeof DocumentsRoute
-  '/export': typeof ExportRoute
-  '/interviewprep': typeof InterviewprepRoute
-  '/interviews': typeof InterviewsRoute
-  '/settings': typeof SettingsRoute
+  __root__: typeof rootRouteImport;
+  '/': typeof IndexRoute;
+  '/login': typeof LoginRoute;
+  '/$': typeof SplatRoute;
+  '/analytics': typeof AnalyticsRoute;
+  '/applications': typeof ApplicationsRoute;
+  '/companies': typeof CompaniesRoute;
+  '/dashboard': typeof DashboardRoute;
+  '/documents': typeof DocumentsRoute;
+  '/export': typeof ExportRoute;
+  '/interviewprep': typeof InterviewprepRoute;
+  '/interviews': typeof InterviewsRoute;
+  '/settings': typeof SettingsRoute;
 }
 export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath
+  fileRoutesByFullPath: FileRoutesByFullPath;
   fullPaths:
     | '/'
     | '/login'
@@ -141,8 +140,8 @@ export interface FileRouteTypes {
     | '/export'
     | '/interviewprep'
     | '/interviews'
-    | '/settings'
-  fileRoutesByTo: FileRoutesByTo
+    | '/settings';
+  fileRoutesByTo: FileRoutesByTo;
   to:
     | '/'
     | '/login'
@@ -155,7 +154,7 @@ export interface FileRouteTypes {
     | '/export'
     | '/interviewprep'
     | '/interviews'
-    | '/settings'
+    | '/settings';
   id:
     | '__root__'
     | '/'
@@ -169,110 +168,110 @@ export interface FileRouteTypes {
     | '/export'
     | '/interviewprep'
     | '/interviews'
-    | '/settings'
-  fileRoutesById: FileRoutesById
+    | '/settings';
+  fileRoutesById: FileRoutesById;
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  LoginRoute: typeof LoginRoute
-  SplatRoute: typeof SplatRoute
-  AnalyticsRoute: typeof AnalyticsRoute
-  ApplicationsRoute: typeof ApplicationsRoute
-  CompaniesRoute: typeof CompaniesRoute
-  DashboardRoute: typeof DashboardRoute
-  DocumentsRoute: typeof DocumentsRoute
-  ExportRoute: typeof ExportRoute
-  InterviewprepRoute: typeof InterviewprepRoute
-  InterviewsRoute: typeof InterviewsRoute
-  SettingsRoute: typeof SettingsRoute
+  IndexRoute: typeof IndexRoute;
+  LoginRoute: typeof LoginRoute;
+  SplatRoute: typeof SplatRoute;
+  AnalyticsRoute: typeof AnalyticsRoute;
+  ApplicationsRoute: typeof ApplicationsRoute;
+  CompaniesRoute: typeof CompaniesRoute;
+  DashboardRoute: typeof DashboardRoute;
+  DocumentsRoute: typeof DocumentsRoute;
+  ExportRoute: typeof ExportRoute;
+  InterviewprepRoute: typeof InterviewprepRoute;
+  InterviewsRoute: typeof InterviewsRoute;
+  SettingsRoute: typeof SettingsRoute;
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
     '/login': {
-      id: '/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginRouteImport
-      parentRoute: typeof rootRouteImport
-    }
+      id: '/login';
+      path: '/login';
+      fullPath: '/login';
+      preLoaderRoute: typeof LoginRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
     '/settings': {
-      id: '/settings'
-      path: '/settings'
-      fullPath: '/settings'
-      preLoaderRoute: typeof SettingsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
+      id: '/settings';
+      path: '/settings';
+      fullPath: '/settings';
+      preLoaderRoute: typeof SettingsRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
     '/interviews': {
-      id: '/interviews'
-      path: '/interviews'
-      fullPath: '/interviews'
-      preLoaderRoute: typeof InterviewsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
+      id: '/interviews';
+      path: '/interviews';
+      fullPath: '/interviews';
+      preLoaderRoute: typeof InterviewsRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
     '/interviewprep': {
-      id: '/interviewprep'
-      path: '/interviewprep'
-      fullPath: '/interviewprep'
-      preLoaderRoute: typeof InterviewprepRouteImport
-      parentRoute: typeof rootRouteImport
-    }
+      id: '/interviewprep';
+      path: '/interviewprep';
+      fullPath: '/interviewprep';
+      preLoaderRoute: typeof InterviewprepRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
     '/export': {
-      id: '/export'
-      path: '/export'
-      fullPath: '/export'
-      preLoaderRoute: typeof ExportRouteImport
-      parentRoute: typeof rootRouteImport
-    }
+      id: '/export';
+      path: '/export';
+      fullPath: '/export';
+      preLoaderRoute: typeof ExportRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
     '/documents': {
-      id: '/documents'
-      path: '/documents'
-      fullPath: '/documents'
-      preLoaderRoute: typeof DocumentsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
+      id: '/documents';
+      path: '/documents';
+      fullPath: '/documents';
+      preLoaderRoute: typeof DocumentsRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
     '/dashboard': {
-      id: '/dashboard'
-      path: '/dashboard'
-      fullPath: '/dashboard'
-      preLoaderRoute: typeof DashboardRouteImport
-      parentRoute: typeof rootRouteImport
-    }
+      id: '/dashboard';
+      path: '/dashboard';
+      fullPath: '/dashboard';
+      preLoaderRoute: typeof DashboardRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
     '/companies': {
-      id: '/companies'
-      path: '/companies'
-      fullPath: '/companies'
-      preLoaderRoute: typeof CompaniesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
+      id: '/companies';
+      path: '/companies';
+      fullPath: '/companies';
+      preLoaderRoute: typeof CompaniesRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
     '/applications': {
-      id: '/applications'
-      path: '/applications'
-      fullPath: '/applications'
-      preLoaderRoute: typeof ApplicationsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
+      id: '/applications';
+      path: '/applications';
+      fullPath: '/applications';
+      preLoaderRoute: typeof ApplicationsRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
     '/analytics': {
-      id: '/analytics'
-      path: '/analytics'
-      fullPath: '/analytics'
-      preLoaderRoute: typeof AnalyticsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
+      id: '/analytics';
+      path: '/analytics';
+      fullPath: '/analytics';
+      preLoaderRoute: typeof AnalyticsRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
     '/$': {
-      id: '/$'
-      path: '/$'
-      fullPath: '/$'
-      preLoaderRoute: typeof SplatRouteImport
-      parentRoute: typeof rootRouteImport
-    }
+      id: '/$';
+      path: '/$';
+      fullPath: '/$';
+      preLoaderRoute: typeof SplatRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
     '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
+      id: '/';
+      path: '/';
+      fullPath: '/';
+      preLoaderRoute: typeof IndexRouteImport;
+      parentRoute: typeof rootRouteImport;
+    };
   }
 }
 
@@ -289,7 +288,7 @@ const rootRouteChildren: RootRouteChildren = {
   InterviewprepRoute: InterviewprepRoute,
   InterviewsRoute: InterviewsRoute,
   SettingsRoute: SettingsRoute,
-}
+};
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
-  ._addFileTypes<FileRouteTypes>()
+  ._addFileTypes<FileRouteTypes>();

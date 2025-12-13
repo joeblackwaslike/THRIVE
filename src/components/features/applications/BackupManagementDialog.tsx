@@ -82,7 +82,7 @@ export function BackupManagementDialog({ open, onOpenChange }: BackupManagementD
         description: 'Backup record removed from history',
       });
     },
-    [removeBackupRecord]
+    [removeBackupRecord],
   );
 
   const handleClearHistory = useCallback(async () => {
@@ -107,7 +107,7 @@ export function BackupManagementDialog({ open, onOpenChange }: BackupManagementD
     if (open && backupDue && applications.length > 0) {
       notify.backupReminder(
         'Backup Due',
-        'Your scheduled backup is due. Consider creating a backup.'
+        'Your scheduled backup is due. Consider creating a backup.',
       );
     }
   }, [open, backupDue, applications.length]);

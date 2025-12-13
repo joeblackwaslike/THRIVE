@@ -72,7 +72,7 @@ export function ReportGenerator({ applications, interviews }: ReportGeneratorPro
   // Calculate metrics for current and previous period
   const currentMetrics = useMemo(
     () => calculateAnalytics(applications, interviews, reportPeriod),
-    [applications, interviews, reportPeriod]
+    [applications, interviews, reportPeriod],
   );
 
   const previousPeriod = useMemo(() => {
@@ -85,7 +85,7 @@ export function ReportGenerator({ applications, interviews }: ReportGeneratorPro
 
   const previousMetrics = useMemo(
     () => calculateAnalytics(applications, interviews, previousPeriod),
-    [applications, interviews, previousPeriod]
+    [applications, interviews, previousPeriod],
   );
 
   // Calculate trends
@@ -104,7 +104,7 @@ export function ReportGenerator({ applications, interviews }: ReportGeneratorPro
     const trends = {
       applications: calculateChange(
         currentMetrics.totalApplications,
-        previousMetrics.totalApplications
+        previousMetrics.totalApplications,
       ),
       interviews: calculateChange(currentMetrics.totalInterviews, previousMetrics.totalInterviews),
       responseRate: calculateChange(currentMetrics.responseRate, previousMetrics.responseRate),
@@ -347,7 +347,7 @@ export function ReportGenerator({ applications, interviews }: ReportGeneratorPro
     const trends = {
       applications: calculateChange(
         currentMetrics.totalApplications,
-        previousMetrics.totalApplications
+        previousMetrics.totalApplications,
       ),
       interviews: calculateChange(currentMetrics.totalInterviews, previousMetrics.totalInterviews),
       responseRate: calculateChange(currentMetrics.responseRate, previousMetrics.responseRate),
@@ -467,7 +467,7 @@ Keep up the great work! 💪
     () => ({
       applications: calculateChange(
         currentMetrics.totalApplications,
-        previousMetrics.totalApplications
+        previousMetrics.totalApplications,
       ),
       interviews: calculateChange(currentMetrics.totalInterviews, previousMetrics.totalInterviews),
       responseRate: calculateChange(currentMetrics.responseRate, previousMetrics.responseRate),
@@ -484,7 +484,7 @@ Keep up the great work! 💪
       previousMetrics.responseRate,
       previousMetrics.offerRate,
       calculateChange,
-    ]
+    ],
   );
 
   return (

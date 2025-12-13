@@ -76,14 +76,14 @@ export function TimePeriodSlider({
                 'flex flex-col items-center gap-0.5 text-xs transition-colors',
                 'hover:text-foreground',
                 'disabled:opacity-50 disabled:cursor-not-allowed',
-                currentIndex === index ? 'text-primary font-medium' : 'text-muted-foreground'
+                currentIndex === index ? 'text-primary font-medium' : 'text-muted-foreground',
               )}
               title={period.label}
             >
               <div
                 className={cn(
                   'h-1.5 w-1.5 rounded-full transition-colors',
-                  currentIndex === index ? 'bg-primary' : 'bg-muted-foreground/30'
+                  currentIndex === index ? 'bg-primary' : 'bg-muted-foreground/30',
                 )}
               />
               <span>{period.shortLabel}</span>

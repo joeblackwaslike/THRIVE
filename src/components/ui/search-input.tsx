@@ -29,7 +29,7 @@ export function SearchInput({
         onChange(newValue);
       }
     },
-    { wait: debounceMs }
+    { wait: debounceMs },
   );
 
   // Update local value and trigger debounced onChange
@@ -38,7 +38,7 @@ export function SearchInput({
       setLocalValue(newValue);
       debouncedOnChange(newValue);
     },
-    [debouncedOnChange]
+    [debouncedOnChange],
   );
 
   // Sync with external value changes

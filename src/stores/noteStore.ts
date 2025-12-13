@@ -45,7 +45,7 @@ export const useNoteStore = create<NoteStore>()(
                   ...updates,
                   updatedAt: new Date(),
                 }
-              : note
+              : note,
           ),
         }));
       },
@@ -64,7 +64,7 @@ export const useNoteStore = create<NoteStore>()(
         return get().notes.filter(
           (note) =>
             note.entityId === entityId &&
-            (entityType === undefined || note.entityType === entityType)
+            (entityType === undefined || note.entityType === entityType),
         );
       },
 
@@ -77,7 +77,7 @@ export const useNoteStore = create<NoteStore>()(
                   isPinned: !note.isPinned,
                   updatedAt: new Date(),
                 }
-              : note
+              : note,
           ),
         }));
       },
@@ -90,6 +90,6 @@ export const useNoteStore = create<NoteStore>()(
     {
       name: 'thrive-notes',
       version: 1,
-    }
-  )
+    },
+  ),
 );

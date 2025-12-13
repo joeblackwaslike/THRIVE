@@ -42,7 +42,7 @@ const AnimatedButton = forwardRef<HTMLButtonElement, AnimatedButtonProps>(
       disabled,
       ...props
     },
-    ref
+    ref,
   ) => {
     return (
       <motion.div
@@ -62,7 +62,7 @@ const AnimatedButton = forwardRef<HTMLButtonElement, AnimatedButtonProps>(
         </Button>
       </motion.div>
     );
-  }
+  },
 );
 
 AnimatedButton.displayName = 'AnimatedButton';

@@ -1,14 +1,14 @@
-import { readFileSync } from "fs";
+import { readFileSync } from 'fs';
 import { fileURLToPath } from 'url';
-import path from "path";
+import path from 'path';
 import type { Server } from 'node:http';
 import { ApolloServer } from '@apollo/server';
 import { ApolloServerPluginDrainHttpServer } from '@apollo/server/plugin/drainHttpServer';
-import { ApolloServerPluginLandingPageLocalDefault } from '@apollo/server/plugin/landingPage/default';
+import { ApolloServerPluginLandingPageLocalDefault, ApolloServerPluginLandingPageProductionDefault} from '@apollo/server/plugin/landingPage/default';
 import { makeExecutableSchema } from '@graphql-tools/schema';
 import { GraphQLScalarType, Kind } from 'graphql';
-import { gql } from "graphql-tag";
-import type { Express } from 'express';
+import { gql } from 'graphql-tag';
+import type { Application } from 'express';
 import { getUserIdFromRequest, optionalAuth } from '../lib/auth.ts';
 import logger from '../logger.ts';
 
@@ -18,16 +18,22 @@ import { companiesResolver } from './resolvers/companies.ts';
 import { contactsResolver } from './resolvers/contacts.ts';
 import { documentsResolver } from './resolvers/documents.ts';
 import { interviewsResolver } from './resolvers/interviews.ts';
+import ApolloLoggingPlugin from './plugins/ApolloLoggingPlugin.ts';
 
 // Get __dirname equivalent for ES modules
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+interface ApolloContext {
+  // we'd define the properties a user should have
+  // in a separate user interface (e.g., email, id, url, etc.)
+  user: UserInterface;
+}
 
 // GraphQL type definitions from ./schema.graphql
 const typeDefs = gql(
-  readFileSync(path.resolve(__dirname, "./schema.graphql"), {
-    encoding: "utf-8",
-  })
+  readFileSync(path.resolve(__dirname, './schema.graphql'), {
+    encoding: 'utf-8',
+  }),
 );
 
 // Create executable schema
@@ -91,12 +97,14 @@ const schema = makeExecutableSchema({
   ],
 });
 
-export async function createApolloServer(expressApp: Express, httpServer: Server) {
-  const server = new ApolloServer({
+export async function createApolloServer(expressApp: Application, httpServer: Server) {
+  const landingPageOptions = { embed: {initialState: {pollForSchemaUpdates: false}} };
+  const server = new ApolloServer<ApolloContext>({
     schema,
     plugins: [
       ApolloServerPluginDrainHttpServer({ httpServer }),
-      ApolloServerPluginLandingPageLocalDefault({ embed: true }),
+      process.env.NODE_ENV === 'production' ? ApolloServerPluginLandingPageProductionDefault({footer: false}) : ApolloServerPluginLandingPageLocalDefault(landingPageOptions),
+      ApolloLoggingPlugin(),
     ],
   });
 
@@ -104,39 +112,35 @@ export async function createApolloServer(expressApp: Express, httpServer: Server
 
   expressApp.use('/graphql', optionalAuth, async (req, res, next) => {
     if (req.method === 'POST') {
-      logger.debug('GraphQL server debug - Headers received:', {
+      logger.debug({
         authorization: req.headers.authorization ? 'Bearer [TOKEN]' : 'missing',
         'x-user-id': req.headers['x-user-id'],
         'content-type': req.headers['content-type'],
-      });
+      }, 'GraphQL server debug - Headers received:');
 
-      logger.debug('GraphQL server debug - Full auth header:', req.headers.authorization);
-      logger.debug('GraphQL server debug - X-User-Id header:', req.headers['x-user-id']);
+      logger.debug({ authorization: req.headers.authorization }, 'GraphQL server debug - Full auth header:');
+      logger.debug({ 'x-user-id': req.headers['x-user-id'] }, 'GraphQL server debug - X-User-Id header:');
 
       const userId = getUserIdFromRequest(req);
 
       try {
-        const parsedBody = (req as any).body;
-        const body =
-          parsedBody && typeof parsedBody === 'object'
-            ? parsedBody
-            : await new Promise<{
-                query: string;
-                variables?: Record<string, unknown>;
-                operationName?: string;
-              }>((resolve, reject) => {
-                let data = '';
-                req.on('data', (chunk) => {
-                  data += chunk;
-                });
-                req.on('end', () => {
-                  try {
-                    resolve(JSON.parse(data || '{}'));
-                  } catch (e) {
-                    reject(e);
-                  }
-                });
-              });
+        const body = (req as any).body as {
+          query: string;
+          variables?: Record<string, unknown>;
+          operationName?: string;
+        };
+        if (!body || typeof body !== 'object' || !body.query) {
+          res.status(400).json({ error: 'Invalid GraphQL request body' });
+          return;
+        }
+
+        const isIntrospection = body.operationName === 'IntrospectionQuery';
+        const ip = req.ip || req.socket.remoteAddress || 'unknown';
+        const now = Date.now();
+        if (isIntrospection && introspectionCache && (now - (lastIntrospectionAtByIp[ip] || 0)) < 8000) {
+          res.status(200).json(introspectionCache);
+          return;
+        }
 
         const result = await server.executeOperation(
           {
@@ -146,10 +150,14 @@ export async function createApolloServer(expressApp: Express, httpServer: Server
           },
           {
             contextValue: { userId }, // userId can be null for unauthenticated requests
-          }
+          },
         );
 
         const single = (result as any)?.body?.singleResult ?? result;
+        if (isIntrospection) {
+          introspectionCache = single;
+          lastIntrospectionAtByIp[ip] = now;
+        }
         res.status(200).json(single);
       } catch (error) {
         res.status(500).json({ error: 'Internal server error' });
@@ -157,8 +165,15 @@ export async function createApolloServer(expressApp: Express, httpServer: Server
     } else if (req.method === 'GET') {
       const host = req.get('host');
       const endpoint = `http://${host}/graphql`;
-      const sandboxUrl = `https://studio.apollographql.com/sandbox?endpoint=${encodeURIComponent(endpoint)}`;
-      res.redirect(302, sandboxUrl);
+      if (process.env.APOLLO_STUDIO === 'true') {
+        const sandboxUrl = `https://studio.apollographql.com/sandbox?endpoint=${encodeURIComponent(endpoint)}`;
+        res.redirect(302, sandboxUrl);
+      } else if (introspectionCache) {
+        res.set('cache-control', 'public, max-age=60');
+        res.status(200).json(introspectionCache);
+      } else {
+        next();
+      }
     } else {
       next();
     }

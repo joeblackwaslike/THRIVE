@@ -4,9 +4,10 @@ import { captureGraphQLError } from '@/lib/sentry-error-tracking';
 /**
  * Apollo Link for Sentry error tracking
  */
-export const sentryErrorLink = onError(({ graphQLErrors, networkError, operation }) => {
+export const sentryErrorLink = onError((args) => {
+  const { graphQLErrors, networkError, operation } = args as any;
   if (graphQLErrors) {
-    graphQLErrors.forEach((error) => {
+    graphQLErrors.forEach((error: any) => {
       const errorMessage = `[GraphQL error]: Message: ${error.message}, Location: ${error.locations}, Path: ${error.path}`;
 
       captureGraphQLError(
@@ -18,14 +19,14 @@ export const sentryErrorLink = onError(({ graphQLErrors, networkError, operation
         },
         {
           userId: operation.getContext().headers?.['x-user-id'],
-        }
+        },
       );
     });
   }
 
   if (networkError) {
     captureGraphQLError(
-      networkError,
+      networkError as any,
       {
         query: operation.query.loc?.source.body || '',
         variables: operation.variables,
@@ -33,7 +34,7 @@ export const sentryErrorLink = onError(({ graphQLErrors, networkError, operation
       },
       {
         userId: operation.getContext().headers?.['x-user-id'],
-      }
+      },
     );
   }
 });

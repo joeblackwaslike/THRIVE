@@ -26,8 +26,8 @@ export class SentryErrorBoundary extends Component<Props, State> {
     // Log error to Sentry with additional context
     Sentry.withScope((scope) => {
       scope.setTag('error_boundary', 'true');
-      scope.setContext('error_info', errorInfo);
-      scope.setContext('component_stack', errorInfo.componentStack);
+      scope.setContext('error_info', { componentStack: errorInfo.componentStack });
+      scope.setExtra('component_stack', errorInfo.componentStack);
       Sentry.captureException(error);
     });
 

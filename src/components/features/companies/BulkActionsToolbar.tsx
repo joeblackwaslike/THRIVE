@@ -47,7 +47,7 @@ export function BulkActionsToolbar({
     items: T[],
     processor: (item: T) => Promise<void>,
     batchSize: number = 5,
-    delayMs: number = 50
+    delayMs: number = 50,
   ): Promise<void> => {
     const total = items.length;
     let completed = 0;
@@ -76,7 +76,7 @@ export function BulkActionsToolbar({
         selectedCompanies,
         async (company) => await deleteCompany(company.id),
         5,
-        50
+        50,
       );
 
       toast.success(`Deleted ${selectedCount} ${selectedCount === 1 ? 'company' : 'companies'}`);
@@ -118,13 +118,13 @@ export function BulkActionsToolbar({
           await updateCompany(company.id, updates);
         },
         10,
-        30
+        30,
       );
 
       const fieldLabel =
         updateField === 'researched' ? 'marked as researched' : `${updateField} updated`;
       toast.success(
-        `${selectedCount} ${selectedCount === 1 ? 'company' : 'companies'} ${fieldLabel}`
+        `${selectedCount} ${selectedCount === 1 ? 'company' : 'companies'} ${fieldLabel}`,
       );
       setUpdateDialogOpen(false);
       setNewValue('');

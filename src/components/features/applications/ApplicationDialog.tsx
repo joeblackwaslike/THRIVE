@@ -54,7 +54,7 @@ export function ApplicationDialog({
       } else {
         // Create new application
         const newApp = await createApplication(
-          applicationData as Omit<Application, 'id' | 'createdAt' | 'updatedAt'>
+          applicationData as Omit<Application, 'id' | 'createdAt' | 'updatedAt'>,
         );
         if (!newApp) {
           throw new Error('Failed to create application');
@@ -66,7 +66,7 @@ export function ApplicationDialog({
       // First, unlink all previously linked documents that are no longer selected
       if (application) {
         const previouslyLinkedDocs = documents.filter((doc) =>
-          doc.usedInApplicationIds?.includes(application.id)
+          doc.usedInApplicationIds?.includes(application.id),
         );
 
         for (const doc of previouslyLinkedDocs) {

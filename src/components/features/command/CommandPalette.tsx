@@ -222,7 +222,7 @@ export function CommandPalette() {
         };
       }),
     ],
-    [navigate, applications, interviews]
+    [navigate, applications, interviews],
   );
 
   // Filter commands based on search
@@ -269,7 +269,7 @@ export function CommandPalette() {
         setIsOpen(false);
       }
     },
-    [filteredCommands, selectedIndex]
+    [filteredCommands, selectedIndex],
   );
 
   // Throttled mouse enter handler (50ms for smooth but performant hover feedback)
@@ -338,7 +338,7 @@ export function CommandPalette() {
                           className={cn(
                             'w-full flex items-center gap-3 px-3 py-2 rounded-md text-sm transition-colors',
                             'hover:bg-muted/50',
-                            globalIndex === selectedIndex && 'bg-muted'
+                            globalIndex === selectedIndex && 'bg-muted',
                           )}
                           onMouseEnter={() => throttledMouseEnter(globalIndex)}
                         >

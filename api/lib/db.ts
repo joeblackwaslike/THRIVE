@@ -1,6 +1,6 @@
 import logger from '../logger.ts';
 import type { Database } from '../types/database.ts';
-import { supabase } from './supabase.ts';
+import { supabaseAdmin as supabase } from './supabase.ts';
 
 export type Application = Database['public']['Tables']['applications']['Row'];
 export type ApplicationInsert = Database['public']['Tables']['applications']['Insert'];
@@ -32,7 +32,7 @@ export const applications = {
       .order('created_at', { ascending: false });
 
     if (error) {
-      logger.error('Error fetching applications:', error);
+      logger.error(error, 'Error fetching applications:');
       throw error;
     }
     return data;
@@ -47,7 +47,7 @@ export const applications = {
       .single();
 
     if (error) {
-      logger.error('Error fetching application:', error);
+      logger.error(error, 'Error fetching application:');
       throw error;
     }
     return data;
@@ -61,7 +61,7 @@ export const applications = {
       .single();
 
     if (error) {
-      logger.error('Error creating application:', error);
+      logger.error(error, 'Error creating application:');
       throw error;
     }
     return data;
@@ -77,7 +77,7 @@ export const applications = {
       .single();
 
     if (error) {
-      logger.error('Error updating application:', error);
+      logger.error(error, 'Error updating application:');
       throw error;
     }
     return data;
@@ -91,7 +91,7 @@ export const applications = {
       .eq('user_id', userId);
 
     if (error) {
-      logger.error('Error deleting application:', error);
+      logger.error(error, 'Error deleting application:');
       throw error;
     }
     return true;
@@ -106,7 +106,7 @@ export const applications = {
       .order('created_at', { ascending: false });
 
     if (error) {
-      logger.error('Error fetching applications by status:', error);
+      logger.error(error, 'Error fetching applications by status:');
       throw error;
     }
     return data;
@@ -123,7 +123,7 @@ export const interviews = {
       .order('scheduled_at', { ascending: true });
 
     if (error) {
-      logger.error('Error fetching interviews:', error);
+      logger.error(error, 'Error fetching interviews:');
       throw error;
     }
     return data;
@@ -138,7 +138,7 @@ export const interviews = {
       .order('scheduled_at', { ascending: true });
 
     if (error) {
-      logger.error('Error fetching interviews by application ID:', error);
+      logger.error(error, 'Error fetching interviews by application ID:');
       throw error;
     }
     return data;
@@ -148,7 +148,7 @@ export const interviews = {
     const { data, error } = await supabase.from('interviews').insert(interview).select().single();
 
     if (error) {
-      logger.error('Error creating interview:', error);
+      logger.error(error, 'Error creating interview:');
       throw error;
     }
     return data;
@@ -164,7 +164,7 @@ export const interviews = {
       .single();
 
     if (error) {
-      logger.error('Error updating interview:', error);
+      logger.error(error, 'Error updating interview:');
       throw error;
     }
     return data;
@@ -174,7 +174,7 @@ export const interviews = {
     const { error } = await supabase.from('interviews').delete().eq('id', id).eq('user_id', userId);
 
     if (error) {
-      logger.error('Error deleting interview:', error);
+      logger.error(error, 'Error deleting interview:');
       throw error;
     }
     return true;
@@ -191,7 +191,7 @@ export const companies = {
       .order('name', { ascending: true });
 
     if (error) {
-      logger.error('Error fetching companies:', error);
+      logger.error(error, 'Error fetching companies:');
       throw error;
     }
     return data;
@@ -206,7 +206,7 @@ export const companies = {
       .single();
 
     if (error) {
-      logger.error('Error fetching company:', error);
+      logger.error(error, 'Error fetching company:');
       throw error;
     }
     return data;
@@ -216,7 +216,7 @@ export const companies = {
     const { data, error } = await supabase.from('companies').insert(company).select().single();
 
     if (error) {
-      logger.error('Error creating company:', error);
+      logger.error(error, 'Error creating company:');
       throw error;
     }
     return data;
@@ -232,7 +232,7 @@ export const companies = {
       .single();
 
     if (error) {
-      logger.error('Error updating company:', error);
+      logger.error(error, 'Error updating company:');
       throw error;
     }
     return data;
@@ -242,7 +242,7 @@ export const companies = {
     const { error } = await supabase.from('companies').delete().eq('id', id).eq('user_id', userId);
 
     if (error) {
-      logger.error('Error deleting company:', error);
+      logger.error(error, 'Error deleting company:');
       throw error;
     }
     return true;
@@ -259,7 +259,7 @@ export const contacts = {
       .order('name', { ascending: true });
 
     if (error) {
-      logger.error('Error fetching contacts:', error);
+      logger.error(error, 'Error fetching contacts:');
       throw error;
     }
     return data;
@@ -274,7 +274,7 @@ export const contacts = {
       .order('name', { ascending: true });
 
     if (error) {
-      logger.error('Error fetching contacts by company ID:', error);
+      logger.error(error, 'Error fetching contacts by company ID:');
       throw error;
     }
     return data;
@@ -284,7 +284,7 @@ export const contacts = {
     const { data, error } = await supabase.from('contacts').insert(contact).select().single();
 
     if (error) {
-      logger.error('Error creating contact:', error);
+      logger.error(error, 'Error creating contact:');
       throw error;
     }
     return data;
@@ -300,7 +300,7 @@ export const contacts = {
       .single();
 
     if (error) {
-      logger.error('Error updating contact:', error);
+      logger.error(error, 'Error updating contact:');
       throw error;
     }
     return data;
@@ -310,7 +310,7 @@ export const contacts = {
     const { error } = await supabase.from('contacts').delete().eq('id', id).eq('user_id', userId);
 
     if (error) {
-      logger.error('Error deleting contact:', error);
+      logger.error(error, 'Error deleting contact:'); 
       throw error;
     }
     return true;
@@ -328,7 +328,7 @@ export const documents = {
       .order('created_at', { ascending: false });
 
     if (error) {
-      logger.error('Error fetching documents:', error);
+      logger.error(error, 'Error fetching documents:');
       throw error;
     }
     return data;
@@ -344,7 +344,7 @@ export const documents = {
       .single();
 
     if (error) {
-      logger.error('Error fetching document:', error);
+      logger.error(error, 'Error fetching document:');
       throw error;
     }
     return data;
@@ -354,7 +354,7 @@ export const documents = {
     const { data, error } = await supabase.from('documents').insert(document).select().single();
 
     if (error) {
-      logger.error('Error creating document:', error);
+      logger.error(error, 'Error creating document:');
       throw error;
     }
     return data;
@@ -370,7 +370,7 @@ export const documents = {
       .single();
 
     if (error) {
-      logger.error('Error updating document:', error);
+      logger.error(error, 'Error updating document:');
       throw error;
     }
     return data;
@@ -386,7 +386,7 @@ export const documents = {
       .single();
 
     if (error) {
-      logger.error('Error deleting document:', error);
+      logger.error(error, 'Error deleting document:');
       throw error;
     }
     return data;
@@ -401,7 +401,7 @@ export const documents = {
       .order('version', { ascending: true });
 
     if (error) {
-      logger.error('Error fetching document versions:', error);
+      logger.error(error, 'Error fetching document versions:');
       throw error;
     }
     return data;
@@ -418,7 +418,7 @@ export const analytics = {
       .eq('user_id', userId);
 
     if (totalError) {
-      logger.error('Error fetching application stats:', totalError);
+      logger.error(totalError, 'Error fetching application stats:');
       throw totalError;
     }
 
@@ -429,7 +429,7 @@ export const analytics = {
       .eq('user_id', userId);
 
     if (statusError) {
-      logger.error('Error fetching application statuses:', statusError);
+      logger.error(statusError, 'Error fetching application statuses:');
       throw statusError;
     }
 
@@ -440,7 +440,7 @@ export const analytics = {
           acc[app.status] = (acc[app.status] || 0) + 1;
           return acc;
         },
-        {} as Record<string, number>
+        {} as Record<string, number>,
       ) || {};
 
     return {
@@ -459,7 +459,7 @@ export const analytics = {
       .eq('user_id', userId);
 
     if (error) {
-      logger.error('Error fetching application statuses:', error);
+      logger.error(error, 'Error fetching application statuses:');
       throw error;
     }
 
@@ -470,7 +470,7 @@ export const analytics = {
           acc[app.status] = (acc[app.status] || 0) + 1;
           return acc;
         },
-        {} as Record<string, number>
+        {} as Record<string, number>,
       ) || {};
 
     return Object.entries(grouped).map(([status, count]) => ({ status, count }));
@@ -486,7 +486,7 @@ export const analytics = {
       .order('created_at', { ascending: true });
 
     if (error) {
-      logger.error('Error fetching applications over time:', error);
+      logger.error(error, 'Error fetching applications over time:');
       throw error;
     }
     return data;

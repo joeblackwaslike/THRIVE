@@ -44,7 +44,7 @@ export function addSentryBreadcrumb(
   message: string,
   category?: string,
   level: Sentry.SeverityLevel = 'info',
-  data?: Record<string, any>
+  data?: Record<string, any>,
 ) {
   Sentry.addBreadcrumb({
     message,
@@ -64,7 +64,7 @@ export function captureException(
     tags?: Record<string, string>;
     extra?: Record<string, any>;
     level?: Sentry.SeverityLevel;
-  }
+  },
 ) {
   Sentry.withScope((scope) => {
     if (context?.tags) {
@@ -96,7 +96,7 @@ export function captureMessage(
   context?: {
     tags?: Record<string, string>;
     extra?: Record<string, any>;
-  }
+  },
 ) {
   Sentry.withScope((scope) => {
     if (context?.tags) {
@@ -119,13 +119,16 @@ export function captureMessage(
  * Start a custom transaction for performance monitoring
  */
 export function startTransaction(name: string, operation: string, tags?: Record<string, string>) {
-  const transaction = Sentry.startTransaction({
-    name,
-    op: operation,
-    tags,
-  });
-
-  return transaction;
+  const span = (Sentry as any).startSpan
+    ? (Sentry as any).startSpan({ name, op: operation, attributes: tags }, () => {})
+    : null;
+  return {
+    finish: () => {
+      if (span && typeof (span as any).end === 'function') {
+        (span as any).end();
+      }
+    },
+  } as any;
 }
 
 /**

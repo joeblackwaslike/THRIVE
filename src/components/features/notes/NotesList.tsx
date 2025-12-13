@@ -172,7 +172,7 @@ export function NotesList({ entityId, entityType, className }: NotesListProps) {
           className={cn(
             'rounded-lg border p-3 space-y-2',
             note.isPinned &&
-              'bg-yellow-50 dark:bg-yellow-950/20 border-yellow-200 dark:border-yellow-800'
+              'bg-yellow-50 dark:bg-yellow-950/20 border-yellow-200 dark:border-yellow-800',
           )}
         >
           {/* Header */}

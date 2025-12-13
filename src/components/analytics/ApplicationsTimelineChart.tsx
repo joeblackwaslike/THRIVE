@@ -274,7 +274,7 @@ export function ApplicationsTimelineChart() {
               const annotationDate = new Date(annotation.date);
               // Find the closest data point
               const dataPoint = filteredChartData.find((point) =>
-                isWithinInterval(annotationDate, { start: point.startDate, end: point.endDate })
+                isWithinInterval(annotationDate, { start: point.startDate, end: point.endDate }),
               );
               if (!dataPoint) return null;
 

@@ -201,14 +201,14 @@ interface InterviewsState {
   fetchInterviewsByApplication: (applicationId: string) => Promise<Interview[]>;
   fetchInterview: (id: string) => Promise<Interview | null>;
   createInterview: (
-    interview: Omit<Interview, 'id' | 'createdAt' | 'updatedAt'>
+    interview: Omit<Interview, 'id' | 'createdAt' | 'updatedAt'>,
   ) => Promise<Interview>;
   updateInterview: (id: string, interview: Partial<Interview>) => Promise<Interview>;
   deleteInterview: (id: string) => Promise<void>;
   getUpcomingInterviews: () => Interview[];
   getPastInterviews: () => Interview[];
   addInterview: (
-    interview: Omit<Interview, 'id' | 'createdAt' | 'updatedAt'>
+    interview: Omit<Interview, 'id' | 'createdAt' | 'updatedAt'>,
   ) => Promise<Interview>;
   isLoading: boolean;
 }

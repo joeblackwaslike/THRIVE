@@ -40,7 +40,7 @@ export function handleListKeyDown(
   event: React.KeyboardEvent,
   items: HTMLElement[],
   currentIndex: number,
-  onSelect?: (index: number) => void
+  onSelect?: (index: number) => void,
 ): number {
   let newIndex = currentIndex;
 
@@ -87,7 +87,7 @@ export function handleListKeyDown(
 export function makeKeyboardAccessible(
   element: HTMLElement,
   onClick: () => void,
-  role: string = 'button'
+  role: string = 'button',
 ): void {
   element.setAttribute('role', role);
   element.setAttribute('tabindex', '0');
@@ -146,7 +146,7 @@ export function generateId(prefix: string = 'a11y'): string {
  */
 export function debounceKeyboard<T extends unknown[]>(
   fn: (...args: T) => void,
-  delay: number = 300
+  delay: number = 300,
 ): (...args: T) => void {
   let timeoutId: NodeJS.Timeout;
 

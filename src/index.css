@@ -1,7 +1,7 @@
-@import 'tailwindcss';
+@import "tailwindcss";
 
-@plugin 'tailwindcss-animate';
-@plugin '@tailwindcss/typography';
+@plugin "tailwindcss-animate";
+@plugin "@tailwindcss/typography";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -62,37 +62,37 @@
     overflow-x: hidden;
     overflow-y: auto;
   }
-  
+
   /* Hide scrollbar by default, show on hover/scroll */
   body::-webkit-scrollbar {
     width: 10px;
   }
-  
+
   body::-webkit-scrollbar-track {
     background: transparent;
   }
-  
+
   body::-webkit-scrollbar-thumb {
     background: transparent;
     border-radius: 5px;
     transition: background 0.2s ease;
   }
-  
+
   body:hover::-webkit-scrollbar-thumb,
   body:active::-webkit-scrollbar-thumb {
     background: hsl(var(--muted-foreground) / 0.3);
   }
-  
+
   body::-webkit-scrollbar-thumb:hover {
     background: hsl(var(--muted-foreground) / 0.5);
   }
-  
+
   /* Firefox */
   body {
     scrollbar-width: thin;
     scrollbar-color: transparent transparent;
   }
-  
+
   body:hover,
   body:active {
     scrollbar-color: hsl(var(--muted-foreground) / 0.3) transparent;
@@ -223,35 +223,35 @@
     padding-left: 1rem;
     padding-right: 1rem;
   }
-  
+
   @media (min-width: 640px) {
     .container {
       padding-left: 1.5rem;
       padding-right: 1.5rem;
     }
   }
-  
+
   @media (min-width: 768px) {
     .container {
       padding-left: 2rem;
       padding-right: 2rem;
     }
   }
-  
+
   @media (min-width: 1024px) {
     .container {
       padding-left: 2.5rem;
       padding-right: 2.5rem;
     }
   }
-  
+
   @media (min-width: 1280px) {
     .container {
       padding-left: 3rem;
       padding-right: 3rem;
     }
   }
-  
+
   @media (min-width: 1536px) {
     .container {
       padding-left: 4rem;
@@ -269,10 +269,10 @@
 
   /* Hide scrollbar for IE, Edge and Firefox */
   .scrollbar-hide {
-    -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
   }
-  
+
   /* Fade-in animation */
   @keyframes fadeIn {
     from {
@@ -282,11 +282,11 @@
       opacity: 1;
     }
   }
-  
+
   .animate-fadeIn {
     animation: fadeIn 0.2s ease-in-out;
   }
-  
+
   /* Slide up animation */
   @keyframes slideUp {
     from {
@@ -298,11 +298,11 @@
       opacity: 1;
     }
   }
-  
+
   .animate-slideUp {
     animation: slideUp 0.3s ease-out;
   }
-  
+
   /* Slide down animation */
   @keyframes slideDown {
     from {
@@ -314,11 +314,11 @@
       opacity: 1;
     }
   }
-  
+
   .animate-slideDown {
     animation: slideDown 0.3s ease-out;
   }
-  
+
   /* Scale in animation */
   @keyframes scaleIn {
     from {
@@ -330,21 +330,22 @@
       opacity: 1;
     }
   }
-  
+
   .animate-scaleIn {
     animation: scaleIn 0.2s ease-out;
   }
-  
+
   /* Pulse animation for badges */
   @keyframes pulse {
-    0%, 100% {
+    0%,
+    100% {
       opacity: 1;
     }
     50% {
       opacity: 0.7;
     }
   }
-  
+
   .animate-pulse-subtle {
     animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   }

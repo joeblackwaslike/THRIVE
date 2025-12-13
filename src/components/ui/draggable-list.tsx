@@ -61,7 +61,7 @@ export function DraggableListItem<T>({
               'cursor-grab active:cursor-grabbing',
               'text-muted-foreground hover:text-foreground',
               'transition-colors',
-              dragHandleClassName
+              dragHandleClassName,
             )}
             onPointerDown={(e) => dragControls.start(e)}
             whileHover={{ scale: 1.1 }}

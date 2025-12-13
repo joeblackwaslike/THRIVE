@@ -27,7 +27,7 @@ export function DashboardWidgetWrapper({ id, children }: DashboardWidgetWrapperP
       className={cn(
         'relative group transition-all',
         isDragging && 'opacity-30',
-        isOver && 'border-2 border-dashed border-primary rounded-lg scale-[1.02]'
+        isOver && 'border-2 border-dashed border-primary rounded-lg scale-[1.02]',
       )}
     >
       {/* Drop indicator overlay */}

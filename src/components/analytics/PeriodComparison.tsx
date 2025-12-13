@@ -171,22 +171,22 @@ export function PeriodComparison({ applications, interviews }: PeriodComparisonP
                         {getTrendIcon(
                           calculateChange(
                             yoyComparison.thisYear.totalApplications,
-                            yoyComparison.lastYear.totalApplications
-                          )
+                            yoyComparison.lastYear.totalApplications,
+                          ),
                         )}
                         <span
                           className={getTrendColor(
                             calculateChange(
                               yoyComparison.thisYear.totalApplications,
-                              yoyComparison.lastYear.totalApplications
-                            )
+                              yoyComparison.lastYear.totalApplications,
+                            ),
                           )}
                         >
                           {Math.abs(
                             calculateChange(
                               yoyComparison.thisYear.totalApplications,
-                              yoyComparison.lastYear.totalApplications
-                            )
+                              yoyComparison.lastYear.totalApplications,
+                            ),
                           ).toFixed(1)}
                           %
                         </span>
@@ -217,22 +217,22 @@ export function PeriodComparison({ applications, interviews }: PeriodComparisonP
                         {getTrendIcon(
                           calculateChange(
                             yoyComparison.thisYear.interviewConversionRate,
-                            yoyComparison.lastYear.interviewConversionRate
-                          )
+                            yoyComparison.lastYear.interviewConversionRate,
+                          ),
                         )}
                         <span
                           className={getTrendColor(
                             calculateChange(
                               yoyComparison.thisYear.interviewConversionRate,
-                              yoyComparison.lastYear.interviewConversionRate
-                            )
+                              yoyComparison.lastYear.interviewConversionRate,
+                            ),
                           )}
                         >
                           {Math.abs(
                             calculateChange(
                               yoyComparison.thisYear.interviewConversionRate,
-                              yoyComparison.lastYear.interviewConversionRate
-                            )
+                              yoyComparison.lastYear.interviewConversionRate,
+                            ),
                           ).toFixed(1)}
                           %
                         </span>
@@ -263,22 +263,22 @@ export function PeriodComparison({ applications, interviews }: PeriodComparisonP
                         {getTrendIcon(
                           calculateChange(
                             yoyComparison.thisYear.successfulApplications,
-                            yoyComparison.lastYear.successfulApplications
-                          )
+                            yoyComparison.lastYear.successfulApplications,
+                          ),
                         )}
                         <span
                           className={getTrendColor(
                             calculateChange(
                               yoyComparison.thisYear.successfulApplications,
-                              yoyComparison.lastYear.successfulApplications
-                            )
+                              yoyComparison.lastYear.successfulApplications,
+                            ),
                           )}
                         >
                           {Math.abs(
                             calculateChange(
                               yoyComparison.thisYear.successfulApplications,
-                              yoyComparison.lastYear.successfulApplications
-                            )
+                              yoyComparison.lastYear.successfulApplications,
+                            ),
                           ).toFixed(1)}
                           %
                         </span>
@@ -309,22 +309,22 @@ export function PeriodComparison({ applications, interviews }: PeriodComparisonP
                         {getTrendIcon(
                           -calculateChange(
                             yoyComparison.thisYear.averageResponseTime,
-                            yoyComparison.lastYear.averageResponseTime
-                          )
+                            yoyComparison.lastYear.averageResponseTime,
+                          ),
                         )}
                         <span
                           className={getTrendColor(
                             -calculateChange(
                               yoyComparison.thisYear.averageResponseTime,
-                              yoyComparison.lastYear.averageResponseTime
-                            )
+                              yoyComparison.lastYear.averageResponseTime,
+                            ),
                           )}
                         >
                           {Math.abs(
                             calculateChange(
                               yoyComparison.thisYear.averageResponseTime,
-                              yoyComparison.lastYear.averageResponseTime
-                            )
+                              yoyComparison.lastYear.averageResponseTime,
+                            ),
                           ).toFixed(1)}
                           %
                         </span>

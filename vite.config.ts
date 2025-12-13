@@ -18,12 +18,12 @@ export default defineConfig({
       autoThemeTarget: '#root',
     }),
     tsconfigPaths(),
-    // Sentry source maps plugin - only in production
-    ...(['production', 'development'].includes(process.env.NODE_ENV || 'development') && process.env.SENTRY_AUTH_TOKEN
+    ...(['production', 'development'].includes(process.env.NODE_ENV || 'development') &&
+    process.env.SENTRY_AUTH_TOKEN
       ? [
           sentryVitePlugin({
-            org: 'joeblackwaslike', // Replace with your Sentry org
-            project: 'thrive', // Replace with your Sentry project
+            org: 'joeblackwaslike',
+            project: 'thrive',
             authToken: process.env.SENTRY_AUTH_TOKEN,
             sourcemaps: {
               filesToDeleteAfterUpload: ['dist/**/*.map.js'],

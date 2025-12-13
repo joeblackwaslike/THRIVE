@@ -254,27 +254,27 @@ type Query {
   applications: [Application!]!
   application(id: ID!): Application
   applicationsByStatus(status: ApplicationStatus!): [Application!]!
-  
+
   # Interviews
   interviews: [Interview!]!
   interview(id: ID!): Interview
   interviewsByApplication(applicationId: ID!): [Interview!]!
-  
+
   # Companies
   companies: [Company!]!
   company(id: ID!): Company
-  
+
   # Contacts
   contacts: [Contact!]!
   contact(id: ID!): Contact
   contactsByCompany(companyId: ID!): [Contact!]!
-  
+
   # Documents
   documents: [Document!]!
   document(id: ID!): Document
   documentsByApplication(applicationId: ID!): [Document!]!
   documentVersions(baseDocumentId: ID!): [Document!]!
-  
+
   # Analytics
   applicationStats: ApplicationStats!
   applicationsByStatusCount: JSON!
@@ -504,22 +504,22 @@ type Mutation {
   createApplication(input: ApplicationInput!): Application!
   updateApplication(id: ID!, input: ApplicationUpdateInput!): Application!
   deleteApplication(id: ID!): Boolean!
-  
+
   # Interviews
   createInterview(input: InterviewInput!): Interview!
   updateInterview(id: ID!, input: InterviewUpdateInput!): Interview!
   deleteInterview(id: ID!): Boolean!
-  
+
   # Companies
   createCompany(input: CompanyInput!): Company!
   updateCompany(id: ID!, input: CompanyUpdateInput!): Company!
   deleteCompany(id: ID!): Boolean!
-  
+
   # Contacts
   createContact(input: ContactInput!): Contact!
   updateContact(id: ID!, input: ContactUpdateInput!): Contact!
   deleteContact(id: ID!): Boolean!
-  
+
   # Documents
   createDocument(input: DocumentInput!): Document!
   updateDocument(id: ID!, input: DocumentUpdateInput!): Document!

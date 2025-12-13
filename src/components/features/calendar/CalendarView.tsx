@@ -218,13 +218,13 @@ export function CalendarView({
                   'min-h-[100px] p-2 text-left border-r border-b transition-colors',
                   'hover:bg-muted/50',
                   !isCurrentMonth && 'bg-muted/30 text-muted-foreground',
-                  (index + 1) % 7 === 0 && 'border-r-0'
+                  (index + 1) % 7 === 0 && 'border-r-0',
                 )}
               >
                 <div
                   className={cn(
                     'inline-flex items-center justify-center w-6 h-6 rounded-full text-sm font-medium mb-1',
-                    isDayToday && 'bg-primary text-primary-foreground'
+                    isDayToday && 'bg-primary text-primary-foreground',
                   )}
                 >
                   {format(day, 'd')}
@@ -242,7 +242,7 @@ export function CalendarView({
                       className={cn(
                         'w-full text-xs p-1 rounded text-left truncate',
                         event.color,
-                        'text-white hover:opacity-90 transition-opacity'
+                        'text-white hover:opacity-90 transition-opacity',
                       )}
                       title={event.title}
                     >

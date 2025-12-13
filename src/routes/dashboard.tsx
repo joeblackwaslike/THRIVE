@@ -81,7 +81,7 @@ function DashboardPage() {
   }, [applications, interviews]);
 
   const getStatusBadgeVariant = (
-    status: string
+    status: string,
   ): 'default' | 'secondary' | 'destructive' | 'outline' => {
     if (['offer', 'accepted', 'completed'].includes(status)) return 'default';
     if (['rejected', 'cancelled'].includes(status)) return 'destructive';
@@ -102,7 +102,7 @@ function DashboardPage() {
       activationConstraint: {
         distance: 8,
       },
-    })
+    }),
   );
 
   const handleDragStart = (event: DragStartEvent) => {
@@ -255,7 +255,7 @@ function DashboardPage() {
       case 'upcoming-interviews': {
         const upcomingInterviews = interviews
           .filter(
-            (interview) => interview.scheduledAt && new Date(interview.scheduledAt) >= new Date()
+            (interview) => interview.scheduledAt && new Date(interview.scheduledAt) >= new Date(),
           )
           .sort((a, b) => {
             if (!a.scheduledAt || !b.scheduledAt) return 0;
@@ -326,10 +326,10 @@ function DashboardPage() {
         const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
 
         const weeklyApps = applications.filter(
-          (app) => new Date(app.createdAt) >= startOfWeek
+          (app) => new Date(app.createdAt) >= startOfWeek,
         ).length;
         const monthlyApps = applications.filter(
-          (app) => new Date(app.createdAt) >= startOfMonth
+          (app) => new Date(app.createdAt) >= startOfMonth,
         ).length;
 
         const weeklyGoal = 10;
@@ -398,7 +398,7 @@ function DashboardPage() {
             acc[company].statuses.push(app.status);
             return acc;
           },
-          {} as Record<string, { name: string; count: number; statuses: string[] }>
+          {} as Record<string, { name: string; count: number; statuses: string[] }>,
         );
 
         const topCompanies = Object.values(companyData)
@@ -520,12 +520,12 @@ function DashboardPage() {
         const referralApps = applications.filter(
           (app) =>
             app.notes?.toLowerCase().includes('referral') ||
-            app.notes?.toLowerCase().includes('reference')
+            app.notes?.toLowerCase().includes('reference'),
         );
         const networkingApps = applications.filter(
           (app) =>
             app.notes?.toLowerCase().includes('network') ||
-            app.notes?.toLowerCase().includes('connection')
+            app.notes?.toLowerCase().includes('connection'),
         );
 
         const totalConnections = referralApps.length + networkingApps.length;

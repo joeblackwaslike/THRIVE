@@ -167,7 +167,7 @@ export function exportAndDownloadApplicationsJSON(applications: Application[]): 
  */
 export function exportInterviewsToCSV(
   interviews: Interview[],
-  applications: Application[]
+  applications: Application[],
 ): string {
   if (interviews.length === 0) {
     return '';
@@ -212,7 +212,7 @@ export function exportInterviewsToCSV(
       escapeCSVValue(interview.type),
       escapeCSVValue(interview.status),
       escapeCSVValue(
-        interview.scheduledAt ? format(new Date(interview.scheduledAt), 'yyyy-MM-dd HH:mm') : ''
+        interview.scheduledAt ? format(new Date(interview.scheduledAt), 'yyyy-MM-dd HH:mm') : '',
       ),
       escapeCSVValue(interview.duration || ''),
       escapeCSVValue(interview.location || ''),
@@ -234,7 +234,7 @@ export function exportInterviewsToCSV(
  */
 export function exportAndDownloadInterviewsCSV(
   interviews: Interview[],
-  applications: Application[]
+  applications: Application[],
 ): void {
   const csvContent = exportInterviewsToCSV(interviews, applications);
 
@@ -430,7 +430,7 @@ export async function exportAndDownloadDocumentsZIP(documents: Document[]): Prom
           // Create a placeholder file
           docsFolder.file(
             `${safeFileName}.txt`,
-            `Document: ${doc.name}\nType: ${doc.type}\n\nNote: The actual file content was not available for export.`
+            `Document: ${doc.name}\nType: ${doc.type}\n\nNote: The actual file content was not available for export.`,
           );
         }
       } catch (error) {
@@ -438,7 +438,7 @@ export async function exportAndDownloadDocumentsZIP(documents: Document[]): Prom
         // Add error note file
         docsFolder.file(
           `ERROR_${doc.name}.txt`,
-          `Failed to export document: ${doc.name}\nError: ${error}`
+          `Failed to export document: ${doc.name}\nError: ${error}`,
         );
       }
     }
@@ -619,7 +619,7 @@ export interface BackupData {
 export function createBackup(
   applications: Application[],
   interviews: Interview[],
-  documents: Document[]
+  documents: Document[],
 ): BackupData {
   return {
     version: '1.0.0',
@@ -641,7 +641,7 @@ export function createBackup(
 export function exportBackup(
   applications: Application[],
   interviews: Interview[],
-  documents: Document[]
+  documents: Document[],
 ): void {
   const backup = createBackup(applications, interviews, documents);
   const timestamp = format(new Date(), 'yyyy-MM-dd-HHmmss');
@@ -722,7 +722,7 @@ export interface DateRangeFilter {
  */
 export function filterApplicationsByDateRange(
   applications: Application[],
-  filter: DateRangeFilter
+  filter: DateRangeFilter,
 ): Application[] {
   return applications.filter((app) => {
     if (!app.appliedDate) return false;
@@ -740,7 +740,7 @@ export function filterApplicationsByDateRange(
  */
 export function filterInterviewsByDateRange(
   interviews: Interview[],
-  filter: DateRangeFilter
+  filter: DateRangeFilter,
 ): Interview[] {
   return interviews.filter((interview) => {
     if (!interview.scheduledAt) return false;
@@ -782,7 +782,7 @@ export interface CustomReportConfig {
  */
 export function generateCustomReport(
   config: CustomReportConfig,
-  data: Application[] | Interview[] | Document[]
+  data: Application[] | Interview[] | Document[],
 ): unknown[] {
   let filteredData = [...data];
 
@@ -856,7 +856,7 @@ export function exportCustomReportToCSV(config: CustomReportConfig, data: unknow
   };
 
   const rows = data.map((item) =>
-    selectedFields.map((field) => escapeCSVValue((item as Record<string, unknown>)[field.key]))
+    selectedFields.map((field) => escapeCSVValue((item as Record<string, unknown>)[field.key])),
   );
 
   return [headers.join(','), ...rows.map((row) => row.join(','))].join('\n');

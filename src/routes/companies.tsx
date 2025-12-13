@@ -8,6 +8,8 @@ import { CompanyResearchHub } from '@/components/interview-prep/CompanyResearchH
 import { useCompaniesStore } from '@/stores/companiesStore';
 import type { Company } from '@/types';
 
+import { CompanyDialog } from '@/components/features/companies/CompanyDialog';
+
 export const Route = createFileRoute('/companies')({
   component: CompaniesRoute,
 });
@@ -18,6 +20,7 @@ function CompaniesRoute() {
   const { companies, fetchCompanies } = useCompaniesStore();
   const [activeView, setActiveView] = useState<ViewType>('cards');
   const [searchQuery, setSearchQuery] = useState('');
+  const [isAddDialogOpen, setIsAddDialogOpen] = useState(false);
   const [filters, setFilters] = useState<{
     status?: string[];
     remotePolicy?: string[];
@@ -59,21 +62,21 @@ function CompaniesRoute() {
           company.name.toLowerCase().includes(query) ||
           company.industry?.some((ind) => ind.toLowerCase().includes(query)) ||
           company.location?.toLowerCase().includes(query) ||
-          company.notes?.toLowerCase().includes(query)
+          company.notes?.toLowerCase().includes(query),
       );
     }
 
     // Apply status filter
     if (filters.status?.length) {
       result = result.filter(
-        (company) => company.status && filters.status?.includes(company.status)
+        (company) => company.status && filters.status?.includes(company.status),
       );
     }
 
     // Apply remote policy filter
     if (filters.remotePolicy?.length) {
       result = result.filter(
-        (company) => company.remotePolicy && filters.remotePolicy?.includes(company.remotePolicy)
+        (company) => company.remotePolicy && filters.remotePolicy?.includes(company.remotePolicy),
       );
     }
 
@@ -90,8 +93,7 @@ function CompaniesRoute() {
   };
 
   const handleAddCompany = () => {
-    // TODO: Open add company dialog
-    console.log('Add company clicked');
+    setIsAddDialogOpen(true);
   };
 
   return (
@@ -116,6 +118,11 @@ function CompaniesRoute() {
       {activeView === 'cards' && <CompanyResearchHub />}
 
       {activeView === 'list' && <CompaniesList companies={filteredCompanies} />}
+
+      <CompanyDialog
+        open={isAddDialogOpen}
+        onOpenChange={setIsAddDialogOpen}
+      />
     </div>
   );
 }
